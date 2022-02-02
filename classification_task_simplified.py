@@ -1,6 +1,10 @@
 import numpy as np
 import gudhi as gd
 import gudhi.representations
+from sklearn.preprocessing   import MinMaxScaler
+from sklearn.pipeline        import Pipeline
+from sklearn.svm             import SVC
+from sklearn.model_selection import GridSearchCV
 
 
 #%%
@@ -116,6 +120,40 @@ classifier = RandomForestClassifier()
 classifier = classifier.fit(training_LS, training_labels)
 
 #Showing the accuracy
-print("Train accuracy = " + str(classifier.score(training_LS, training_labels)))
-print("Test accuracy  = " + str(classifier.score(test_LS, test_labels)))    
+#print("Train accuracy = " + str(classifier.score(training_LS, training_labels)))
+#print("Test accuracy  = " + str(classifier.score(test_LS, test_labels)))    
+
+#%%
+#Cross validation for method and parameter selection
+
+pipe = Pipeline([("Separator", gd.representations.DiagramSelector(limit=np.inf, point_type="finite")),
+                 ("Scaler",    gd.representations.DiagramScaler(scalers=[([0,1], MinMaxScaler())])),
+                 ("TDA",       gd.representations.PersistenceImage()),
+                 ("Estimator", RandomForestClassifier())])
+
+param =    [{"Scaler__use":         [True],
+             "TDA":                 [gd.representations.PersistenceImage()], 
+             "TDA__resolution":     [ [5,5], [6,6] ],
+             "TDA__bandwidth":      [0.01, 0.1, 1.0, 10.0],
+             "Estimator":           [SVC(), RandomForestClassifier()]},
+            
+            {"Scaler__use":         [True],
+             "TDA":                 [gd.representations.Landscape()], 
+             "TDA__resolution":     [100],
+             "Estimator":           [SVC(), RandomForestClassifier()]},
+            
+            {"Scaler__use":         [True],
+             "TDA":                 [gd.representations.BettiCurve()], 
+             "TDA__resolution":     [100],
+             "Estimator":           [SVC(), RandomForestClassifier()]}
+           ]
+
+model = GridSearchCV(pipe, param, cv=5)
+model = model.fit(training_pds_1, training_labels)
+
+#print("The method and parameters with the best accuracy are ")
+#print(model.best_params_)
+#print("Train accuracy = " + str(model.score(training_pds_1, training_labels)))
+#print("Test accuracy  = " + str(model.score(test_pds_1,  test_labels)))
+
 
