@@ -3,7 +3,7 @@
 
 # Import dependencies
 import numpy as np
-from gudhi import CubicalComplex
+from gudhi import CubicalComplex, representations
 import teaspoon.ML.feature_functions as Ff
 import persistence_curves as pc
 
@@ -66,49 +66,54 @@ def GetPersStats(barcode):
     return bar_stats
 
 # 2. Function to compute Persistence Image
-def GetPersImageFeature(barcode, persIm):
-    feature_vectors = []
+def GetPersImageFeature(barcode, res):
+    feature_vector = []
     
     if(np.size(barcode) > 0):
-        feature_vectors = persIm.fit_transform([barcode])
+        perImg = representations.PersistenceImage(resolution=res)
+        feature_vector = perImg.fit_transform([barcode])[0]
     
-    return feature_vectors
+    return feature_vector
 
 # 3. Function to compute Persistence Landscape
-def GetPersLandscapeFeature(barcode, persLand):
-    feature_vectors = []
+def GetPersLandscapeFeature(barcode, res):
+    feature_vector = []
     
     if(np.size(barcode) > 0):
-        feature_vectors = persLand.fit_transform([barcode])
+        perLand = representations.Landscape(resolution=res)
+        feature_vector = perLand.fit_transform([barcode])[0]
     
-    return feature_vectors
+    return feature_vector
 
 # 4. Function to compute Persistence Entropy
 def GetPersEntropyFeature(barcode):
-    feature_vectors = []
+    feature_vector = []
     
     if(np.size(barcode) > 0):
         ent = pc.Entropy(mode='vector')
-        feature_vectors = ent.fit_transform(barcode)
+        feature_vector = ent.fit_transform(barcode).flatten()
         
-    return feature_vectors
+    return feature_vector
 
 # 5. Function to compute Betti Curve
-def GetBettiCurveFeature(barcode, bettiCurve):
-    feature_vectors = []
+def GetBettiCurveFeature(barcode, res):
+    feature_vector = []
     
     if(np.size(barcode) > 0):
-        feature_vectors = bettiCurve.fit_transform([barcode])
+        bettiCurve = representations.vector_methods.BettiCurve(resolution=res)
+        feature_vector = bettiCurve.fit_transform([barcode])[0]
     
-    return feature_vectors
+    return feature_vector
 
 # 6. Function to compute Carlsson Coordinates
 def GetCarlssonCoordinatesFeature(barcode, FN=3):
+    feature_vector = []
+    
     if(np.size(barcode) > 0):
         featureMatrix, _, _ = Ff.F_CCoordinates(barcode,FN)
-        return featureMatrix
-    else:
-        return [],[],[]
+        feature_vector = np.concatenate([mat.flatten() for mat in featureMatrix])
+        
+    return feature_vector
 
 # 7. Function to compute Persistence Codebooks (incomplete)
 # def GetPersistenceCodebooksFeature(barcode, pbow, wpbow, spbow):
@@ -121,50 +126,54 @@ def GetCarlssonCoordinatesFeature(barcode, FN=3):
 #         return [],[],[]
 
 # 8. Function to compute Persistence Silhouette
-def GetPersSilhouetteFeature(barcode, persSilhouette):
-    feature_vectors = []
+def GetPersSilhouetteFeature(barcode):
+    feature_vector = []
     
     if(np.size(barcode) > 0):
-        feature_vectors = persSilhouette.fit_transform([barcode])
+        persSilhouette = representations.vector_methods.Silhouette()
+        feature_vector = persSilhouette.fit_transform([barcode])[0]
     
-    return feature_vectors
+    return feature_vector
 
 # 9. Function to compute Topological Vector
-def GetTopologicalVectorFeature(barcode, topologicalVector):
-    feature_vectors = []
+def GetTopologicalVectorFeature(barcode):
+    feature_vector = []
     
     if(np.size(barcode) > 0):
-        feature_vectors = topologicalVector.fit_transform([barcode])
+        topologicalVector = representations.vector_methods.TopologicalVector()
+        feature_vector = topologicalVector.fit_transform([barcode])[0]
     
-    return feature_vectors
+    return feature_vector
 
 # 10. Function to compute Atol
-def GetAtolFeature(barcode, atol):
-    feature_vectors = []
+def GetAtolFeature(barcode, qt):
+    feature_vector = []
     
     if(np.size(barcode) > 0):
-        feature_vectors = atol.fit_transform([barcode])
+        atol = representations.vector_methods.Atol(quantiser=qt)
+        feature_vector = atol.fit_transform([barcode])[0]
     
-    return feature_vectors
+    return feature_vector
 
 # 11. Function to compute Complex Polynomial
-def GetComplexPolynomialFeature(barcode, complexPolynomial):
-    feature_vectors = []
+def GetComplexPolynomialFeature(barcode):
+    feature_vector = []
     
     if(np.size(barcode) > 0):
-        feature_vectors = complexPolynomial.fit_transform([barcode])
+        complexPolynomial = representations.vector_methods.ComplexPolynomial()
+        feature_vector = complexPolynomial.fit_transform([barcode])[0]
     
-    return feature_vectors
+    return feature_vector
 
 # 12. Function to compute lifespan curve
 def GetPersLifespanFeature(barcode):
-    feature_vectors = []
+    feature_vector = []
     
     if(np.size(barcode) > 0):
         lfsp = pc.Lifespan()
-        feature_vectors = lfsp.fit_transform(barcode)
+        feature_vector = lfsp.fit_transform(barcode).flatten()
         
-    return feature_vectors
+    return feature_vector
 
 # Function to compute pds
 def GetCubicalComplexPDs(img, img_dim):
