@@ -133,19 +133,8 @@ if __name__ == '__main__':
     training_labels = (training_1_labels + training_2_labels + training_3_labels +
                        training_4_labels + training_5_labels)
     
-    
     test_list = test_dict[b'data']
     test_labels = test_dict[b'labels']
-    
-    
-    indexes = list(filter(lambda i : (training_labels[i]==7)|(training_labels[i]==8), range(len(training_labels))))
-    training_labels = [training_labels[i] for i in indexes]
-    training_list = training_list[indexes,:]
-    
-    indexes = list(filter(lambda i : (test_labels[i]==7)|(test_labels[i]==8), range(len(test_labels))))
-    test_labels = [test_labels[i] for i in indexes]
-    test_list = test_list[indexes,:]
-    
     
     training_gudhi = map(color2grey, training_list)
     training_gudhi = map(row_transpose, training_gudhi)
