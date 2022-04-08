@@ -198,6 +198,33 @@ def GetPersLifespanFeature(barcode):
 
     return feature_vector
 
+# 13. Function to compute tropical coordinates
+
+
+def GetPersTropicalCoordinatesFeature(barcode, r):
+    feature_vector = []
+    
+    if(np.size(barcode) > 0):
+        #change the deaths by the lifetime
+        barcode[:,1] = barcode[:,1]-barcode[:,0]
+        #sort them so the bars with the longest lifetime appears first
+        barcode = barcode[np.argsort(-barcode[:,1])]
+        #Write the output of the selected polynomials
+        pol_max1 = barcode[0,1]
+        pol_max2 = barcode[0,1] + barcode[1,1]
+        pol_max3 = barcode[0,1] + barcode[1,1] + barcode[2,1]
+        pol_max4 = barcode[0,1] + barcode[1,1] + barcode[2,1] + barcode[3,1]
+        total_length = sum(barcode[:,1])
+        #In each row, take the minimum between the birth time and r*lifetime
+        aux_array = np.array(list(map(lambda x : min(r*x[1], x[0]), barcode)))
+        pol_r = sum(aux_array)
+        M = max(aux_array + barcode[:,1])
+        pol_r2 = sum(M - (aux_array + barcode[:,1]))
+        
+        feature_vector = np.array([pol_max1, pol_max2, pol_max3, pol_max4,
+                                   total_length, pol_r, pol_r2])
+    return feature_vector
+
 # Function to compute pds
 
 
