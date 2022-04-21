@@ -60,7 +60,7 @@ def GetPersStats(barcode):
                               bc_lengthAverage, bc_lengthSTD, bc_lengthMedian, bc_count,  # ])
                               bc_ent[0][0]])
     else:
-        bar_stats = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        bar_stats = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
     bar_stats[~np.isfinite(bar_stats)] = 0
 
@@ -70,11 +70,12 @@ def GetPersStats(barcode):
 
 
 def GetPersImageFeature(barcode, res):
-    feature_vector = []
 
     if(np.size(barcode) > 0):
         perImg = representations.PersistenceImage(resolution=res)
         feature_vector = perImg.fit_transform([barcode])[0]
+    else:
+        feature_vector = np.zeros(res**2)
 
     return feature_vector
 
@@ -82,36 +83,39 @@ def GetPersImageFeature(barcode, res):
 
 
 def GetPersLandscapeFeature(barcode, res):
-    feature_vector = []
 
     if(np.size(barcode) > 0):
         perLand = representations.Landscape(resolution=res)
         feature_vector = perLand.fit_transform([barcode])[0]
-
+    else:
+        feature_vector = np.zeros(5*res)
+        
     return feature_vector
 
 # 4. Function to compute Persistence Entropy
 
 
 def GetPersEntropyFeature(barcode):
-    feature_vector = []
 
     if(np.size(barcode) > 0):
         ent = pc.Entropy(mode='vector')
         feature_vector = ent.fit_transform(barcode).flatten()
-
+    else:
+        feature_vector = np.zeros(100)
+        
     return feature_vector
 
 # 5. Function to compute Betti Curve
 
 
 def GetBettiCurveFeature(barcode, res):
-    feature_vector = []
 
     if(np.size(barcode) > 0):
         bettiCurve = representations.vector_methods.BettiCurve(resolution=res)
         feature_vector = bettiCurve.fit_transform([barcode])[0]
-
+    else:
+    	feature_vector = np.zeros(res)
+        
     return feature_vector
 
 # 6. Function to compute Carlsson Coordinates
@@ -141,11 +145,12 @@ def GetCarlssonCoordinatesFeature(barcode, FN=3):
 
 
 def GetPersSilhouetteFeature(barcode):
-    feature_vector = []
 
     if(np.size(barcode) > 0):
         persSilhouette = representations.vector_methods.Silhouette()
         feature_vector = persSilhouette.fit_transform([barcode])[0]
+    else:
+    	feature_vector = np.zeros(100)
 
     return feature_vector
 
@@ -153,12 +158,13 @@ def GetPersSilhouetteFeature(barcode):
 
 
 def GetTopologicalVectorFeature(barcode):
-    feature_vector = []
 
     if(np.size(barcode) > 0):
         topologicalVector = representations.vector_methods.TopologicalVector()
         feature_vector = topologicalVector.fit_transform([barcode])[0]
-
+    else:
+    	feature_vector = np.zeros(10)
+        
     return feature_vector
 
 # 10. Function to compute Atol
@@ -183,7 +189,9 @@ def GetComplexPolynomialFeature(barcode):
         complexPolynomial = representations.vector_methods.ComplexPolynomial()
         feature_vector = complexPolynomial.fit_transform([barcode])[0]
         feature_vector = [abs(i) for i in feature_vector]
-
+    else:
+    	feature_vector = np.zeros(10)
+        
     return feature_vector
 
 # 12. Function to compute lifespan curve
@@ -195,14 +203,15 @@ def GetPersLifespanFeature(barcode):
     if(np.size(barcode) > 0):
         lfsp = pc.Lifespan()
         feature_vector = lfsp.fit_transform(barcode).flatten()
-
+    else:
+    	feature_vector = np.zeros(100)
+    
     return feature_vector
 
 # 13. Function to compute tropical coordinates
 
 
 def GetPersTropicalCoordinatesFeature(barcode, r):
-    feature_vector = []
     
     if(np.size(barcode) > 0):
         #change the deaths by the lifetime
@@ -223,6 +232,9 @@ def GetPersTropicalCoordinatesFeature(barcode, r):
         
         feature_vector = np.array([pol_max1, pol_max2, pol_max3, pol_max4,
                                    total_length, pol_r, pol_r2])
+    else:
+    	feature_vector = np.zeros(7)
+            
     return feature_vector
 
 # Function to compute pds
