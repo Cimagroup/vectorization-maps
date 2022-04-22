@@ -9,7 +9,6 @@
 |----------------------------------------------------------------------------------------------------------|----------------------------------|
 |[cifar-10-py-original](https://github.com/Cimagroup/vectorisation-maps/tree/master/cifar-10-py-original) |folder with the dataset cifar-10 |
 |[Outex-TC-00024](https://github.com/Cimagroup/vectorisation-maps/tree/master/Outex-TC-00024)             | folder with the dataset Outex-68 | |[fashion_mnist](https://github.com/Cimagroup/vectorisation-maps/tree/master/fashion_mnist)             | folder with the dataset fashion_mnist |
-|
 
 
 ## Feature extraction from data
