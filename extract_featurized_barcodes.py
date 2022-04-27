@@ -6,6 +6,7 @@ import numpy as np
 from gudhi import CubicalComplex, representations
 import teaspoon.ML.feature_functions as Ff
 import persistence_curves as pc
+from copy import deepcopy
 
 
 # 1. Function to compute PH binnings
@@ -69,7 +70,7 @@ def GetPersStats(barcode):
 # 2. Function to compute Persistence Image
 
 
-def GetPersImageFeature(barcode, res):
+def GetPersImageFeature(barcode, res=[6,6]):
 
     if(np.size(barcode) > 0):
         perImg = representations.PersistenceImage(resolution=res)
@@ -82,10 +83,10 @@ def GetPersImageFeature(barcode, res):
 # 3. Function to compute Persistence Landscape
 
 
-def GetPersLandscapeFeature(barcode, res):
+def GetPersLandscapeFeature(barcode, res=100, num=5):
 
     if(np.size(barcode) > 0):
-        perLand = representations.Landscape(resolution=res)
+        perLand = representations.Landscape(resolution=res,num_landscapes=num)
         feature_vector = perLand.fit_transform([barcode])[0]
     else:
         feature_vector = np.zeros(5*res)
@@ -95,20 +96,20 @@ def GetPersLandscapeFeature(barcode, res):
 # 4. Function to compute Persistence Entropy
 
 
-def GetPersEntropyFeature(barcode):
+def GetPersEntropyFeature(barcode, res=100):
 
     if(np.size(barcode) > 0):
-        ent = pc.Entropy(mode='vector')
-        feature_vector = ent.fit_transform(barcode).flatten()
+        ent = pc.Entropy(mode='vector', resolution = res)
+        feature_vector = ent.fit_transform([barcode]).flatten()
     else:
-        feature_vector = np.zeros(100)
+        feature_vector = np.zeros(res)
         
     return feature_vector
 
 # 5. Function to compute Betti Curve
 
 
-def GetBettiCurveFeature(barcode, res):
+def GetBettiCurveFeature(barcode, res=100):
 
     if(np.size(barcode) > 0):
         bettiCurve = representations.vector_methods.BettiCurve(resolution=res)
@@ -121,13 +122,13 @@ def GetBettiCurveFeature(barcode, res):
 # 6. Function to compute Carlsson Coordinates
 
 
-def GetCarlssonCoordinatesFeature(barcode, FN=3):
+def GetCarlssonCoordinatesFeature(barcode, FN=5):
     feature_vector = []
 
     if(np.size(barcode) > 0):
-        featureMatrix, _, _ = Ff.F_CCoordinates(barcode, FN)
+        featureMatrix, _, _ = Ff.F_CCoordinates([barcode], FN)
         feature_vector = np.concatenate(
-            [mat.flatten() for mat in featureMatrix])
+            [mat.flatten() for mat in featureMatrix[0:FN]])
 
     return feature_vector
 
@@ -144,10 +145,10 @@ def GetCarlssonCoordinatesFeature(barcode, FN=3):
 # 8. Function to compute Persistence Silhouette
 
 
-def GetPersSilhouetteFeature(barcode):
+def GetPersSilhouetteFeature(barcode, res=100):
 
     if(np.size(barcode) > 0):
-        persSilhouette = representations.vector_methods.Silhouette()
+        persSilhouette = representations.vector_methods.Silhouette(resolution=res)
         feature_vector = persSilhouette.fit_transform([barcode])[0]
     else:
     	feature_vector = np.zeros(100)
@@ -157,10 +158,10 @@ def GetPersSilhouetteFeature(barcode):
 # 9. Function to compute Topological Vector
 
 
-def GetTopologicalVectorFeature(barcode):
+def GetTopologicalVectorFeature(barcode, thres = 10):
 
     if(np.size(barcode) > 0):
-        topologicalVector = representations.vector_methods.TopologicalVector()
+        topologicalVector = representations.vector_methods.TopologicalVector(threshold = thres)
         feature_vector = topologicalVector.fit_transform([barcode])[0]
     else:
     	feature_vector = np.zeros(10)
@@ -182,53 +183,62 @@ def GetAtolFeature(barcode, qt):
 # 11. Function to compute Complex Polynomial
 
 
-def GetComplexPolynomialFeature(barcode):
-    feature_vector = []
-
+def GetComplexPolynomialFeature(barcode, thres = 10, pol_type='R'):
+    #We pick the first tresh largest cofficient from the polynomial.
+    #There are different pol_type, 'R' is the most common but unstable,
+    #'S' and 'T' sends points close to the diagonal to points close to zero.
     if(np.size(barcode) > 0):
-        complexPolynomial = representations.vector_methods.ComplexPolynomial()
-        feature_vector = complexPolynomial.fit_transform([barcode])[0]
-        feature_vector = [abs(i) for i in feature_vector]
+        complexPolynomial = representations.vector_methods.ComplexPolynomial(threshold = thres, 
+                                                                             polynomial_type = pol_type)
+        feature_vector = complexPolynomial.fit_transform([barcode]).flatten()
+        #np.real and np.imag generates float64, we need float32 to perform
+        #the machine learning tasks. The maximum of the experiment is e47,
+        #we need to put it down e38
+        #We divide each by e10 and change it to float32
+        feature_vector = np.concatenate([np.array([np.float32(np.real(i)/10**11),
+                                                   np.float32(np.imag(i)/10**11)]) 
+                                         for i in feature_vector])
     else:
-    	feature_vector = np.zeros(10)
+    	feature_vector = np.zeros(2*thres)
         
     return feature_vector
 
 # 12. Function to compute lifespan curve
 
 
-def GetPersLifespanFeature(barcode):
+def GetPersLifespanFeature(barcode, res=100):
     feature_vector = []
 
     if(np.size(barcode) > 0):
-        lfsp = pc.Lifespan()
-        feature_vector = lfsp.fit_transform(barcode).flatten()
+        lfsp = pc.Lifespan(resolution = res)
+        feature_vector = lfsp.fit_transform([barcode]).flatten()
     else:
-    	feature_vector = np.zeros(100)
+        feature_vector = np.zeros(res)
     
     return feature_vector
 
 # 13. Function to compute tropical coordinates
 
 
-def GetPersTropicalCoordinatesFeature(barcode, r):
+def GetPersTropicalCoordinatesFeature(barcode, r=28):
     
     if(np.size(barcode) > 0):
         #change the deaths by the lifetime
-        barcode[:,1] = barcode[:,1]-barcode[:,0]
+        new_barcode = deepcopy(barcode)
+        new_barcode[:,1] = new_barcode[:,1]-new_barcode[:,0]
         #sort them so the bars with the longest lifetime appears first
-        barcode = barcode[np.argsort(-barcode[:,1])]
+        new_barcode = new_barcode[np.argsort(-new_barcode[:,1])]
         #Write the output of the selected polynomials
-        pol_max1 = barcode[0,1]
-        pol_max2 = barcode[0,1] + barcode[1,1]
-        pol_max3 = barcode[0,1] + barcode[1,1] + barcode[2,1]
-        pol_max4 = barcode[0,1] + barcode[1,1] + barcode[2,1] + barcode[3,1]
-        total_length = sum(barcode[:,1])
+        pol_max1 = new_barcode[0,1]
+        pol_max2 = new_barcode[0,1] + new_barcode[1,1]
+        pol_max3 = new_barcode[0,1] + new_barcode[1,1] + new_barcode[2,1]
+        pol_max4 = new_barcode[0,1] + new_barcode[1,1] + new_barcode[2,1] + new_barcode[3,1]
+        total_length = sum(new_barcode[:,1])
         #In each row, take the minimum between the birth time and r*lifetime
-        aux_array = np.array(list(map(lambda x : min(r*x[1], x[0]), barcode)))
+        aux_array = np.array(list(map(lambda x : min(r*x[1], x[0]), new_barcode)))
         pol_r = sum(aux_array)
-        M = max(aux_array + barcode[:,1])
-        pol_r2 = sum(M - (aux_array + barcode[:,1]))
+        M = max(aux_array + new_barcode[:,1])
+        pol_r2 = sum(M - (aux_array + new_barcode[:,1]))
         
         feature_vector = np.array([pol_max1, pol_max2, pol_max3, pol_max4,
                                    total_length, pol_r, pol_r2])
