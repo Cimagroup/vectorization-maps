@@ -191,12 +191,7 @@ def GetComplexPolynomialFeature(barcode, thres = 10, pol_type='R'):
         complexPolynomial = representations.vector_methods.ComplexPolynomial(threshold = thres, 
                                                                              polynomial_type = pol_type)
         feature_vector = complexPolynomial.fit_transform([barcode]).flatten()
-        #np.real and np.imag generates float64, we need float32 to perform
-        #the machine learning tasks. The maximum of the experiment is e47,
-        #we need to put it down e38
-        #We divide each by e10 and change it to float32
-        feature_vector = np.concatenate([np.array([np.float32(np.real(i)/10**11),
-                                                   np.float32(np.imag(i)/10**11)]) 
+        feature_vector = np.concatenate([np.array([np.real(i), np.imag(i)]) 
                                          for i in feature_vector])
     else:
     	feature_vector = np.zeros(2*thres)
