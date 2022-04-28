@@ -27,6 +27,7 @@
 | [example_classification_cifar10.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/example_classification_cifar10.ipynb)  |   notebook with an example of classification using cifar10                                |
 |  [example_classification_cifar10_simplified.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/example_classification_cifar10_simplified.py)      |   same example, but written in a script|
 |[example_classification_outex68.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/example_classification_outex68.ipynb)|notebook with an example of classification using outex-68|
+|[example_classification_fashion-mnist.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/example_classification_fashion-mnist.ipynb)|notebook with an example of classification using fashion-mnist|
 |[example_pcs.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/example_pcs.ipynb)|example showing how to use the persistence curves defined in [persistence_curves.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/persistence_curves.py)|
 
 
