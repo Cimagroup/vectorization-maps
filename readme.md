@@ -10,6 +10,7 @@
 |[cifar-10-py-original](https://github.com/Cimagroup/vectorisation-maps/tree/master/cifar-10-py-original) |folder with the dataset cifar-10 |
 |[Outex-TC-00024](https://github.com/Cimagroup/vectorisation-maps/tree/master/Outex-TC-00024)             | folder with the dataset Outex-68 |
 |[fashion_mnist](https://github.com/Cimagroup/vectorisation-maps/tree/master/fashion_mnist)             | folder with the dataset fashion_mnist |
+|[Shrec14/pdiagrams](https://github.com/Cimagroup/vectorisation-maps/tree/master/Shrec14/pdiagrams) | folder with H0 persistence diagrams of Shrec14 (real) dataset |
 
 
 ## Feature extraction from data
@@ -20,6 +21,7 @@
 |[extract_featurized_barcodes.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/extract_featurized_barcodes.py) | script with functions for all vectorization methods |
 |[persistence_curves.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/persistence_curves.py)| script defyining betti curve, entropy and lifespan curve|
 |[Test_extract_featurized_barcodes.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/Test_extract_featurized_barcodes.ipynb)|test for functions defined in extract_featurized_barcodes.py|
+| [SHREC14_features_computation.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_features_computation.ipynb) | Notebook to obtain 3D points from Shrec14 dataset, apply VR-filtration, and compute features |
 
 ## Examples
 | Name | Description  |
