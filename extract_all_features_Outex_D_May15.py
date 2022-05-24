@@ -4,7 +4,7 @@
 
 import numpy as np
 from sklearn.cluster import KMeans
-import extract_featurized_barcodes as ex
+import vectorization as ex
 from multiprocessing import Pool
 import glob
 import os
