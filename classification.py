@@ -6,12 +6,13 @@ from sklearn.model_selection import cross_val_score
 
 
 
-def classification(path,labels):
+def classification(path,labels,n):
 # path to computed features saved as dictionary
 # labels of the dataset
 # Return a dictionary with the performance.
+# n size of the dataset
     d = dict()
-    for i in range(0,400):
+    for i in range(0,n):
         with open(path+str(i)+".pkl", 'rb') as f:
             d[str(i)] = pickle.load(f)
     scores = dict()
