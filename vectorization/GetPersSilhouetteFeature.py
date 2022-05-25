@@ -9,6 +9,6 @@ def GetPersSilhouetteFeature(barcode, res=100):
         persSilhouette = representations.vector_methods.Silhouette(resolution=res)
         feature_vector = persSilhouette.fit_transform([barcode])[0]
     else:
-    	feature_vector = np.zeros(100)
+    	feature_vector = np.zeros(res)
 
     return feature_vector

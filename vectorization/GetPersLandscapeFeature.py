@@ -9,6 +9,6 @@ def GetPersLandscapeFeature(barcode, res=100, num=5):
         perLand = representations.Landscape(resolution=res,num_landscapes=num)
         feature_vector = perLand.fit_transform([barcode])[0]
     else:
-        feature_vector = np.zeros(5*res)
+        feature_vector = np.zeros(num*res)
         
     return feature_vector

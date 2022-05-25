@@ -10,5 +10,6 @@ def GetCarlssonCoordinatesFeature(barcode, FN=5):
         featureMatrix, _, _ = Ff.F_CCoordinates([barcode], FN)
         feature_vector = np.concatenate(
             [mat.flatten() for mat in featureMatrix[0:FN]])
-
+    else:
+        feature_vector = np.zeros(FN)
     return feature_vector
