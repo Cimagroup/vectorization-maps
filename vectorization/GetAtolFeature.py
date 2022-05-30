@@ -1,9 +1,11 @@
 import numpy as np
 from gudhi import representations
+from sklearn.cluster import KMeans
+quantiser = KMeans(n_clusters=2, random_state=202006)
 
 __all__ = ["GetAtolFeature"]
 
-def GetAtolFeature(barcode, qt):
+def GetAtolFeature(barcode, qt=quantiser):
     feature_vector = []
 
     if(np.size(barcode) > 0):
