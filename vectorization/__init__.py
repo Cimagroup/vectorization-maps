@@ -12,3 +12,4 @@ from .GetPersSilhouetteFeature import *
 from .GetPersStats import *
 from .GetPersTropicalCoordinatesFeature import *
 from .GetTopologicalVectorFeature import *
+from .float64to32 import *

@@ -14,4 +14,4 @@ def float64to32(complex_coeff):
             [max([e_index(c) for c in cp]) for cp in complex_coeff])
     n = max(0, n-38+1)
     complex_coeff = [[np.float32(x/10**n) for x in cp] for cp in complex_coeff]
-    return 
+    return complex_coeff

@@ -9,6 +9,6 @@ def GetPersImageFeature(barcode, res=[6,6]):
         perImg = representations.PersistenceImage(resolution=res)
         feature_vector = perImg.fit_transform([barcode])[0]
     else:
-        feature_vector = np.zeros(res**2)
+        feature_vector = np.zeros(res[0]*res[1])
 
     return feature_vector

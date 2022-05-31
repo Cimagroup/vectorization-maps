@@ -11,9 +11,9 @@ def GetCubicalComplexPDs(img, img_dim):
            cub_filtration.persistence_intervals_in_dimension(1)]
     for j in range(pds[0].shape[0]):
         if pds[0][j,1]==np.inf:
-            pds[0][j,1]=255
+            pds[0][j,1]=256
     for j in range(pds[1].shape[0]):
         if pds[1][j,1]==np.inf:
-            pds[1][j,1]=255
+            pds[1][j,1]=256
 
     return pds
