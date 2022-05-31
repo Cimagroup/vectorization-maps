@@ -5,7 +5,7 @@ __all__ = ["GetPersEntropyFeature"]
 
 def GetPersEntropyFeature(barcode, res=100):
 
-    if(np.size(barcode) > 0):
+    if (barcode.shape[0]) > 1:
         ent = pc.Entropy(mode='vector', resolution = res)
         feature_vector = ent.fit_transform([barcode]).flatten()
     else:
