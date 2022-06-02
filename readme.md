@@ -1,35 +1,53 @@
 # Table of contents
-1. [Datasets](#datasets)
-2. [Feature extraction from data](#feature-extraction-from-data)
-3. [Examples](#examples)
+1. [Folders](#folders)
+2. [Vectorisation Methods](#vectorisation-methods)
+3. [Feature extraction from data](#feature-extraction-from-data)
+4. [Classification](#classification)
+5. [Examples](#examples)
 
-## Datasets
+## Folders
 
 | Name | Description  |
 |----------------------------------------------------------------------------------------------------------|----------------------------------|
 |[cifar-10-py-original](https://github.com/Cimagroup/vectorisation-maps/tree/master/cifar-10-py-original) |folder with the dataset cifar-10 |
-|[Outex-TC-00024](https://github.com/Cimagroup/vectorisation-maps/tree/master/Outex-TC-00024)             | folder with the dataset Outex-68 |
-|[fashion_mnist](https://github.com/Cimagroup/vectorisation-maps/tree/master/fashion_mnist)             | folder with the dataset fashion_mnist |
-|[Shrec14/pdiagrams](https://github.com/Cimagroup/vectorisation-maps/tree/master/Shrec14/pdiagrams) | folder with H0 persistence diagrams of Shrec14 (real) dataset |
+|[Outex-TC-00024](https://github.com/Cimagroup/vectorisation-maps/tree/master/Outex-TC-00024)             | folder with the dataset Outex-68 and outputs of the experiment. The persistent diagram and features have been deleted, and can be found in OneDrive |
+|[fashion_mnist](https://github.com/Cimagroup/vectorisation-maps/tree/master/fashion_mnist)             | folder with the dataset fashion_mnist and outputs of the experiment. The persistent diagram and features have been deleted, and can be found in OneDrive  |
+|[Shrec14/pdiagrams](https://github.com/Cimagroup/vectorisation-maps/tree/master/Shrec14/pdiagrams) | folder with the dataset shrec14 and outputs of the experiment. The persistent diagram and features have been deleted, and can be found in OneDrive |
+| [WebApp](https://github.com/Cimagroup/vectorisation-maps/tree/master/WebApp) | implementation of the web app of this project |
+
+## Vectorisation Methods
+
+| Name | Description  |
+|----------------------------------------------------------------------------------------------------------|----------------------------------|
+|[Vectorisation/Get(method)](https://github.com/Cimagroup/vectorisation-maps/tree/master/vectorization) | implementation of the method in python |
+|[Vectorisation/float64to32](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorization/float64to32.py) | normalisation used for the complex polynomials |
+|[persistence_curves.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/persistence_curves.py)| script defyining betti curve, entropy and lifespan curve|
+|[TEST_extract_featurized_barcodes.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/TEST_extract_featurized_barcodes.ipynb)| test to check the features and the cubical complex fucntion works well. It uses the image [TEST_image.pgm](https://github.com/Cimagroup/vectorisation-maps/blob/master/TEST_image.pgm)|
 
 
 ## Feature extraction from data
 
 | Name | Description  |
 |----------------------------------------------------------------------------------------------------------|----------------------------------|
-|[extract_all_features_parallel.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/extract_all_features_parallel.py) | script for extracting all features from the cifar10 database (in paralell) |
+|[PARALLEL_extract_all_features.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/extract_all_features_parallel.py) | old script for extracting features from the cifar10 database (in paralell) |
 |[extract_featurized_barcodes.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/extract_featurized_barcodes.py) | script with functions for all vectorization methods |
-|[persistence_curves.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/persistence_curves.py)| script defyining betti curve, entropy and lifespan curve|
-|[Test_extract_featurized_barcodes.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/Test_extract_featurized_barcodes.ipynb)|test for functions defined in extract_featurized_barcodes.py|
-| [SHREC14_features_computation.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_features_computation.ipynb) | Notebook to obtain 3D points from Shrec14 dataset, apply VR-filtration, and compute features |
+|[Test_extract_featurized_barcodes.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/Test_extract_featurized_barcodes.ipynb)| test for functions defined in extract_featurized_barcodes.py|
+|[OUTEX_pdiagrams.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_pdiagrams.ipynb) | notebook to obtain the persistent diagrams and features from the OUTEX database |
+|[fashionMNIST_pdiagrams.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_pdiagrams.ipynb) | notebook to obtain the persistent diagrams and features from the fashion_mnist database |
+|[SHREC14_features_computation.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_features_computation.ipynb) | notebook to obtain 3D points from Shrec14 dataset, apply VR-filtration, and compute features |
+
+## Classification
+| Name | Description  |
+|----------------------------------------------------------------------------------------------------------|----------------------------------|
+|[OUTEX68_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX68_classification.ipynb) | notebook to classify the OUTEX database using random forest|
+|[OUTEX10_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX10_classification.ipynb) | notebook to classify 10 classes from the OUTEX database using random forest|
+|[fashionMNIST_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_classification.ipynb) | notebook to classify the fashion_mnist database using random forest |
 
 ## Examples
 | Name | Description  |
 |----------------------------------------------------------------------------------------------------------|----------------------------------|
-| [example_classification_cifar10.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/example_classification_cifar10.ipynb)  |   notebook with an example of classification using cifar10                                |
-|  [example_classification_cifar10_simplified.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/example_classification_cifar10_simplified.py)      |   same example, but written in a script|
-|[example_classification_outex68.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/example_classification_outex68.ipynb)|notebook with an example of classification using outex-68|
-|[example_classification_fashion-mnist.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/example_classification_fashion-mnist.ipynb)|notebook with an example of classification using fashion-mnist|
-|[example_pcs.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/example_pcs.ipynb)|example showing how to use the persistence curves defined in [persistence_curves.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/persistence_curves.py)|
+| [CIFAR10_example_classificationipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/CIFAR10_example_classification.ipynb)  |   notebook with an example of classification using cifar10                                |
+| [OUTEX68_example_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX68_example_classification.ipynb) | notebook with an example of classification using outex-68|
+| [fashionMNIST_example_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_example_classification.ipynb)|notebook with an example of classification using fashion-mnist|
 
 
