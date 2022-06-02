@@ -4,7 +4,7 @@
 
 import numpy as np
 from sklearn.cluster import KMeans
-import vectorization as ex
+import vectorisation as ex
 from multiprocessing import Pool
 import pickle
 
