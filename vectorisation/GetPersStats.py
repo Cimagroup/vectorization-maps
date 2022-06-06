@@ -1,5 +1,5 @@
 import numpy as np
-import persistence_curves as pc
+from vectorisation import GetPersistenceCurves
 
 __all__ = ["GetPersStats"]
 
@@ -23,7 +23,7 @@ def GetPersStats(barcode):
         # Number of Bars
         bc_count = len(diff_barcode)
         # Persitent Entropy
-        ent = pc.Entropy()
+        ent = GetPersistenceCurves.Entropy()
         bc_ent = ent.fit_transform([barcode])
 
         bar_stats = np.array([bc_av0, bc_av1, bc_std0, bc_std1, bc_med0, bc_med1,
