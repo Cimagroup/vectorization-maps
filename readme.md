@@ -5,6 +5,10 @@
 4. [Classification](#classification)
 5. [Examples](#examples)
 
+
+To install the package: ``pip install . ``
+
+
 ## Folders
 
 | Name | Description  |
