@@ -3,7 +3,7 @@ from gudhi import representations
 
 __all__ = ["GetPersImageFeature"]
 
-def GetPersImageFeature(barcode, res=[6,6]):
+def GetPersImageFeature(barcode, res=[48,48]):
 
     if(np.size(barcode) > 0):
         perImg = representations.PersistenceImage(resolution=res)
