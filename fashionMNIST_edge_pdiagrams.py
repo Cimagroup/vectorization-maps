@@ -1,4 +1,4 @@
-#import pickle
+import pickle
 import numpy as np
 from skimage import feature
 from scipy.ndimage import distance_transform_bf
@@ -6,7 +6,7 @@ from fashion_mnist import mnist_reader
 from vectorisation import *
 
 path_feat = "fashion_mnist/features/"
-path_dia = "fashion_mnist/pdiagrams/"
+path_diag= "fashion_mnist/pdiagrams/"
 
 n_train = 60000
 n_total = 70000
@@ -22,36 +22,44 @@ labels = np.array(y_train.tolist() + y_test.tolist())
 #%%
 to2828 = lambda ima : ima.reshape([28,28])
 edger = lambda ima : feature.canny(image=ima, low_threshold=20, high_threshold=170)
+inverter = lambda ima : np.max(np.float32(ima))-ima
+edge_pipeline = lambda ima : inverter(edger(to2828(ima)))
+
+edge_images = np.array(list(map(edge_pipeline, images)))
+
 filt_taxi = lambda ima : distance_transform_bf(ima, metric='taxicab')
 filt_euc = lambda ima : distance_transform_bf(ima)**2
 
-taxi_pipeline = lambda ima : filt_taxi(edger(to2828(ima)))
-euc_pipeline = lambda ima : filt_euc(edger(to2828(ima)))
-
-taxi_complexes = np.array(list(map(taxi_pipeline, images)))
-euc_complexes = np.array(list(map(euc_pipeline, images)))
+taxi_complexes = np.array(list(map(filt_taxi, edge_images)))
+euc_complexes = np.array(list(map(filt_euc, edge_images)))
+taxi_complexes_opp = np.array(list(map(inverter, taxi_complexes)))
+euc_complexes_opp = np.array(list(map(inverter, euc_complexes)))
 
 #%%
 
 for i in range(n_train):
     print(i)
     dgms = GetCubicalComplexPDs(img=taxi_complexes[i].reshape(784,), img_dim=[28,28])
-    np.savetxt(path_dia + "taxi_d0_"+str(i),dgms[0])
-    np.savetxt(path_dia + "taxi_d1_"+str(i),dgms[1])
+    np.savetxt(path_diag+ "taxi_d1_"+str(i),dgms[1])
+    dgms = GetCubicalComplexPDs(img=taxi_complexes_opp[i].reshape(784,), img_dim=[28,28])
+    np.savetxt(path_diag+ "taxi_d0_"+str(i),dgms[0])
     
     dgms = GetCubicalComplexPDs(img=euc_complexes[i].reshape(784,), img_dim=[28,28])
-    np.savetxt(path_dia + "euc_d0_"+str(i),dgms[0])
-    np.savetxt(path_dia + "euc_d1_"+str(i),dgms[1])
+    np.savetxt(path_diag+ "euc_d1_"+str(i),dgms[1])
+    dgms = GetCubicalComplexPDs(img=euc_complexes_opp[i].reshape(784,), img_dim=[28,28])
+    np.savetxt(path_diag+ "euc_d0_"+str(i),dgms[0])   
     
 for i in range(n_train, n_total):
     print(i)
     dgms = GetCubicalComplexPDs(img=taxi_complexes[i].reshape(784,), img_dim=[28,28])
-    np.savetxt(path_dia + "taxi_d0_"+str(i),dgms[0])
-    np.savetxt(path_dia + "taxi_d1_"+str(i),dgms[1])
+    np.savetxt(path_diag+ "taxi_d1_"+str(i),dgms[1])
+    dgms = GetCubicalComplexPDs(img=taxi_complexes_opp[i].reshape(784,), img_dim=[28,28])
+    np.savetxt(path_diag+ "taxi_d0_"+str(i),dgms[0])
     
     dgms = GetCubicalComplexPDs(img=euc_complexes[i].reshape(784,), img_dim=[28,28])
-    np.savetxt(path_dia + "euc_d0_"+str(i),dgms[0])
-    np.savetxt(path_dia + "euc_d1_"+str(i),dgms[1])
+    np.savetxt(path_diag+ "euc_d1_"+str(i),dgms[1])
+    dgms = GetCubicalComplexPDs(img=euc_complexes_opp[i].reshape(784,), img_dim=[28,28])
+    np.savetxt(path_diag+ "euc_d0_"+str(i),dgms[0])  
     
 #%%
 pdiagrams = dict()
@@ -132,4 +140,6 @@ with open(path_feat + 'euc_d0.pkl', 'wb') as f:
   pickle.dump(features_euc_d0, f)
 with open(path_feat + 'euc_d1.pkl', 'wb') as f:
   pickle.dump(features_euc_d1, f)
-    
+
+print("")
+print('------------ DONE ------------')    
