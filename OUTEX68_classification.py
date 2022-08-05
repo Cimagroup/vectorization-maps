@@ -4,7 +4,7 @@ import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from direct_optimisation import main_classifier
-from tropical_optimisation import tropical_classifier
+from OUTEX68_tropical_optimisation import tropical_classifier
 from vectorisation import *
 from sklearn.svm import SVC
 
