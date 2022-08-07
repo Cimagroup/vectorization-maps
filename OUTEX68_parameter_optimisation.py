@@ -256,7 +256,7 @@ for func in func_list:
 
 #%%
 func = GetPersTropicalCoordinatesFeature
-from tropical_optimisation import tropical_classifier
+from OUTEX_tropical_optimisation import tropical_classifier
 
 param_grid = [
     {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500], 'r': uniform(0,500)}#,
