@@ -37,6 +37,7 @@ To install the package: ``pip install . ``
 |[extract_featurized_barcodes.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/extract_featurized_barcodes.py) | script with functions for all vectorization methods |
 |[Test_extract_featurized_barcodes.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/Test_extract_featurized_barcodes.ipynb)| test for functions defined in extract_featurized_barcodes.py|
 |[OUTEX_pdiagrams.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_pdiagrams.py) | script to obtain the persistent diagrams from the OUTEX database |
+|[OUTEX_feature_extraction.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_feature_extraction.py) | script to obtain all the features  from the OUTEX database |
 |[fashionMNIST_pdiagrams.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_pdiagrams.ipynb) | notebook to obtain the persistent diagrams and features from the fashion_mnist database |
 |[SHREC14_features_computation.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_features_computation.ipynb) | notebook to obtain 3D points from Shrec14 dataset, apply VR-filtration, and compute features |
 
