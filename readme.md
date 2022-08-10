@@ -43,11 +43,13 @@ To install the package: ``pip install . ``
 ## Classification
 | Name | Description  |
 |----------------------------------------------------------------------------------------------------------|----------------------------------|
-|[OUTEX68_classification.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX68_classification.py) | Function to classify OUTEX68. Both, the feature and the machine learning method can given as an input.|
-|[OUTEX10_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX10_classification.ipynb) | notebook to classify 10 classes from the OUTEX database using random forest|
+|[OUTEX68_classification.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX68_classification.py) | Function to classify OUTEX68. Both, the feature and the machine learning method can be given as an input.|
+|[OUTEX68_parameter_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX68_parameter_optimisation.py) | Function to find the best parameters for each method when classifying OUTEX68.|
+|[OUTEX10_classification.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX10_classification.py) | Function to classify OUTEX68. Both, the feature and the machine learning method can be given as an input.|
+|[OUTEX10_parameter_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX10_parameter_optimisation.py) | Function to find the best parameters for each method when classifying OUTEX10.|
 |[fashionMNIST_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_classification.ipynb) | notebook to classify the fashion_mnist database using random forest |
 |[direct_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/direct_optimisation.py) | estimator with a general classifier from already calculated features|
-|[OUTEX68_tropical_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX68_tropical_optimisation.py) | estimator with a specific classifier for Tropical Coordinates and the OUTEX68 database|
+|[OUTEX_tropical_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_tropical_optimisation.py) | estimator with a specific classifier for Tropical Coordinates and the OUTEX database|
 
 ## Examples
 | Name | Description  |
