@@ -245,7 +245,7 @@ class Entropy(BaseEstimator, TransformerMixin):
                 # Empty persistence diagram case - https://github.com/GUDHI/gudhi-devel/issues/507
                 assert len(diagram) == 0
                 new_diagram = np.empty(shape = [0, 2])
-                
+            new_diagram = new_diagram[new_diagram[:,1]>0]    
             p = new_diagram[:,1]
             p = p/np.sum(p)
             if self.mode == "scalar":
