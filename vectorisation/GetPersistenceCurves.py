@@ -234,7 +234,7 @@ class Entropy(BaseEstimator, TransformerMixin):
         num_diag, Xfit = len(X), []
         x_values = np.linspace(self.sample_range[0], self.sample_range[1], self.resolution)
         step_x = x_values[1] - x_values[0]
-        new_X = BirthPersistenceTransform().fit_transform(X)        
+        new_X = BirthPersistenceTransform().fit_transform(X)  
 
         for i in range(num_diag):
             orig_diagram, diagram, num_pts_in_diag = X[i], new_X[i], X[i].shape[0]
@@ -244,21 +244,25 @@ class Entropy(BaseEstimator, TransformerMixin):
             except ValueError:
                 # Empty persistence diagram case - https://github.com/GUDHI/gudhi-devel/issues/507
                 assert len(diagram) == 0
-                new_diagram = np.empty(shape = [0, 2])
-            new_diagram = new_diagram[new_diagram[:,1]>0]    
+                new_diagram = np.empty(shape = [0, 2])   
             p = new_diagram[:,1]
-            p = p/np.sum(p)
+            #we need this condition to avoid dividing by zero
+            if (p!=0).any():
+                p = p/np.sum(p)
+            #This function is necessary to guarantee that 0*log(0)=0 later
+            log0 = lambda x: 0 if x == 0 else np.log(x)
+            log0 = np.frompyfunc(log0, 1, 1)
             if self.mode == "scalar":
-                ent = -np.dot(p, np.log(p))
+                ent = -np.dot(p, log0(p))
                 Xfit.append(np.array([[ent]]))
-           
             else:
                 ent = np.zeros(self.resolution)
                 for j in range(num_pts_in_diag):
                     [px,py] = orig_diagram[j,:2]
-                    min_idx = np.clip(np.ceil((px - self.sample_range[0]) / step_x).astype(int), 0, self.resolution)
-                    max_idx = np.clip(np.ceil((py - self.sample_range[0]) / step_x).astype(int), 0, self.resolution)
-                    ent[min_idx:max_idx]-=p[j]*np.log(p[j])
+                    if px!=py:
+                        min_idx = np.clip(np.ceil((px - self.sample_range[0]) / step_x).astype(int), 0, self.resolution)
+                        max_idx = np.clip(np.ceil((py - self.sample_range[0]) / step_x).astype(int), 0, self.resolution)
+                        ent[min_idx:max_idx]-=p[j]*log0(p[j])
                 if self.normalized:
                     ent = ent / np.linalg.norm(ent, ord=1)
                 Xfit.append(np.reshape(ent,[1,-1]))
@@ -328,14 +332,13 @@ class Lifespan(BaseEstimator, TransformerMixin):
                 new_diagram = np.empty(shape = [0, 2])
                 
             p = new_diagram[:,1]
-            p = p/np.sum(p)
-
             lsp = np.zeros(self.resolution)
             for j in range(num_pts_in_diag):
                 [px,py] = orig_diagram[j,:2]
-                min_idx = np.clip(np.ceil((px - self.sample_range[0]) / step_x).astype(int), 0, self.resolution)
-                max_idx = np.clip(np.ceil((py - self.sample_range[0]) / step_x).astype(int), 0, self.resolution)
-                lsp[min_idx:max_idx]+=p[j]
+                if px!=py:
+                    min_idx = np.clip(np.ceil((px - self.sample_range[0]) / step_x).astype(int), 0, self.resolution)
+                    max_idx = np.clip(np.ceil((py - self.sample_range[0]) / step_x).astype(int), 0, self.resolution)
+                    lsp[min_idx:max_idx]+=p[j]
                 
             Xfit.append(np.reshape(lsp,[1,-1]))
 

@@ -55,7 +55,7 @@ for func in func_list:
 #%%
 #Methods with only one parameter
 func_list = [
-             #GetPersEntropyFeature,
+             # GetPersEntropyFeature,
              #GetBettiCurveFeature,
              #GetTopologicalVectorFeature,
              #GetPersLifespanFeature,
@@ -68,7 +68,7 @@ hyper_parameters['GetPersEntropyFeature'] = [50,100,200]
 hyper_parameters['GetBettiCurveFeature'] = [50,100,200]
 hyper_parameters['GetPersLifespanFeature'] = [50,100,200]
 hyper_parameters['GetTopologicalVectorFeature'] = [5, 10, 20]
-hyper_parameters['GetPerImageFeature'] = [[50,50],[100,100],[200,200],[225,225],[250,250]]
+hyper_parameters['GetPersImageFeature'] = [50,100,150,200,250]
 hyper_parameters['GetAtolFeature'] = [2,4,8,16]
 
 for func in func_list:
@@ -98,7 +98,7 @@ for func in func_list:
 #Methods with two parameter
 func_list = [
              #GetPersSilhouetteFeature,
-             #GetComplexPolynomialFeature,
+             GetComplexPolynomialFeature,
              #GetPersLandscapeFeature
             ]
 
