@@ -34,8 +34,8 @@ dgmsDF['Dgm1'] = dgmsDF.CollectedDgm.apply(lambda x: getDgm(x, dim = 1))
 #Methods with no parameter
 
 func_list = [
-              GetPersStats,
-              GetCarlssonCoordinatesFeature
+            # GetPersStats,
+            # GetCarlssonCoordinatesFeature
             ]
 
 for func in func_list:
@@ -54,12 +54,12 @@ for func in func_list:
 #%%
 #Methods with only one parameter
 func_list = [
-             GetPersEntropyFeature,
-             GetBettiCurveFeature,
-             #GetTopologicalVectorFeature,
-             GetPersLifespanFeature,
-             #GetPersImageFeature,
-             #GetAtolFeature
+             # GetPersEntropyFeature,
+             # GetBettiCurveFeature,
+              GetTopologicalVectorFeature,
+             # GetPersLifespanFeature,
+              GetPersImageFeature,
+             # GetAtolFeature
             ]
 
 hyper_parameters = {}
@@ -77,6 +77,7 @@ for func in func_list:
     for p in hyper_parameters[func.__name__]:
         print(str(p))
         for t in range(1,12):
+            print(t)
             dgms = dgmsDF[dgmsDF.trial==t]
             dgms = np.array(dgms['Dgm1'])
             for i in range(dgms.shape[0]):
@@ -88,9 +89,9 @@ for func in func_list:
 #%%
 #Methods with two parameter
 func_list = [
-             # GetPersSilhouetteFeature,
-             # GetComplexPolynomialFeature,
-             # GetPersLandscapeFeature
+               # GetPersSilhouetteFeature,
+              GetComplexPolynomialFeature,
+              GetPersLandscapeFeature
             ]
 
 hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
@@ -104,9 +105,9 @@ for func in func_list:
         for q in hyper_parameters[func.__name__][1]:
             print(str(p),str(q))
             for t in range(1,12):
+                print(t)
                 dgms = dgmsDF[dgmsDF.trial==t]
                 dgms = np.array(dgms['Dgm1'])
-                
                 for i in range(dgms.shape[0]):
                     features[str(t)+'_'+str(i)+'_'+str(p)+'_'+str(q)]=func(dgms[i],p,q) 
                 

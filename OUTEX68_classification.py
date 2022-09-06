@@ -4,7 +4,7 @@ import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from direct_optimisation import main_classifier
-from OUTEX68_tropical_optimisation import tropical_classifier
+from OUTEX_tropical_optimisation import tropical_classifier
 from vectorisation import *
 from sklearn.svm import SVC
 
@@ -12,13 +12,13 @@ from sklearn.svm import SVC
 #classification(func=GetCarlssonCoordinatesFeature , base_estimator='RF', n_estimators=500)
 #classification(func=GetPersEntropyFeature, str_p='200', base_estimator='RF', n_estimators=300)
 #classification(func=GetBettiCurveFeature, str_p='200', base_estimator='SVM', C=105, kernel='poly', gamma=0.00891, degree=2)
-#classification(func=GetPersLifeSpanFeature, str_p='100', base_estimator='SVM', C=211.4, kernel='linear')
-#classification(func=GetPersImageFeature, str_p='225', , base_estimator='RF', n_estimators=300)
+#classification(func=GetPersLifespanFeature, str_p='100', base_estimator='SVM', C=211.4, kernel='linear')
+#classification(func=GetPersImageFeature, str_p='225' , base_estimator='RF', n_estimators=300)
 #classification(func=GetAtolFeature, str_p='2', base_estimator='RF', n_estimators=500)
 #classification(func=GetPersSilhouetteFeature, str_p='100', str_q='5', base_estimator='RF', n_estimators=300)
 #classification(func=GetComplexPolynomialFeature, str_p='5', str_q='R', base_estimator='RF', n_estimators=300)
 #classification(func=GetPersLandscapeFeature, str_p='50', str_q='20', base_estimator='SVM', C=70, kernel='linear')
-#classification(func=GetPersTropicalCoordinatesFeature, str_p='258.53', base_estimator='RF', n_estimators=300)
+#classification(func=GetPersTropicalCoordinatesFeature, str_p='35.91', base_estimator='SVM', kernel='linear', C=95.37)
              
 def classification(func, str_p='', str_q='', base_estimator='RF', 
              n_estimators=100, C=1.0, kernel='rbf', gamma=0.1, degree=3):
@@ -84,6 +84,8 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
                         features_u_d1[str(i) + str_p + str_q]
                     ]
                     ))    
+        X_train = float64to32(X_train)
+        X_test = float64to32(X_test)
     
     else:
         method = tropical_classifier(base_estimator, 
@@ -91,6 +93,9 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
         
         X_train, X_test = Z_train, Z_test
     
-    method.fit(X_train, y_train) 
-    y_pred = method.predict(X_test)
-    print(classification_report(y_test, y_pred))
+    score_list = []
+    for i in range(10):
+        method.fit(X_train, y_train)
+        score_list.append(np.mean(y_test.ravel() == method.predict(X_test)))
+        
+    print(np.mean(score_list))

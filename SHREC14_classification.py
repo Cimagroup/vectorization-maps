@@ -7,24 +7,16 @@ from direct_optimisation import main_classifier
 from OUTEX_tropical_optimisation import tropical_classifier
 from vectorisation import *
 from sklearn.svm import SVC
+from numpy.random import seed
 
-#classification(func=GetPersStatsFeature, base_estimator='RF', n_estimators=500)
-#classification(func=GetCarlssonCoordinatesFeature , base_estimator='RF', n_estimators=500)
-#classification(func=GetPersEntropyFeature, str_p='200', base_estimator='RF', n_estimators=300)
-#classification(func=GetBettiCurveFeature, str_p='200', base_estimator='SVM', C=105, kernel='poly', gamma=0.00891, degree=2)
-#classification(func=GetPersLifeSpanFeature, str_p='100', base_estimator='SVM', C=211.4, kernel='linear')
-#classification(func=GetPersImageFeature, str_p='225', , base_estimator='RF', n_estimators=300)
-#classification(func=GetAtolFeature, str_p='2', base_estimator='RF', n_estimators=500)
-#classification(func=GetPersSilhouetteFeature, str_p='100', str_q='5', base_estimator='RF', n_estimators=300)
-#classification(func=GetComplexPolynomialFeature, str_p='5', str_q='R', base_estimator='RF', n_estimators=300)
-#classification(func=GetPersLandscapeFeature, str_p='50', str_q='20', base_estimator='SVM', C=70, kernel='linear')
-#classification(func=GetPersTropicalCoordinatesFeature, str_p='258.53', base_estimator='RF', n_estimators=300)
+
              
 def classification(func, str_p='', str_q='', base_estimator='RF', t=10,
              n_estimators=100, C=1.0, kernel='rbf', gamma=0.1, degree=3):
     
     data_path = 'Shrec14/data/'
     data = pd.read_csv(data_path+'Uli_data.csv')
+    seed(1)
     
     if str_p!='':
         p = str_p
@@ -130,9 +122,77 @@ def classification(func, str_p='', str_q='', base_estimator='RF', t=10,
     
         method = main_classifier(base_estimator,
                      n_estimators, C, kernel, gamma, degree)
-        
     
-    method.fit(X_train, y_train) 
-    y_pred = method.predict(X_test)
-    print(classification_report(y_test, y_pred))
+    score_list = []
+    for i in range(100):
+        method.fit(X_train, y_train)
+        score_list.append(np.mean(y_test == method.predict(X_test)))
+        
+    print(np.mean(score_list))
 
+#GetPersStats
+# classification(func=GetPersStats, base_estimator='SVM', t=1, C=242.61602391361458, kernel='linear')
+# classification(func=GetPersStats, base_estimator='SVM', t=2, C=34.41327954736772, kernel='linear')
+# classification(func=GetPersStats, base_estimator='SVM', t=3, C=327.14773416776956, kernel='linear')
+# classification(func=GetPersStats, base_estimator='SVM', t=4, C=75.87960668267124, kernel='linear')
+# classification(func=GetPersStats, base_estimator='SVM', t=5, C=6.063748502539767, kernel='linear')
+# classification(func=GetPersStats, base_estimator='SVM', t=6, C=547.0104892185311, kernel='rbf', gamma=0.0022931176685105576)
+# classification(func=GetPersStats, base_estimator='SVM', t=7, C=277.311870239477, kernel='rbf', gamma=0.005724516397732078)
+# classification(func=GetPersStats, base_estimator='SVM', t=8, C=771.0945390318818, kernel='poly', gamma=0.0180808489464352, degree=2)
+# classification(func=GetPersStats, base_estimator='RF', t=9, n_estimators=300)
+# classification(func=GetPersStats, base_estimator='SVM', t=10, C=219.44680984683285, kernel='linear')
+#GetCarlssonCoordinatesFeature
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', t=1, n_estimators=200)
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', t=2, n_estimators=50)
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', t=3, n_estimators=50)
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', t=4, n_estimators=100)
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', t=5, n_estimators=300)
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', t=6, n_estimators=100)
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', t=7, n_estimators=100)
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', t=8, n_estimators=50)
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', t=9, n_estimators=300)
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', t=10, n_estimators=100)
+#GetPersEntropyFeature
+# classification(func=GetPersEntropyFeature, str_p='200', t=1, base_estimator='SVM', kernel='rbf', C=333.73240112817837, gamma=0.004816329290999086)
+# classification(func=GetPersEntropyFeature, str_p='200', t=2, base_estimator='RF', n_estimators=50)
+# classification(func=GetPersEntropyFeature, str_p='200', t=3, base_estimator='RF', n_estimators=500)
+# classification(func=GetPersEntropyFeature, str_p='200', t=4, base_estimator='RF', n_estimators=300)
+# classification(func=GetPersEntropyFeature, str_p='200', t=5, base_estimator='RF', n_estimators=300)
+# classification(func=GetPersEntropyFeature, str_p='200', t=6, base_estimator='RF', n_estimators=300)
+# classification(func=GetPersEntropyFeature, str_p='200', t=7, base_estimator='RF', n_estimators=300)
+# classification(func=GetPersEntropyFeature, str_p='200', t=8, base_estimator='SVM', kernel='rbf', C=137.5518127520976, gamma=0.001966757624327403)
+# classification(func=GetPersEntropyFeature, str_p='100', t=9, base_estimator='SVM', kernel='rbf', C=167.17443031566526, gamma=0.0029046626574237167)
+# classification(func=GetPersEntropyFeature, str_p='100', t=10, base_estimator='SVM', kernel='rbf', C=236.75530013409286, gamma=0.004904869721469778)
+#GetBettiCurveFeature
+# classification(func=GetBettiCurveFeature, str_p='200', t=1, base_estimator='SVM', kernel='poly', C=685.1757925863737, gamma=0.026095092746128038, degree=3)
+# classification(func=GetBettiCurveFeature, str_p='100', t=2, base_estimator='SVM', kernel='poly', C=707.6263512818409, gamma=0.010457978529920224, degree=2)
+# classification(func=GetBettiCurveFeature, str_p='100', t=3, base_estimator='SVM', kernel='rbf', C=206.01770354273862, gamma=0.0030882237830110715)
+# classification(func=GetBettiCurveFeature, str_p='200', t=4, base_estimator='RF', n_estimators=50)
+# classification(func=GetBettiCurveFeature, str_p='200', t=5, base_estimator='RF', n_estimators=300)
+# classification(func=GetBettiCurveFeature, str_p='200', t=6, base_estimator='RF', n_estimators=300)
+# classification(func=GetBettiCurveFeature, str_p='200', t=7, base_estimator='RF', n_estimators=50)
+# classification(func=GetBettiCurveFeature, str_p='200', t=8, base_estimator='RF', n_estimators=100)
+# classification(func=GetBettiCurveFeature, str_p='200', t=9, base_estimator='SVM', kernel='rbf', C=45.91396006997594, gamma=0.0002056231610313888)
+# classification(func=GetBettiCurveFeature, str_p='200', t=10, base_estimator='SVM', kernel='poly', C=838.3106508517023, gamma=0.03928745645869667, degree=2)
+#GetPersLifespanFeature
+# classification(func=GetPersLifespanFeature, str_p='200', t=1, base_estimator='SVM', kernel='poly', C=879.5184108555763, gamma=0.0349498757941561, degree=2)
+# classification(func=GetPersLifespanFeature, str_p='200', t=2, base_estimator='SVM', kernel='linear',C=775.2915571850108)
+# classification(func=GetPersLifespanFeature, str_p='200', t=3, base_estimator='SVM', kernel='linear',C=205.51602581712015)
+# classification(func=GetPersLifespanFeature, str_p='100', t=4, base_estimator='RF',n_estimators=300)
+# classification(func=GetPersLifespanFeature, str_p='200', t=5, base_estimator='RF',n_estimators=300)
+# classification(func=GetPersLifespanFeature, str_p='100', t=6, base_estimator='RF',n_estimators=200)
+# classification(func=GetPersLifespanFeature, str_p='200', t=7, base_estimator='RF',n_estimators=300)
+# classification(func=GetPersLifespanFeature, str_p='200', t=8, base_estimator='SVM', kernel='linear',C=809.5469892495846)
+# classification(func=GetPersLifespanFeature, str_p='200', t=9, base_estimator='SVM', kernel='linear',C=142.0011634426691)
+# classification(func=GetPersLifespanFeature, str_p='200', t=10, base_estimator='RF', n_estimators=300)
+#GetPersImage
+# classification(func=GetPersImageFeature, str_p='200', t=1, base_estimator='RF',n_estimators=500)
+# classification(func=GetPersImageFeature, str_p='200', t=2, base_estimator='RF',n_estimators=300)
+# classification(func=GetPersImageFeature, str_p='200', t=3, base_estimator='RF',n_estimators=500)
+# classification(func=GetPersImageFeature, str_p='25', t=4, base_estimator='RF',n_estimators=200)
+# classification(func=GetPersImageFeature, str_p='50', t=5, base_estimator='RF',n_estimators=50)
+# classification(func=GetPersImageFeature, str_p='10', t=6, base_estimator='RF',n_estimators=300)
+# classification(func=GetPersImageFeature, str_p='100', t=7, base_estimator='SVM',kernel='rbf',C=108.15265139116536, gamma=0.0007232398939433436)
+# classification(func=GetPersImageFeature, str_p='10', t=8, base_estimator='SVM',kernel='linear',C=360.00349917907647)
+# classification(func=GetPersImageFeature, str_p='25', t=9, base_estimator='RF',n_estimators=200)
+# classification(func=GetPersImageFeature, str_p='25', t=10, base_estimator='RF',n_estimators=50)

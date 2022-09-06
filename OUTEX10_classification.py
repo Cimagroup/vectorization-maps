@@ -10,20 +10,10 @@ from sklearn.svm import SVC
 from numpy.random import choice
 from numpy.random import seed
 
-#classification(func=GetPersStatsFeature, base_estimator='RF', n_estimators=500)
-#classification(func=GetCarlssonCoordinatesFeature , base_estimator='RF', n_estimators=500)
-#classification(func=GetPersEntropyFeature, str_p='200', base_estimator='RF', n_estimators=300)
-#classification(func=GetBettiCurveFeature, str_p='200', base_estimator='SVM', C=105, kernel='poly', gamma=0.00891, degree=2)
-#classification(func=GetPersLifeSpanFeature, str_p='100', base_estimator='SVM', C=211.4, kernel='linear')
-#classification(func=GetPersImageFeature, str_p='225', , base_estimator='RF', n_estimators=300)
-#classification(func=GetAtolFeature, str_p='2', base_estimator='RF', n_estimators=500)
-#classification(func=GetPersSilhouetteFeature, str_p='100', str_q='5', base_estimator='RF', n_estimators=300)
-#classification(func=GetComplexPolynomialFeature, str_p='5', str_q='R', base_estimator='RF', n_estimators=300)
-#classification(func=GetPersLandscapeFeature, str_p='50', str_q='20', base_estimator='SVM', C=70, kernel='linear')
-#classification(func=GetPersTropicalCoordinatesFeature, str_p='258.53', base_estimator='RF', n_estimators=300)
-             
+
 def classification(func, str_p='', str_q='', base_estimator='RF', 
-             n_estimators=100, C=1.0, kernel='rbf', gamma=0.1, degree=3):
+             n_estimators=100, C=1.0, kernel='rbf', gamma=0.1, degree=3, 
+             s=1, rs=0):
     
     if str_p!='':
         p = str_p
@@ -38,7 +28,7 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
     path_feat = 'Outex-TC-00024/features/' 
     path_data = 'Outex-TC-00024/data/000/'
     
-    seed(1)
+    seed(s)
     labels = range(68)
     labels = choice(labels, size=(10), replace = False)
 
@@ -53,8 +43,7 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
 
     Z_train, Z_test, y_train, y_test = train_test_split(range(len(label_list)), 
                                                         label_list, test_size=0.3, 
-                                                        random_state=0)
-    
+                                                        random_state=rs)
     if func!=GetPersTropicalCoordinatesFeature:
         with open(path_feat + func.__name__ + '_l_d0.pkl', 'rb') as f:
             features_l_d0 = pickle.load(f)
@@ -104,6 +93,10 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
             
         X_train, X_test = Z_train, Z_test
     
-    method.fit(X_train, y_train) 
-    y_pred = method.predict(X_test)
-    print(classification_report(y_test, y_pred))
+    score_list = []
+    for i in range(10):
+        method.fit(X_train, y_train)
+        y_pred = method.predict(X_test)
+        score_list.append(np.mean(y_test.ravel() == method.predict(X_test)))
+
+    return np.mean(score_list)
