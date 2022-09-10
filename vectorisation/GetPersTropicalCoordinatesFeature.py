@@ -1,9 +1,11 @@
 import numpy as np
 from copy import deepcopy
+from vectorisation.bar_cleaner import bar_cleaner
 
 __all__ = ["GetPersTropicalCoordinatesFeature"]
 
 def GetPersTropicalCoordinatesFeature(barcode, r=28):
+    barcode = bar_cleaner(barcode)
     feature_vector = np.zeros(7)
     if(np.size(barcode) > 0):
         #change the deaths by the lifetime
