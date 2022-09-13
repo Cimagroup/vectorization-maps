@@ -10,30 +10,63 @@ from bokeh.layouts import column, row
 from bokeh.models import ColumnDataSource, Range1d
 from bokeh.transform import factor_cmap
 import pandas as pd
+import io
+import os
+from scipy.spatial import distance
+from ripser import ripser
 
 
 @st.cache
 def load_image(image_file):
 	img = Image.open(image_file)
 	return img
+    
+@st.cache
+def load_csv(csv_file):
+    df = pd.read_csv(csv_file, names=['x', 'y', 'z'])
+    return df
 
 def infty_proj(x):
      return (256 if ~np.isfinite(x) else x)
 
 @st.cache
-def GetPds(img):
-    pds = pd0 = pd1 = None
-    image_val = np.array(img)
-    images_gudhi = np.resize(image_val, [128, 128])
-    images_gudhi = images_gudhi.reshape(128*128,1)
-    #st.image(image_val)
-    cub_filtration = gd.CubicalComplex(dimensions = [128,128], top_dimensional_cells=images_gudhi)
-    pds = cub_filtration.persistence()
-    pd0 = np.array([[x[1][0], infty_proj(x[1][1])]  for x in pds if x[0]==0])
-    pd1 = np.array([[x[1][0], infty_proj(x[1][1])]  for x in pds if x[0]==1])
-    return pds, pd0, pd1
+def GetPds(data, isPointCloud):
+    pd0 = pd1 = None
+
+    if isPointCloud:
+        data = data.to_numpy()
+        dist_mat = distance.squareform(distance.pdist(data))
+        ripser_result = ripser(dist_mat, maxdim=1, distance_matrix=True)
+        pd0 = ripser_result['dgms'][0]
+        pd1 = ripser_result['dgms'][1]
+    else:
+        data = np.array(data)
+        data_gudhi = np.resize(data, [128, 128])
+        data_gudhi = data_gudhi.reshape(128*128,1)
+        cub_filtration = gd.CubicalComplex(dimensions = [128,128], top_dimensional_cells=data_gudhi)
+        cub_filtration.persistence()
+
+        pd0 = cub_filtration.persistence_intervals_in_dimension(0)
+        pd1 = cub_filtration.persistence_intervals_in_dimension(1)
+
+    for j in range(pd0.shape[0]):
+        if pd0[j,1]==np.inf:
+            pd0[j,1]=256
+    for j in range(pd1.shape[0]):
+        if pd1[j,1]==np.inf:
+            pd1[j,1]=256
+    
+    return pd0, pd1
 
 def PlotPersistantDiagram(pd0, pd1):
+    if (len(pd0.shape) > 1):
+        pd0 = pd0[pd0[:, 0] != 256]
+        pd0 = pd0[pd0[:, 1] != 256]
+
+    if (len(pd1.shape) > 1):
+        pd1 = pd1[pd1[:, 0] != np.inf]
+        pd1 = pd1[pd1[:, 1] != np.inf]
+
     tools = ["pan","box_zoom", "wheel_zoom", "box_select", "hover", "reset"]
 
     fig = figure(height=400, tools = tools)
@@ -64,32 +97,67 @@ def PlotPersistantDiagram(pd0, pd1):
     # chart.set(xlim=(-1, lineY), ylim=(-1, lineY))
     return fig
 
+def CreateDownloadButton(label, data):
+    # Create an in-memory buffer
+    with io.BytesIO() as buffer:
+        # Write array to buffer
+        np.savetxt(buffer, data, delimiter=",")
+        st.download_button(
+            label=f"Download {label}",
+            data = buffer, # Download buffer
+            file_name = f'{label}.csv',
+            mime='text/csv')
+
 def main():
+    hide_menu_style = """
+        <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        </style>
+        """
+    st.markdown(hide_menu_style, unsafe_allow_html=True)
+
     st.title("Featurized Persistent Barcode")
     
     tools = ["pan","box_zoom", "wheel_zoom", "box_select", "hover", "reset"]
     
-    menu = ["Cifar10","Fashion MNIST","Outex68", "Custom"]
+    menu = ["Cifar10","Fashion MNIST","Outex68", "Shrec14", "Custom"]
     choice = st.sidebar.selectbox("Select a Dataset",menu)
 
     if choice == "Cifar10":
-        image_file = r"data\cifar10.png"
+        file_path = r"data\cifar10.png"
     elif choice == "Fashion MNIST":
-        image_file = r"data\FashionMNIST.jpg"
+        file_path = r"data\FashionMNIST.jpg"
     elif choice == "Outex68":
-        image_file = r"data\Outex1.bmp"
+        file_path = r"data\Outex1.bmp"
+    elif choice == "Shrec14":
+        file_path = r"data\shrec14_data_0.csv"
     else:
-        image_file = st.sidebar.file_uploader("Upload Image",type=['png','jpeg','jpg','bmp'])
+        file_path = st.sidebar.file_uploader("Upload Image",type=['png','jpeg','jpg','bmp','csv'])
 
-    if image_file is not None:
+    if file_path is not None:
         
         isShowImageChecked = st.checkbox('Input File', value=True)
-        img = load_image(image_file)
+        isPointCloud = (choice == "Shrec14" or 
+                        (choice == "Custom" and os.path.splitext(file_path.name)[1] == ".csv"))
+
+        if isPointCloud:
+            input_data = load_csv(file_path)
+        else:
+            input_data = load_image(file_path)
 
         if isShowImageChecked:
-            st.image(img,width=250)
-
-        pds, pd0, pd1 = GetPds(img)
+            if isPointCloud:
+                fig = px.scatter_3d(input_data, x='x', y='y', z='z')
+                st.plotly_chart(fig)
+            else:
+                st.image(input_data,width=250)
+        
+        if(choice == "Shrec14"):
+            pd0 = pd.read_csv(r"data\shrec14_data_0_ph0.csv").to_numpy()
+            pd1 = pd.read_csv(r"data\shrec14_data_0_ph1.csv").to_numpy()
+        else:
+            pd0, pd1 = GetPds(input_data, isPointCloud)
 
         isPersBarChecked = st.checkbox('Persistence Barcodes')
 
@@ -111,10 +179,9 @@ def main():
             fig.hbar(y='y', left='x1', right='x2', height=0.1, alpha=0.5, source=source)
             st.bokeh_chart(fig, use_container_width=True)
 
-            # fig, ax = plt.subplots()
-            # gd.plot_persistence_barcode(pd1, axes=ax)
-            # ax.set_title("Persistence Barcode [dim = 1]")
-            # st.pyplot(fig)
+            CreateDownloadButton('PH0', pd0)
+            CreateDownloadButton('PH1', pd1)
+            st.markdown('#')
 
         isPersDiagChecked = st.checkbox('Persistence Diagram')
 
@@ -148,6 +215,10 @@ def main():
             fig.circle(range(0, len(Btt_1)), Btt_1, fill_color="darkblue", alpha=0.4, size=4, hover_color="red")
             st.bokeh_chart(fig, use_container_width=True)
 
+            CreateDownloadButton('Betti Curve (PH0)', Btt_0)
+            CreateDownloadButton('Betti Curve (PH1)', Btt_1)
+            st.markdown('#')
+
         isPersStatsChecked = st.checkbox('Persistent Statistics')
 
         if isPersStatsChecked:
@@ -155,8 +226,14 @@ def main():
             stat_0 = vec.GetPersStats(pd0)
             stat_1 = vec.GetPersStats(pd1)
             df = pd.DataFrame(np.array((stat_0, stat_1)), index=['PH(0)', 'PH(1)'])
-            df.columns =['stat. 1', 'stat. 2', 'stat. 3', 'stat. 4', 'stat. 5', 'stat. 6', 'stat. 7', 'stat. 8', 'stat. 9', 'stat. 10', 'stat. 11']
+            df.columns =['Birth Average', 'Death Average', 'Birth STD.', 'Death STD.', 
+                         'Birth Median', 'Death Median', 'Bar Length Average', 'Bar Length STD', 
+                         'Bar Length Median', 'Bar Count', 'Barcode Persitent Entropy']
             st.dataframe(df)
+
+            CreateDownloadButton('Persistent Stats (PH0)', stat_0)
+            CreateDownloadButton('Persistent Stats (PH1)', stat_1)
+            st.markdown('#')
 
         isPersImgChecked = st.checkbox('Persistent Image')
 
@@ -176,12 +253,16 @@ def main():
             ax.set_title("Persistent Image [dim = 1]")
             col2.pyplot(fig)
 
+            CreateDownloadButton('Persistent Image (PH0)', PI_0)
+            CreateDownloadButton('Persistent Image (PH1)', PI_1)
+            st.markdown('#')
+
         isPersLandChecked = st.checkbox('Persistent Landscape')
 
         if isPersLandChecked:
             st.subheader("Persistent Landscape")
             col1, col2 = st.columns(2)
-            PL_0 = vec.GetPersLandscapeFeature(pd0, num=100)
+            PL_0 = vec.GetPersLandscapeFeature(pd0)
             fig, ax = plt.subplots()
             ax.plot(PL_0[:100])
             ax.plot(PL_0[100:200])
@@ -189,13 +270,17 @@ def main():
             ax.set_title("Persistent Landscape [dim = 0]")
             col1.pyplot(fig)
 
-            PL_1 = vec.GetPersLandscapeFeature(pd1, num=100)
+            PL_1 = vec.GetPersLandscapeFeature(pd1)
             fig, ax = plt.subplots()
             ax.plot(PL_1[:100])
             ax.plot(PL_1[100:200])
             ax.plot(PL_1[200:300])
             ax.set_title("Persistent Landscape [dim = 1]")
             col2.pyplot(fig)
+
+            CreateDownloadButton('Persistent Landscape (PH0)', PL_0)
+            CreateDownloadButton('Persistent Landscape (PH1)', PL_1)
+            st.markdown('#')
 
         isPersEntropyChecked = st.checkbox('Persistent Entropy')
 
@@ -211,19 +296,27 @@ def main():
             ax.set_title("Persistent entropy [dim = 1]")
             st.line_chart(PersEntropy_1)
 
+            CreateDownloadButton('Persistent Entropy (PH0)', PersEntropy_0)
+            CreateDownloadButton('Persistent Entropy (PH1)', PersEntropy_1)
+            st.markdown('#')
+
         isPersSilChecked = st.checkbox('Persistent Silhouette')
 
         if isPersSilChecked:
             st.subheader("Persistent silhouette")
             PersSil_0 = vec.GetPersSilhouetteFeature(pd0)
             fig, ax = plt.subplots()
-            ax.set_title("Persistent silhouette [dim = 0]")
+            ax.set_title("Persistent Silhouette [dim = 0]")
             st.line_chart(PersSil_0)
 
             PersSil_1 = vec.GetPersSilhouetteFeature(pd1)
             fig, ax = plt.subplots()
-            ax.set_title("Persistent silhouette [dim = 1]")
+            ax.set_title("Persistent Silhouette [dim = 1]")
             st.line_chart(PersSil_1)
+
+            CreateDownloadButton('Persistent Silhouette (PH0)', PersSil_0)
+            CreateDownloadButton('Persistent Silhouette (PH1)', PersSil_1)
+            st.markdown('#')
 
         isAtolChecked = st.checkbox('Atol')
 
@@ -239,6 +332,10 @@ def main():
             ax.set_title("Atol [dim = 1]")
             st.line_chart(atol_1)
 
+            CreateDownloadButton('Atol (PH0)', atol_0)
+            CreateDownloadButton('Atol (PH1)', atol_1)
+            st.markdown('#')
+
         isCarlsCoordsChecked = st.checkbox('Carlsson Coordinates')
 
         if isCarlsCoordsChecked:
@@ -253,6 +350,10 @@ def main():
             ax.set_title("Carlsson Coordinates [dim = 1]")
             st.line_chart(carlsCoords_1)
 
+            CreateDownloadButton('Carlsson Coordinates (PH0)', carlsCoords_0)
+            CreateDownloadButton('Carlsson Coordinates (PH1)', carlsCoords_1)
+            st.markdown('#')
+
         isPersLifeSpanChecked = st.checkbox('Persistent Life Span')
 
         if isPersLifeSpanChecked:
@@ -266,6 +367,10 @@ def main():
             fig, ax = plt.subplots()
             ax.set_title("Persistent Life Span [dim = 1]")
             st.line_chart(persLifeSpan_1)
+
+            CreateDownloadButton('Persistent Life Span (PH0)', persLifeSpan_0)
+            CreateDownloadButton('Persistent Life Span (PH1)', persLifeSpan_1)
+            st.markdown('#')
 
         isComplexPolynomialChecked = st.checkbox('Complex Polynomial')
 
@@ -289,6 +394,10 @@ def main():
             fig.circle(x='x', y='y', fill_color="darkblue", alpha=0.4, size=4, hover_color="red", source=source)
             st.bokeh_chart(fig, use_container_width=True)
 
+            CreateDownloadButton('Complex Polynomial (PH0)', CP_pd0)
+            CreateDownloadButton('Complex Polynomial (PH1)', CP_pd1)
+            st.markdown('#')
+
         isTopologicalVectorChecked = st.checkbox('Topological Vector')
 
         if isTopologicalVectorChecked:
@@ -303,6 +412,10 @@ def main():
             ax.set_title("Persistent Topological Vector [dim = 1]")
             st.line_chart(topologicalVector_1)
 
+            CreateDownloadButton('Persistent Topological Vector (PH0)', topologicalVector_0)
+            CreateDownloadButton('Persistent Topological Vector (PH1)', topologicalVector_1)
+            st.markdown('#')
+
         isPersTropCoordsChecked = st.checkbox('Persistent Tropical Coordinates')
 
         if isPersTropCoordsChecked:
@@ -316,6 +429,10 @@ def main():
             fig, ax = plt.subplots()
             ax.set_title("Persistent Tropical Coordinates [dim = 1]")
             st.line_chart(persTropCoords_1)
+
+            CreateDownloadButton('Persistent Tropical Coordinates (PH0)', persTropCoords_0)
+            CreateDownloadButton('Persistent Tropical Coordinates (PH1)', persTropCoords_1)
+            st.markdown('#')
 
 
 if __name__ == '__main__':
