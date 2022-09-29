@@ -94,9 +94,42 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
         X_train, X_test = Z_train, Z_test
     
     score_list = []
-    for i in range(10):
+    for i in range(100):
         method.fit(X_train, y_train)
         y_pred = method.predict(X_test)
         score_list.append(np.mean(y_test.ravel() == method.predict(X_test)))
 
     return np.mean(score_list)
+
+# classification(func=GetPersStats, base_estimator='RF', n_estimators=100)
+# 0.9893333333333334
+
+# classification(func=GetCarlssonCoordinatesFeature, base_estimator='RF', n_estimators=200)
+# 0.9736666666666665
+
+# classification(func=GetPersEntropyFeature, str_p='50', kernel='rbf', gamma=0.01872823656893796, C=936.5390708060319)
+# 0.9323333333333335
+
+# classification(func=GetBettiCurveFeature, str_p='50', base_estimator='RF', n_estimators=100)
+# 0.9525833333333334
+
+# classification(func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=300)
+# 0.7395
+
+# classification(func=GetPersLifespanFeature, str_p='50', base_estimator='RF', n_estimators=100)
+# 0.9635833333333333
+
+# classification(func=GetAtolFeature, str_p='2', base_estimator='RF', n_estimators=500)
+# 0.7625833333333334
+
+# classification(func=GetPersSilhouetteFeature, str_p='50', str_q='1', base_estimator='SVM', degree=2, C=1000.0405153241447, gamma=0.0009688387165373345, kernel='poly')
+# 0.9416666666666664
+
+# classification(func=GetPersLandscapeFeature, str_p='100', str_q='5', base_estimator='RF', n_estimators=500)
+# 0.9373333333333335
+
+# classification(func=GetComplexPolynomialFeature, str_p='5', str_q='R', base_estimator='RF', n_estimators=200)
+# 0.9376666666666666
+
+# classification(func=GetPersTropicalCoordinatesFeature, str_p='914.9620245792329', base_estimator='RF', n_estimators=200)
+# 0.9578333333333332

@@ -1,5 +1,5 @@
 import numpy as np
-from vectorisation import GetPersistenceCurves
+from vectorisation import GetNewMethods
 from vectorisation.bar_cleaner import bar_cleaner
 
 __all__ = ["GetPersStats"]
@@ -25,7 +25,7 @@ def GetPersStats(barcode):
         # Number of Bars
         bc_count = len(diff_barcode)
         # Persitent Entropy
-        ent = GetPersistenceCurves.Entropy()
+        ent = GetNewMethods.Entropy()
         bc_ent = ent.fit_transform([barcode])
 
         bar_stats = np.array([bc_av0, bc_av1, bc_std0, bc_std1, bc_med0, bc_med1,

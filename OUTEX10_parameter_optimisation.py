@@ -31,56 +31,203 @@ label_list = np.hstack([train_labels[train_indexes], test_labels[test_indexes]])
 Z_train, Z_test, y_train, y_test = train_test_split(range(len(label_list)), 
                                                     label_list, test_size=0.3, 
                                                     random_state=0)
+      
+#%%
+#Different possible grids (some methods do not converge for some 
+#hyperparameters)
 
+complete = [
+    {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500]},
+    {'base_estimator': ['SVM'], 'kernel': ['linear'], 'C': uniform(1,1000)},
+    {'base_estimator': ['SVM'], 'kernel': ['rbf'], 'C': uniform(1,1000), 
+      'gamma': expon(scale=.01)},
+    {'base_estimator': ['SVM'], 'kernel': ['poly'], 'C': uniform(1,1000), 
+      'degree': [2,3], 'gamma': expon(scale=.01)},
+ ]
+
+onlyForest = [
+    {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500]},
+ ]
+
+noPoly = [
+    {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500]},
+    {'base_estimator': ['SVM'], 'kernel': ['linear'], 'C': uniform(1,1000)},
+    {'base_estimator': ['SVM'], 'kernel': ['rbf'], 'C': uniform(1,1000), 
+      'gamma': expon(scale=.01)}
+ ]
+
+noL =  [
+    {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500]},
+    {'base_estimator': ['SVM'], 'kernel': ['rbf'], 'C': uniform(1,1000), 
+      'gamma': expon(scale=.01)},
+    {'base_estimator': ['SVM'], 'kernel': ['poly'], 'C': uniform(1,1000), 
+      'degree': [2,3], 'gamma': expon(scale=.01)},
+ ]
+
+forestRBF = [
+    {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500]},
+    {'base_estimator': ['SVM'], 'kernel': ['rbf'], 'C': uniform(1,1000), 
+      'gamma': expon(scale=.01)}
+ ]
+
+forestL = [
+    {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500]},
+    {'base_estimator': ['SVM'], 'kernel': ['linear'], 'C': uniform(1,1000)}
+ ]
+
+searchR = lambda pg : RandomizedSearchCV(
+    main_classifier(), param_distributions=pg, cv=5, n_iter=5,
+    return_train_score=True, scoring='accuracy', random_state=1
+)
+
+searchG = lambda pg :  GridSearchCV(
+    main_classifier(), param_grid=pg, cv=5,
+    return_train_score=True, scoring='accuracy'
+)
+
+#%%
+hyper_parameters = {}
+hyper_parameters['GetPersEntropyFeature'] = [50,100,200]
+hyper_parameters['GetBettiCurveFeature'] = [50,100,200]
+hyper_parameters['GetPersLifespanFeature'] = [50,100,200]
+hyper_parameters['GetTopologicalVectorFeature'] = [5, 10, 20]
+hyper_parameters['GetAtolFeature'] = [2,4,8,16]
+hyper_parameters['GetPersImageFeature'] = [50,100,150,200,250]
+hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
+hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
+hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
+
+#%%
+
+func = GetPersStats
+
+print(func.__name__)
+
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
+
+search =  searchR(complete)
+
+best_scores = {}
+X_train = []
+for i in Z_train:
+    X_train.append(
+        np.hstack(
+            [
+                features_l_d0[str(i)],
+                features_l_d1[str(i)],
+                features_u_d0[str(i)],
+                features_u_d1[str(i)]
+            ]
+            ))
+    
+X_test = []
+for i in Z_test:
+    X_test.append(
+        np.hstack(
+            [
+                features_l_d0[str(i)],
+                features_l_d1[str(i)],
+                features_u_d0[str(i)],
+                features_u_d1[str(i)]
+            ]
+            ))    
+
+
+search.fit(X_train, y_train)
+
+best_scores = (search.best_params_, search.best_score_)
+print(best_scores)
+    
+
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
 
 #%%
 #Methods with no parameter
-func_list = [
-             # GetPersStats,
-             #GetCarlssonCoordinatesFeature
+func = GetCarlssonCoordinatesFeature
+print(func.__name__)
+
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
+    
+
+search =  searchG(onlyForest)
+
+best_scores = {}
+X_train = []
+for i in Z_train:
+    X_train.append(
+        np.hstack(
+            [
+                features_l_d0[str(i)],
+                features_l_d1[str(i)],
+                features_u_d0[str(i)],
+                features_u_d1[str(i)]
             ]
+            ))
+    
+X_test = []
+for i in Z_test:
+    X_test.append(
+        np.hstack(
+            [
+                features_l_d0[str(i)],
+                features_l_d1[str(i)],
+                features_u_d0[str(i)],
+                features_u_d1[str(i)]
+            ]
+            ))    
 
-for func in func_list:
-    print(func.__name__)
-    
-    with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
-        features_l_d0 = pickle.load(f)
-    with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
-        features_l_d1 = pickle.load(f)
-    with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
-        features_u_d0 = pickle.load(f)
-    with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
-        features_u_d1 = pickle.load(f)
-        
-    param_grid = [
-        {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500]},
-        {'base_estimator': ['SVM'], 'kernel': ['linear'], 'C': uniform(50,450)},
-        {'base_estimator': ['SVM'], 'kernel': ['rbf'], 'C': uniform(1,999), 
-        'gamma': expon(scale=.1)},
-        {'base_estimator': ['SVM'], 'kernel': ['poly'], 'C': uniform(1,999), 
-        'degree': [2,3], 'gamma': expon(scale=.1)},
-    ]
 
-    search =  RandomizedSearchCV(
-        main_classifier(), param_distributions=param_grid, cv=5, n_iter=20,
-        return_train_score=True, scoring='accuracy'
-    )
+search.fit(X_train, y_train)
+
+best_scores = (search.best_params_, search.best_score_)
+print(best_scores)
     
-    # search =  GridSearchCV(
-    #     main_classifier(), param_grid=param_grid, cv=10,
-    #     return_train_score=True, scoring='accuracy'
-    # )
-    
-    best_scores = {}
+
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
+
+#%%
+
+func = GetPersEntropyFeature
+print(func.__name__)
+
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
+
+search =  searchR(complete)
+
+best_scores = {}
+for p in hyper_parameters[func.__name__]:
     X_train = []
     for i in Z_train:
         X_train.append(
             np.hstack(
                 [
-                    features_l_d0[str(i)],
-                    features_l_d1[str(i)],
-                    features_u_d0[str(i)],
-                    features_u_d1[str(i)]
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
                 ]
                 ))
         
@@ -89,83 +236,307 @@ for func in func_list:
         X_test.append(
             np.hstack(
                 [
-                    features_l_d0[str(i)],
-                    features_l_d1[str(i)],
-                    features_u_d0[str(i)],
-                    features_u_d1[str(i)]
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
                 ]
                 ))    
 
 
     search.fit(X_train, y_train)
 
-    best_scores = (search.best_params_, search.best_score_)
-    print(best_scores)
-        
+    best_scores[str(p)] = (search.best_params_, search.best_score_)
+    print(str(p), ' :', best_scores[str(p)])
     
-    with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-      pickle.dump(best_scores, f)
+print(best_scores)
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
+
+#%%
+func = GetBettiCurveFeature
+
+print(func.__name__)
+
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
+    
+search = searchR(complete)
+
+best_scores = {}
+for p in hyper_parameters[func.__name__]:
+    X_train = []
+    for i in Z_train:
+        X_train.append(
+            np.hstack(
+                [
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
+                ]
+                ))
+        
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
+                ]
+                ))    
+
+
+    search.fit(X_train, y_train)
+
+    best_scores[str(p)] = (search.best_params_, search.best_score_)
+    print(str(p), ' :', best_scores[str(p)])
+    
+print(best_scores)
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
+  
+#%%
+func = GetTopologicalVectorFeature
+print(func.__name__)
+
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
+    
+search = searchG(onlyForest)
+
+best_scores = {}
+for p in hyper_parameters[func.__name__]:
+    X_train = []
+    for i in Z_train:
+        X_train.append(
+            np.hstack(
+                [
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
+                ]
+                ))
+        
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
+                ]
+                ))    
+
+
+    search.fit(X_train, y_train)
+
+    best_scores[str(p)] = (search.best_params_, search.best_score_)
+    print(str(p), ' :', best_scores[str(p)])
+    
+print(best_scores)
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)           
+
+#%%
+func = GetPersLifespanFeature
+print(func.__name__)
+    
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
+
+
+search =  searchR(complete)
+best_scores = {}
+for p in hyper_parameters[func.__name__]:
+    X_train = []
+    for i in Z_train:
+        X_train.append(
+            np.hstack(
+                [
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
+                ]
+                ))
+        
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
+                ]
+                ))    
+
+
+    search.fit(X_train, y_train)
+
+    best_scores[str(p)] = (search.best_params_, search.best_score_)
+    print(str(p), ' :', best_scores[str(p)])
+    
+print(best_scores)
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
       
 #%%
-func_list = [
-             #GetPersEntropyFeature,
-             #GetBettiCurveFeature,
-             #GetTopologicalVectorFeature,
-             #GetPersLifespanFeature,
-             #GetAtolFeature,
-             GetPersImageFeature
-            ]
+func = GetAtolFeature
 
-hyper_parameters = {}
-hyper_parameters['GetPersEntropyFeature'] = [50,100,200]
-hyper_parameters['GetPersImageFeature'] = [50,100,150,200,250]
-hyper_parameters['GetBettiCurveFeature'] = [50,100,200]
-hyper_parameters['GetPersLifespanFeature'] = [50,100,200]
-hyper_parameters['GetTopologicalVectorFeature'] = [5, 10, 20]
-hyper_parameters['GetAtolFeature'] = [2,4,8,16]
+print(func.__name__)
 
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
 
-for func in func_list:
-    print(func.__name__)
-    
-    with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
-        features_l_d0 = pickle.load(f)
-    with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
-        features_l_d1 = pickle.load(f)
-    with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
-        features_u_d0 = pickle.load(f)
-    with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
-        features_u_d1 = pickle.load(f)
+best_scores = {}
+for p in hyper_parameters[func.__name__]:
+    X_train = []
+    for i in Z_train:
+        X_train.append(
+            np.hstack(
+                [
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
+                ]
+                ))
         
-    param_grid = [
-         {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500]},
-         # {'base_estimator': ['SVM'], 'kernel': ['linear'], 'C': uniform(50,450)},
-         # {'base_estimator': ['SVM'], 'kernel': ['rbf'], 'C': uniform(1,999), 
-         #  'gamma': expon(scale=.1)},
-         # {'base_estimator': ['SVM'], 'kernel': ['poly'], 'C': uniform(1,999), 
-         #  'degree': [2,3], 'gamma': expon(scale=.1)},
-    ]
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
+                ]
+                ))   
+    if p==4:
+        search = searchR(noL)
+    else:
+        search = searchR(complete)
+    search.fit(X_train, y_train)
 
-    # search =  RandomizedSearchCV(
-    #     main_classifier(), param_distributions=param_grid, cv=10, n_iter=40,
-    #     return_train_score=True, scoring='accuracy'
-    #  )
-    search =  GridSearchCV(
-        main_classifier(), param_grid=param_grid, cv=5,
-        return_train_score=True, scoring='accuracy'
-    )
+    best_scores[str(p)] = (search.best_params_, search.best_score_)
+    print(str(p), ' :', best_scores[str(p)])
     
-    best_scores = {}
-    for p in hyper_parameters[func.__name__]:
+print(best_scores)
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
+
+#%%
+
+func = GetPersImageFeature
+print(func.__name__)
+    
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
+
+
+search = searchR(complete)
+best_scores = {}
+for p in hyper_parameters[func.__name__]:
+    X_train = []
+    for i in Z_train:
+        X_train.append(
+            np.hstack(
+                [
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
+                ]
+                ))
+        
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+                    features_l_d0[str(i)+'_'+str(p)],
+                    features_l_d1[str(i)+'_'+str(p)],
+                    features_u_d0[str(i)+'_'+str(p)],
+                    features_u_d1[str(i)+'_'+str(p)]
+                ]
+                ))    
+
+    search.fit(X_train, y_train)
+
+    best_scores[str(p)] = (search.best_params_, search.best_score_)
+    print(str(p), ' :', best_scores[str(p)])
+    
+print(best_scores)
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
+
+#%%
+func = GetPersSilhouetteFeature
+print(func.__name__)
+
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
+    
+search = searchR(complete)
+
+best_scores = {}
+for p in hyper_parameters[func.__name__][0]:
+    for q in hyper_parameters[func.__name__][1]:
         X_train = []
         for i in Z_train:
             X_train.append(
                 np.hstack(
                     [
-                        features_l_d0[str(i)+'_'+str(p)],
-                        features_l_d1[str(i)+'_'+str(p)],
-                        features_u_d0[str(i)+'_'+str(p)],
-                        features_u_d1[str(i)+'_'+str(p)]
+                        features_l_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_l_d1[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d1[str(i)+'_'+str(p)+'_'+str(q)]
                     ]
                     ))
             
@@ -174,199 +545,225 @@ for func in func_list:
             X_test.append(
                 np.hstack(
                     [
-                        features_l_d0[str(i)+'_'+str(p)],
-                        features_l_d1[str(i)+'_'+str(p)],
-                        features_u_d0[str(i)+'_'+str(p)],
-                        features_u_d1[str(i)+'_'+str(p)]
+                        features_l_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_l_d1[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d1[str(i)+'_'+str(p)+'_'+str(q)]
                     ]
                     ))    
 
-
+        X_train = float64to32(X_train)
+        X_test = float64to32(X_test)
         search.fit(X_train, y_train)
-
-        best_scores[str(p)] = (search.best_params_, search.best_score_)
-        print(str(p), ' :', best_scores[str(p)])
-        
-    print(best_scores)
-    with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-      pickle.dump(best_scores, f)
+        best_scores[str(p)+'_'+str(q)] = (search.best_params_, search.best_score_)
+        print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
+    
+print(best_scores)
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
       
 #%%
-func_list = [
-             #GetPersSilhouetteFeature,
-             #GetComplexPolynomialFeature,
-             #GetPersLandscapeFeature
-            ]
+func = GetComplexPolynomialFeature
+print(func.__name__)
 
-hyper_parameters = {}
-hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [1,2,3,5,10,20]]
-hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
-hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
-
-
-for func in func_list:
-    print(func.__name__)
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
     
-    with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
-        features_l_d0 = pickle.load(f)
-    with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
-        features_l_d1 = pickle.load(f)
-    with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
-        features_u_d0 = pickle.load(f)
-    with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
-        features_u_d1 = pickle.load(f)
-        
-    param_grid = [
-        {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500]},
-         {'base_estimator': ['SVM'], 'kernel': ['linear'], 'C': uniform(50,450)},
-         {'base_estimator': ['SVM'], 'kernel': ['rbf'], 'C': uniform(1,999), 
-          'gamma': expon(scale=.1)},
-         {'base_estimator': ['SVM'], 'kernel': ['poly'], 'C': uniform(1,999), 
-          'degree': [2,3], 'gamma': expon(scale=.1)}
-     ]
-    search =  RandomizedSearchCV(
-        main_classifier(), param_distributions=param_grid, cv=10, n_iter=40,
-        return_train_score=True, scoring='accuracy'
-    )
-    # search =  GridSearchCV(
-    # main_classifier(), param_grid=param_grid, cv=10, 
-    # return_train_score=True, scoring='accuracy'
-    # )
-    
-    best_scores = {}
-    for p in hyper_parameters[func.__name__][0]:
-        for q in hyper_parameters[func.__name__][1]:
-            X_train = []
-            for i in Z_train:
-                X_train.append(
-                    np.hstack(
-                        [
-                            features_l_d0[str(i)+'_'+str(p)+'_'+str(q)],
-                            features_l_d1[str(i)+'_'+str(p)+'_'+str(q)],
-                            features_u_d0[str(i)+'_'+str(p)+'_'+str(q)],
-                            features_u_d1[str(i)+'_'+str(p)+'_'+str(q)]
-                        ]
-                        ))
-                
-            X_test = []
-            for i in Z_test:
-                X_test.append(
-                    np.hstack(
-                        [
-                            features_l_d0[str(i)+'_'+str(p)+'_'+str(q)],
-                            features_l_d1[str(i)+'_'+str(p)+'_'+str(q)],
-                            features_u_d0[str(i)+'_'+str(p)+'_'+str(q)],
-                            features_u_d1[str(i)+'_'+str(p)+'_'+str(q)]
-                        ]
-                        ))    
+search = searchG(onlyForest)
 
-            X_train = float64to32(X_train)
-            X_test = float64to32(X_test)
-            search.fit(X_train, y_train)
-            best_scores[str(p)+'_'+str(q)] = (search.best_params_, search.best_score_)
-            print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
-        
-    print(best_scores)
-    with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-      pickle.dump(best_scores, f)
+best_scores = {}
+for p in hyper_parameters[func.__name__][0]:
+    for q in hyper_parameters[func.__name__][1]:
+        X_train = []
+        for i in Z_train:
+            X_train.append(
+                np.hstack(
+                    [
+                        features_l_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_l_d1[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d1[str(i)+'_'+str(p)+'_'+str(q)]
+                    ]
+                    ))
+            
+        X_test = []
+        for i in Z_test:
+            X_test.append(
+                np.hstack(
+                    [
+                        features_l_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_l_d1[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d1[str(i)+'_'+str(p)+'_'+str(q)]
+                    ]
+                    ))    
+
+        X_train = float64to32(X_train)
+        X_test = float64to32(X_test)
+        search.fit(X_train, y_train)
+        best_scores[str(p)+'_'+str(q)] = (search.best_params_, search.best_score_)
+        print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
+    
+print(best_scores)
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
 
 #%%
-# func = GetPersTropicalCoordinatesFeature
-# from OUTEX_tropical_optimisation import tropical_classifier
+func = GetPersLandscapeFeature
 
-# param_grid = [
-#     {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500], 'r': uniform(0,500)}#,
-#     #{'base_estimator': ['SVM'], 'kernel': ['linear'], 'C': uniform(50,450), 'r': uniform(0,500)},
-#     #{'base_estimator': ['SVM'], 'kernel': ['rbf'], 'C': uniform(1,999), 
-#     # 'gamma': expon(scale=.1), 'r': uniform(0,500)},
-#     #{'base_estimator': ['SVM'], 'kernel': ['poly'], 'C': uniform(1,999), 
-#     # 'degree': [2,3], 'gamma': expon(scale=.1), 'r': uniform(0,500)},
-# ]
+print(func.__name__)
 
-# search =  RandomizedSearchCV(
-#     tropical_classifier(), param_distributions=param_grid, cv=10, n_iter=40,
-#     return_train_score=True, scoring='accuracy'
-# )
+with open(path_feat + func.__name__ +'_l_d0.pkl', 'rb') as f:
+    features_l_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+    features_l_d1 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+    features_u_d0 = pickle.load(f)
+with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+    features_u_d1 = pickle.load(f)
+    
+search = searchR(complete)
 
-# X_train, X_test = Z_train, Z_test
-# search.fit(X_train, y_train)
+best_scores = {}
+for p in hyper_parameters[func.__name__][0]:
+    for q in hyper_parameters[func.__name__][1]:
+        X_train = []
+        for i in Z_train:
+            X_train.append(
+                np.hstack(
+                    [
+                        features_l_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_l_d1[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d1[str(i)+'_'+str(p)+'_'+str(q)]
+                    ]
+                    ))
+            
+        X_test = []
+        for i in Z_test:
+            X_test.append(
+                np.hstack(
+                    [
+                        features_l_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_l_d1[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d0[str(i)+'_'+str(p)+'_'+str(q)],
+                        features_u_d1[str(i)+'_'+str(p)+'_'+str(q)]
+                    ]
+                    ))    
 
-# best_scores = (search.best_params_, search.best_score_)
-# print(best_scores)
-# with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-#   pickle.dump(best_scores, f)
-      
-#GetPersStats   
-#({'base_estimator': 'RF', 'n_estimators': 300}, 0.9857142857142858)
-#GetCarlssonCoordinates   
-# ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9642857142857142)
-#GetPersEntropyFeature
-# 50  : ({'C': 271.87681709513566, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.9357142857142857)
-# 100  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.95)
-# 200  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.95)
-#GetBettiCurveFeature
-# 50  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9535714285714285)
-# 100  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9571428571428571)
-# 200  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.95)
-#GetPersImages
-# 50  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9035714285714285)
-# 100  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9071428571428571)
-# 150  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9214285714285715)
-# 200  : ({'base_estimator': 'RF', 'n_estimators': 50}, 0.9035714285714287)
-# 250  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9)
+        X_train = float64to32(X_train)
+        X_test = float64to32(X_test)
+        search.fit(X_train, y_train)
+        best_scores[str(p)+'_'+str(q)] = (search.best_params_, search.best_score_)
+        print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
+    
+print(best_scores)
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
+  
+#%%
+func = GetPersTropicalCoordinatesFeature
+from OUTEX_tropical_optimisation import tropical_classifier
 
-#GetPersLifeSpan
-# 50  : ({'C': 327.31825687032403, 'base_estimator': 'SVM', 'gamma': 0.07487827357893098, 'kernel': 'rbf'}, 0.975)
-# 100  : ({'C': 588.6862732930688, 'base_estimator': 'SVM', 'gamma': 0.0339886976822587, 'kernel': 'rbf'}, 0.9678571428571429)
-# 200  : ({'C': 937.5633724779192, 'base_estimator': 'SVM', 'gamma': 0.01959376913638965, 'kernel': 'rbf'}, 0.9714285714285715)
-#GetAtolFeature
-# 2  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.8178571428571428)
-# 4  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.6214285714285714)
-# 8  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.575)
-# 16  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.45357142857142857)
-#GetPersSilhouette
-# 50_1  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9785714285714286)
-# 50_2  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9750000000000002)
-# 50_3  : ({'base_estimator': 'RF', 'n_estimators': 50}, 0.9785714285714286)
-# 50_5  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9785714285714286)
-# 50_10  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9750000000000002)
-# 50_20  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9785714285714286)
-# 100_1  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9750000000000002)
-# 100_2  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9714285714285715)
-# 100_3  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.975)
-# 100_5  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9714285714285715)
-# 100_10  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9714285714285715)
-# 100_20  : ({'base_estimator': 'RF', 'n_estimators': 50}, 0.9750000000000002)
-# 200_1  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9714285714285715)
-# 200_2  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9714285714285715)
-# 200_3  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9714285714285715)
-# 200_5  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9678571428571429)
-# 200_10  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9714285714285715)
-# 200_20  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9714285714285715)
+parameters = [
+    {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500], 'r': uniform(1,1000)},
+    {'base_estimator': ['SVM'], 'kernel': ['linear'], 'C': uniform(1,1000), 'r': uniform(1,1000)}
+ ]
 
-#GetComplexPolynomial
-# 5_R  : ({'base_estimator': 'RF', 'n_estimators': 50}, 0.9607142857142857)
-# 5_S  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.8964285714285714)
-# 5_T  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.39642857142857146)
-# 10_R  : ({'base_estimator': 'RF', 'n_estimators': 50}, 0.9607142857142856)
-# 10_S  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9071428571428571)
-# 10_T  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.4)
-# 20_R  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9392857142857143)
-# 20_S  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9214285714285714)
-# 20_T  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.43928571428571433)
+X_train, X_test = Z_train, Z_test
+search = RandomizedSearchCV(
+    tropical_classifier(), param_distributions = parameters, cv=5, n_iter=40,
+    return_train_score=True, scoring='accuracy', random_state=1
+)
 
-#Landscape
-# 50_2  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9285714285714286)
-# 50_5  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9428571428571428)
-# 50_10  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9428571428571428)
-# 50_20  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9535714285714286)
-# 100_2  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9321428571428572)
-# 100_5  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9428571428571427)
-# 100_10  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9464285714285714)
-# 100_20  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9535714285714286)
-# 200_2  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9321428571428572)
-# 200_5  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9464285714285714)
-# 200_10  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.9428571428571428)
-# 200_20  : ({'base_estimator': 'RF', 'n_estimators': 50}, 0.9571428571428571)
-      
+search.fit(X_train, y_train)
 
+best_scores = (search.best_params_, search.best_score_)
+print(best_scores)
+    
+
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
+  
+# GetPersStats
+# 'base_estimator': 'RF', 'n_estimators': 100}, 0.9821428571428571
+
+# GetCarlssonCoordinatesFeature
+# {'base_estimator': 'RF', 'n_estimators': 200}, 0.9428571428571428
+
+# GetPersEntropyFeature
+# 50  : ({'C': 936.5390708060319, 'base_estimator': 'SVM', 'gamma': 0.01872823656893796, 'kernel': 'rbf'}, 0.9535714285714285)
+# 100  : ({'C': 936.5390708060319, 'base_estimator': 'SVM', 'gamma': 0.01872823656893796, 'kernel': 'rbf'}, 0.9428571428571427)
+# 200  : ({'C': 1000.0405153241447, 'base_estimator': 'SVM', 'degree': 2, 'gamma': 0.0009688387165373345, 'kernel': 'poly'}, 0.9464285714285714)
+
+# GetBettiCurveFeature
+# 50  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9392857142857143)
+# 100  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9321428571428573)
+# 200  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9321428571428572)
+
+# GetTopologicalVectorFeature
+# 5  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.7678571428571429)
+# 10  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.7821428571428571)
+# 20  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.8142857142857143)
+
+# GetPersLifespanFeature
+# 50  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.95)
+# 100  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9464285714285714)
+# 200  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9428571428571428)
+
+# GetAtolFeature
+# 2  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.8178571428571427)
+# 4  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.6285714285714287)
+# 8  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.5750000000000001)
+# 16  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.4571428571428572)
+
+# GetPersSilhouetteFeature
+# 50_0  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9678571428571429)
+# 50_1  : ({'C': 1000.0405153241447, 'base_estimator': 'SVM', 'degree': 2, 'gamma': 0.0009688387165373345, 'kernel': 'poly'}, 0.9678571428571429)
+# 50_2  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9392857142857143)
+# 50_5  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.8964285714285716)
+# 50_10  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9)
+# 50_20  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.8535714285714284)
+# 100_0  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9571428571428571)
+# 100_1  : ({'C': 1000.0405153241447, 'base_estimator': 'SVM', 'degree': 2, 'gamma': 0.0009688387165373345, 'kernel': 'poly'}, 0.9678571428571429)
+# 100_2  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9357142857142857)
+# 100_5  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.8964285714285716)
+# 100_10  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.8892857142857142)
+# 100_20  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.8642857142857142)
+# 200_0  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9464285714285714)
+# 200_1  : ({'C': 1000.0405153241447, 'base_estimator': 'SVM', 'degree': 2, 'gamma': 0.0009688387165373345, 'kernel': 'poly'}, 0.9678571428571429)
+# 200_2  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9357142857142857)
+# 200_5  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.8964285714285716)
+# 200_10  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.8678571428571427)
+# 200_20  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.8642857142857142)
+
+# GetComplexPolynomialFeature
+# 5_R  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9571428571428571)
+# 5_S  : ({'base_estimator': 'RF', 'n_estimators': 300}, 0.8928571428571429)
+# 5_T  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.3857142857142858)
+# 10_R  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9571428571428571)
+# 10_S  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9035714285714287)
+# 10_T  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.39285714285714285)
+# 20_R  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9392857142857143)
+# 20_S  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9)
+# 20_T  : ({'base_estimator': 'RF', 'n_estimators': 50}, 0.44642857142857145)
+
+# GetPersLandscapeFeature
+# 50_2  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9178571428571429)
+# 50_5  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9285714285714286)
+# 50_10  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9285714285714286)
+# 50_20  : ({'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.9321428571428572)
+# 100_2  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9178571428571429)
+# 100_5  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9357142857142857)
+# 100_10  : ({'C': 1000.0405153241447, 'base_estimator': 'SVM', 'degree': 2, 'gamma': 0.0009688387165373345, 'kernel': 'poly'}, 0.9214285714285715)
+# 100_20  : ({'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.9321428571428572)
+# 200_2  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9178571428571429)
+# 200_5  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.925)
+# 200_10  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9250000000000002)
+# 200_20  : ({'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.9321428571428572)

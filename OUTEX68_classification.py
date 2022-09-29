@@ -7,18 +7,6 @@ from direct_optimisation import main_classifier
 from OUTEX_tropical_optimisation import tropical_classifier
 from vectorisation import *
 from sklearn.svm import SVC
-
-#classification(func=GetPersStatsFeature, base_estimator='RF', n_estimators=500)
-#classification(func=GetCarlssonCoordinatesFeature , base_estimator='RF', n_estimators=500)
-#classification(func=GetPersEntropyFeature, str_p='200', base_estimator='RF', n_estimators=300)
-#classification(func=GetBettiCurveFeature, str_p='200', base_estimator='SVM', C=105, kernel='poly', gamma=0.00891, degree=2)
-#classification(func=GetPersLifespanFeature, str_p='100', base_estimator='SVM', C=211.4, kernel='linear')
-#classification(func=GetPersImageFeature, str_p='225' , base_estimator='RF', n_estimators=300)
-#classification(func=GetAtolFeature, str_p='2', base_estimator='RF', n_estimators=500)
-#classification(func=GetPersSilhouetteFeature, str_p='100', str_q='5', base_estimator='RF', n_estimators=300)
-#classification(func=GetComplexPolynomialFeature, str_p='5', str_q='R', base_estimator='RF', n_estimators=300)
-#classification(func=GetPersLandscapeFeature, str_p='50', str_q='20', base_estimator='SVM', C=70, kernel='linear')
-#classification(func=GetPersTropicalCoordinatesFeature, str_p='35.91', base_estimator='SVM', kernel='linear', C=95.37)
              
 def classification(func, str_p='', str_q='', base_estimator='RF', 
              n_estimators=100, C=1.0, kernel='rbf', gamma=0.1, degree=3):
@@ -94,8 +82,27 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
         X_train, X_test = Z_train, Z_test
     
     score_list = []
-    for i in range(10):
+    for i in range(100):
         method.fit(X_train, y_train)
         score_list.append(np.mean(y_test.ravel() == method.predict(X_test)))
         
     print(np.mean(score_list))
+    
+# classification(func = GetPersStats, base_estimator='RF', n_estimators=300)
+# 0.8964460784313725
+# classification(func = GetCarlssonCoordinatesFeature, base_estimator='RF', n_estimators=200)
+# 0.84453431372549
+# classification(str_q = '100', func = GetPersEntropyFeature, base_estimator='RF', n_estimators=300)
+# 0.8197916666666666
+# classification(str_p = '100', func = GetBettiCurveFeature,  base_estimator='SVM', kernel='poly', C=1000.0405153241447 , gamma=0.0009688387165373345, degree=2)
+# 0.8186274509803918
+# classification(str_p = '100', func = GetPersLifespanFeature, base_estimator='RF', n_estimators=300)
+# 0.8450367647058823
+# classification(str_p='250', func=GetPersImageFeature, base_estimator='RF', n_estimators=200)
+
+# classification(func=GetPersSilhouetteFeature, str_p='100', str_q='1', base_estimator='SVM', kernel='poly', degree=2, C=1000.0405153241447, gamma=0.0009688387165373345)
+# 0.8370098039215691
+# classification(func=GetPersLandscapeFeature, str_p='50', str_q='20', C=998.1848109388686, base_estimator='SVM', kernel='linear')
+# 0.8370098039215691
+# classification(func=GetPersTropicalCoordinatesFeature, str_p='492.5731592803383', base_estimator='RF', n_estimators=200)
+# 0.872732843137255

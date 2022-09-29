@@ -1,17 +1,17 @@
 import numpy as np
 from gudhi import representations
 from sklearn.cluster import KMeans
-quantiser = KMeans(n_clusters=2, random_state=202006)
+
 from vectorisation.bar_cleaner import bar_cleaner
 
 __all__ = ["GetAtolFeature"]
 
-def GetAtolFeature(barcode, qt=quantiser):
-    feature_vector = []
-    barcode = bar_cleaner(barcode)
+def GetAtolFeature(barcode_list, k=2):
+    qt = KMeans(n_clusters=k, random_state=1)
     
-    if(np.size(barcode) > 0):
-        atol = representations.vector_methods.Atol(quantiser=qt)
-        feature_vector = atol.fit_transform([barcode])[0]
-
+    barcode_list = list(map(bar_cleaner, barcode_list))
+    
+    atol = representations.vector_methods.Atol(quantiser=qt)
+    #each row is the vector corresponding to each barcode
+    feature_vector = atol.fit_transform(barcode_list)
     return feature_vector

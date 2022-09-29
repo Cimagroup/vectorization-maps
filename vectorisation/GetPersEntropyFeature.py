@@ -1,5 +1,5 @@
 import numpy as np
-from vectorisation import GetPersistenceCurves
+from vectorisation import GetNewMethods
 from vectorisation.bar_cleaner import bar_cleaner
 
 __all__ = ["GetPersEntropyFeature"]
@@ -7,7 +7,7 @@ __all__ = ["GetPersEntropyFeature"]
 def GetPersEntropyFeature(barcode, res=100):
     barcode = bar_cleaner(barcode)
     if (barcode.shape[0]) > 1:
-        ent = GetPersistenceCurves.Entropy(mode='vector', resolution = res, 
+        ent = GetNewMethods.Entropy(mode='vector', resolution = res, 
                                            normalized = False)
         feature_vector = ent.fit_transform([barcode]).flatten()
     else:
