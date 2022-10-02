@@ -79,15 +79,16 @@ def classification(func, str_p='', str_q='', base_estimator='RF', t=6,
         X_train=Z_train[str(t)]
         X_test=Z_test[str(t)]
     score_list = []
-    for i in range(10):
+    
+    for i in range(100):
         method.fit(X_train, y_train[str(t)])
         score_list.append(np.mean(y_test[str(t)] == method.predict(X_test)))
         
     print(np.mean(score_list))
 
-# GetPersStats
+# print('GetPersStats')
 # classification(t=1,base_estimator='RF', n_estimators=50, func=GetPersStats)
-# 0.581111111111111
+# 0.5752222222222221
 # classification(t=2,base_estimator='SVM', kernel='poly', C=1000.0405153241447, gamma=0.0009688387165373345, degree=2, func=GetPersStats)
 # 0.6777777777777778
 # classification(t=3,base_estimator='SVM', kernel='linear', C=141.38693859523377, func=GetPersStats)
@@ -105,53 +106,53 @@ def classification(func, str_p='', str_q='', base_estimator='RF', t=6,
 # classification(t=9, base_estimator='SVM', kernel='linear', C=686.2195003967595,func=GetPersStats)
 # 0.8555555555555555
 # classification(t=10,base_estimator='RF', n_estimators=100, func=GetPersStats)
-# 0.8455555555555556
+# 0.8441111111111113
 
-# GetCarlssonCoordinates
+# print('GetCarlssonCoordinates')
 # classification(t=1,base_estimator='RF',n_estimators=50,func=GetCarlssonCoordinatesFeature)
-# 0.4
+# 0.4077777777777778
 # classification(t=2,base_estimator='RF',n_estimators=200,func=GetCarlssonCoordinatesFeature)
-# 0.33111111111111113
+# 0.3363333333333334
 # classification(t=3,base_estimator='RF',n_estimators=200,func=GetCarlssonCoordinatesFeature)
-# 0.37
+# 0.37755555555555553
 # classification(t=4,base_estimator='RF',n_estimators=100,func=GetCarlssonCoordinatesFeature)
-# 0.571111111111111
+# 0.5664444444444443
 # classification(t=5,base_estimator='RF',n_estimators=300,func=GetCarlssonCoordinatesFeature)
 # 0.9066666666666668
 # classification(t=6,base_estimator='RF',n_estimators=50,func=GetCarlssonCoordinatesFeature)
-# 0.8611111111111113
+# 0.8647777777777778
 # classification(t=7,base_estimator='RF',n_estimators=50,func=GetCarlssonCoordinatesFeature)
-# 0.8555555555555555
+# 0.8598888888888889
+# classification(t=8,base_estimator='RF',n_estimators=100,func=GetCarlssonCoordinatesFeature)
+# 0.7372222222222223
 # classification(t=9,base_estimator='RF',n_estimators=100,func=GetCarlssonCoordinatesFeature)
-# 0.7422222222222222
-# classification(t=9,base_estimator='RF',n_estimators=100,func=GetCarlssonCoordinatesFeature)
-# 0.7422222222222222
+# 0.7372222222222223
 # classification(t=10,base_estimator='RF',n_estimators=200,func=GetCarlssonCoordinatesFeature)
-# 0.678888888888889
+# 0.6815555555555557
 
-# GetPersEntropyFeature
+# print('GetPersEntropyFeature')
 # classification(t=1, str_p='200', base_estimator='SVM', kernel='linear', C=998.1848109388686, func=GetPersEntropyFeature)
 # 0.47777777777777775
 # classification(t=2, str_p='100', base_estimator='SVM', kernel='poly', C=223.1245475353748, degree=3, gamma=0.005940143639429267, func=GetPersEntropyFeature)
 # 0.3222222222222223
 # classification(t=3, str_p='200', base_estimator='RF', n_estimators=300, func=GetPersEntropyFeature)
-# 0.4644444444444445
+# 0.4696666666666667
 # classification(t=4, str_p='200', base_estimator='RF', n_estimators=100, func=GetPersEntropyFeature)
-# 0.5344444444444443
+# 0.5356666666666665
 # classification(t=5, str_p='100', base_estimator='RF', n_estimators=100, func=GetPersEntropyFeature)
-# 0.6466666666666667
+# 0.6553333333333334
 # classification(t=6, str_p='200', base_estimator='RF', n_estimators=100, func=GetPersEntropyFeature)
-# 0.7155555555555555
+# 0.7166666666666666
 # classification(t=7, str_p='200', base_estimator='RF', n_estimators=100, func=GetPersEntropyFeature)
-# 0.6644444444444446
+# 0.6606666666666667
 # classification(t=8, str_p='200', base_estimator='SVM', kernel='linear', C=998.1848109388686, func=GetPersEntropyFeature)
 # 0.5777777777777777
 # classification(t=9, str_p='50', base_estimator='SVM', kernel='rbf', C=879.1425034294132, gamma=0.0010352534930954075, func=GetPersEntropyFeature)
 # 0.4666666666666667
 # classification(t=10, str_p='200', n_estimators=500, func=GetPersEntropyFeature)
-# 0.39333333333333337
+# 0.3868888888888889
 
-# GetBettiCurveFeature
+# print('GetBettiCurveFeature')
 # classification(t=1, str_p='200', base_estimator='SVM', kernel='rbf', C=835.625671897373, gamma=0.00018457575175565604, func=GetBettiCurveFeature)
 # 0.5444444444444444
 # classification(t=2, str_p='200', base_estimator='SVM', kernel='rbf', C=288.77533858634877, gamma=0.001392949093880637, func=GetBettiCurveFeature)
@@ -159,33 +160,33 @@ def classification(func, str_p='', str_q='', base_estimator='RF', t=6,
 # classification(t=3, str_p='200', base_estimator='SVM', kernel='rbf', C=288.77533858634877, gamma=0.001392949093880637, func=GetBettiCurveFeature)
 # 0.7111111111111111
 # classification(t=4, str_p='200', base_estimator='RF', n_estimators=500, func=GetBettiCurveFeature)
-# 0.6577777777777778
+# 0.6631111111111113
 # classification(t=5, str_p='100', base_estimator='RF', n_estimators=500, func=GetBettiCurveFeature)
-# 0.6777777777777778
+# 0.6804444444444445
 # classification(t=6, str_p='200', base_estimator='RF', n_estimators=300, func=GetBettiCurveFeature)
-# 0.6322222222222221
+# 0.6365555555555555
 # classification(t=7, str_p='200', base_estimator='RF', n_estimators=300, func=GetBettiCurveFeature)
-# 0.6633333333333334
+# 0.6642222222222223
 # classification(t=8, str_p='200', base_estimator='RF', n_estimators=50, func=GetBettiCurveFeature)
-# 0.6322222222222221
+# 0.6335555555555556
 # classification(t=9, str_p='100', base_estimator='RF', n_estimators=500, func=GetBettiCurveFeature)
-# 0.5533333333333333
+# 0.5483333333333333
 # classification(t=10, str_p='50', base_estimator='RF', n_estimators=50, func=GetBettiCurveFeature)
-# 0.34
+# 0.3400000000000001
 
-# GetPersLifespanFeature
+# print('GetPersLifespanFeature')
 # classification(t=1, str_p='200', base_estimator='SVM', kernel='poly', C=1000.0405153241447, gamma=0.0009688387165373345, degree=2, func=GetPersLifespanFeature)
 # 0.47777777777777775
 # classification(t=2, str_p='100', base_estimator='SVM', kernel='poly', C=1000.0405153241447, gamma=0.0009688387165373345, degree=2, func=GetPersLifespanFeature)
 # 0.4
 # classification(t=3, str_p='200', base_estimator='RF', n_estimators=300, func=GetPersLifespanFeature)
-# 0.5844444444444443
+# 0.5885555555555555
 # classification(t=4, str_p='200', base_estimator='RF', n_estimators=50, func=GetPersLifespanFeature)
-# 0.64
+# 0.6405555555555558
 # classification(t=5, str_p='100', base_estimator='RF', n_estimators=300, func=GetPersLifespanFeature)
-# 0.7611111111111111
+# 0.7620000000000001
 # classification(t=6, str_p='100', base_estimator='RF', n_estimators=500, func=GetPersLifespanFeature)
-# 0.8533333333333333
+# 0.8518888888888889
 # classification(t=7, str_p='200', base_estimator='SVM', kernel='rbf', C=835.625671897373, gamma=0.00018457575175565604, func=GetPersLifespanFeature)
 # 0.8666666666666668
 # classification(t=8, str_p='50', base_estimator='SVM', kernel='rbf', C=835.625671897373, gamma=0.00018457575175565604, func=GetPersLifespanFeature)
@@ -193,9 +194,9 @@ def classification(func, str_p='', str_q='', base_estimator='RF', t=6,
 # classification(t=9, str_p='50', base_estimator='SVM', kernel='rbf', C=141.38693859523377, func=GetPersLifespanFeature)
 # 0.5888888888888888
 # classification(t=10, str_p='200', base_estimator='RF', n_estimators=500, func=GetPersLifespanFeature)
-# 0.5455555555555556
+# 0.545111111111111
 
-#GetPersImageFeature
+# print('GetPersImageFeature')
 # classification(t=1, str_p='200', base_estimator='RF', n_estimators=300, func=GetPersImageFeature)
 # 0.7055555555555555
 # classification(t=2, str_p='100', base_estimator='RF', n_estimators=100, func=GetPersImageFeature)
@@ -218,28 +219,48 @@ def classification(func, str_p='', str_q='', base_estimator='RF', t=6,
 # 0.4322222222222223
 
 #GetTopologicalVectorFeature
-# classification(t=1, str_p='20', n_estimators=100, base_estimator='RF', func=GetTopologicalVectorFeature)
-# 0.3
-# classification(t=2, str_p='20', n_estimators=50, base_estimator='RF', func=GetTopologicalVectorFeature)
-# 0.21444444444444444
-# classification(t=3, str_p='20', n_estimators=50, base_estimator='RF', func=GetTopologicalVectorFeature)
-# 0.2677777777777778
-# classification(t=4, str_p='5', n_estimators=50, base_estimator='RF', func=GetTopologicalVectorFeature)
-# 0.1622222222222222
-# classification(t=5, str_p='20', n_estimators=500, base_estimator='RF', func=GetTopologicalVectorFeature)
-# 0.5477777777777778
-# classification(t=6, str_p='20', n_estimators=200, base_estimator='RF', func=GetTopologicalVectorFeature)
-# 0.6600000000000001
-# classification(t=7, str_p='20', n_estimators=50, base_estimator='RF', func=GetTopologicalVectorFeature)
-# 0.6477777777777778
-# classification(t=8, str_p='20', n_estimators=300, base_estimator='RF', func=GetTopologicalVectorFeature)
-# 0.7233333333333334
-# classification(t=9, str_p='20', n_estimators=100, base_estimator='RF', func=GetTopologicalVectorFeature)
-# 0.6122222222222222
-# classification(t=10, str_p='20', n_estimators=200, base_estimator='RF', func=GetTopologicalVectorFeature)
-# 0.44333333333333336
+# classification(t=1, func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=100)
+# 0.31244444444444447
+# classification(t=2, func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=200)
+# 0.15599999999999997
+# classification(t=3, func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=50)
+# 0.19088888888888889
+# classification(t=4, func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=300)
+# 0.3562222222222222
+# classification(t=5, func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=500)
+# 0.6131111111111109
+# classification(t=6, func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=100)
+# 0.6915555555555557
+# classification(t=7, func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=200)
+# 0.6705555555555557
+# classification(t=8, func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=100)
+# 0.745777777777778
+# classification(t=9, func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=100)
+# 0.6052222222222222
+# classification(t=10, func=GetTopologicalVectorFeature, str_p='20', base_estimator='RF', n_estimators=100)
+# 0.44555555555555565
 
-#GetPerSilhouetteFeature
+# print('GetAtolFeature')
+# classification(t=1, func=GetAtolFeature, str_p='8', base_estimator='RF', n_estimators=300)
+# 0.7524444444444444
+# classification(t=2, func=GetAtolFeature, str_p='8', base_estimator='RF', n_estimators=200)
+# 0.6133333333333332
+# classification(t=3, func=GetAtolFeature, str_p='8', base_estimator='RF', n_estimators=100)
+# 0.7898888888888888
+# classification(t=4, func=GetAtolFeature, str_p='4', base_estimator='RF', n_estimators=100)
+# 0.7211111111111113
+# classification(t=5, func=GetAtolFeature, str_p='4', base_estimator='RF', n_estimators=200)
+# 0.9081111111111113
+# classification(t=6, func=GetAtolFeature, str_p='8', base_estimator='SVM', kernel='rbf', C=835.625671897373,  gamma=0.00018457575175565604)
+# 0.8666666666666667
+# classification(t=7, func=GetAtolFeature, str_p='8', base_estimator='RF', n_estimators=100)
+# 0.8742222222222225
+# classification(t=8, func=GetAtolFeature, str_p='8', base_estimator='RF', n_estimators=100)
+# 0.8777777777777779
+# classification(t=9, func=GetAtolFeature, str_p='8', base_estimator='SVM', kernel='linear', C=998.1848109388686)
+# 0.8444444444444446
+
+# print('GetPerSilhouetteFeature')
 # classification(t=1, str_p='100', str_q='0', base_estimator='SVM', kernel='linear', C=998.1848109388686, func=GetPersSilhouetteFeature)
 # 0.4111111111111111
 # classification(t=2, str_p='100', str_q='0', base_estimator='SVM', kernel='linear', C=998.1848109388686, func=GetPersSilhouetteFeature)
@@ -259,31 +280,31 @@ def classification(func, str_p='', str_q='', base_estimator='RF', t=6,
 # classification(t=9, str_p='50', str_q='2', base_estimator='SVM', kernel='linear', C=998.1848109388686,  func=GetPersSilhouetteFeature)
 # 0.7111111111111111
 # classification(t=10, str_p='100', str_q='0', base_estimator='RF', n_estimators=100, func=GetPersSilhouetteFeature)
-# 0.5411111111111111
+# 0.5439999999999999
 
-#GetComplexPolynomialFeature
+# print('GetComplexPolynomialFeature')
 # classification(t=1, str_p='10', str_q='S', base_estimator='RF', n_estimators=200, func=GetComplexPolynomialFeature)
-# 0.3188888888888889
+# 0.32888888888888895
 # classification(t=2, str_p='10', str_q='S', base_estimator='RF', n_estimators=100, func=GetComplexPolynomialFeature)
-# 0.34
+# 0.33299999999999996
 # classification(t=3, str_p='20', str_q='S', base_estimator='RF', n_estimators=200, func=GetComplexPolynomialFeature)
-# 0.37222222222222223
+# 0.37333333333333335
 # classification(t=4, str_p='20', str_q='S', base_estimator='RF', n_estimators=200, func=GetComplexPolynomialFeature)
-# 0.45111111111111113
+# 0.4496666666666666
 # classification(t=5, str_p='20', str_q='S', base_estimator='RF', n_estimators=300, func=GetComplexPolynomialFeature)
-# 0.7622222222222221
+# 0.7633333333333333
 # classification(t=6, str_p='20', str_q='S', base_estimator='RF', n_estimators=300, func=GetComplexPolynomialFeature)
-# 0.8255555555555555
+# 0.8263333333333334
 # classification(t=7, str_p='10', str_q='S', base_estimator='RF', n_estimators=50, func=GetComplexPolynomialFeature)
-# 0.8255555555555555
+# 0.8234444444444445
 # classification(t=8, str_p='20', str_q='T', base_estimator='RF', n_estimators=100, func=GetComplexPolynomialFeature)
-# 0.8544444444444445
+# 0.8519999999999999
 # classification(t=9, str_p='10', str_q='T', base_estimator='RF', n_estimators=200, func=GetComplexPolynomialFeature)
-# 0.7755555555555554
+# 0.771111111111111
 # classification(t=10, str_p='20', str_q='T', base_estimator='RF', n_estimators=200, func=GetComplexPolynomialFeature)
-# 0.7066666666666667
+# 0.6972222222222223
 
-#GetPersLandscapeFeature
+# print('GetPersLandscapeFeature')
 # classification(t=1, str_p='200', str_q='5', base_estimator='SVM', kernel='linear', C=998.1848109388686, func=GetPersLandscapeFeature)
 # 0.5666666666666667
 # classification(t=2, str_p='50', str_q='20', base_estimator='SVM', kernel='linear', C=998.1848109388686, func=GetPersLandscapeFeature)
@@ -293,37 +314,38 @@ def classification(func, str_p='', str_q='', base_estimator='RF', t=6,
 # classification(t=4, str_p='100', str_q='10', base_estimator='SVM', kernel='linear', C=998.1848109388686, func=GetPersLandscapeFeature)
 # 0.7222222222222222
 # classification(t=5, str_p='200', str_q='20', base_estimator='RF', n_estimators=50, func=GetPersLandscapeFeature)
-# 0.8877777777777778
+# 0.8888888888888892
 # classification(t=6, str_p='50', str_q='20', base_estimator='RF', n_estimators=50, func=GetPersLandscapeFeature)
-# 0.8666666666666668
+# 0.8718888888888892
 # classification(t=7, str_p='200', str_q='2', base_estimator='RF', n_estimators=100, func=GetPersLandscapeFeature)
-# 0.8466666666666667
+# 0.8436666666666666
 # classification(t=8, str_p='200', str_q='5', base_estimator='SVM', kernel='rbf', C=212.62811600005904, gamma=0.0030862881073963535, func=GetPersLandscapeFeature)
 # 0.8555555555555555
 # classification(t=9, str_p='200', str_q='10', base_estimator='RF', n_estimators=300, func=GetPersLandscapeFeature)
-# 0.8144444444444444
+# 0.8156666666666668
 # classification(t=10, str_p='100', str_q='10', base_estimator='SVM', kernel='linear', C=274.0499742167474, func=GetPersLandscapeFeature)
 # 0.5
 
-#GetPersTropicalCoordinatesFeature
+# print('GetPersTropicalCoordinatesFeature')
 # classification(t=1, base_estimator='RF', n_estimators=200, str_p='52.19579592311136', func=GetPersTropicalCoordinatesFeature)
+# 0.4556666666666668
 # classification(t=2, base_estimator='RF', n_estimators=100, str_p='19.234452089092336', func=GetPersTropicalCoordinatesFeature)
-# 0.4322222222222223
+# 0.4222222222222222
 # classification(t=3, base_estimator='RF', n_estimators=100, str_p='19.234452089092336', func=GetPersTropicalCoordinatesFeature)
-# 0.4922222222222222
+# 0.4918888888888888
 # classification(t=4, base_estimator='RF', n_estimators=200, str_p='52.19579592311136', func=GetPersTropicalCoordinatesFeature)
-# 0.6066666666666667
+# 0.6073333333333334
 # classification(t=5, base_estimator='RF', n_estimators=200, str_p='166.92513437947457', func=GetPersTropicalCoordinatesFeature)
-# 0.8700000000000001
+# 0.8692222222222225
 # classification(t=6, base_estimator='RF', n_estimators=500, str_p='104.95987537408911', func=GetPersTropicalCoordinatesFeature)
 # 0.8622222222222222
 # classification(t=7, base_estimator='RF', n_estimators=50, str_p='1.801599392208586', func=GetPersTropicalCoordinatesFeature)
-# 0.8322222222222221
+# 0.8384444444444443
 # classification(t=8, base_estimator='RF', n_estimators=500, str_p='165.82938147342833', func=GetPersTropicalCoordinatesFeature)
-# 0.7777777777777777
+# 0.7772222222222223
 # classification(t=9, base_estimator='RF', n_estimators=50, str_p='188.3673897506845', func=GetPersTropicalCoordinatesFeature)
-# 0.7411111111111112
+# 0.7453333333333333
 # classification(t=10, base_estimator='SVM', C=429.0911898712949, kernel='rbf', gamma=0.033478475471326576, str_p='132.6882995636896', func=GetPersTropicalCoordinatesFeature)
-# 0.5999999999999999
+# 0.6
 
 

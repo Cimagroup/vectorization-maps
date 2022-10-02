@@ -76,7 +76,7 @@ forestL = [
  ]
 
 searchR = lambda pg : RandomizedSearchCV(
-    main_classifier(), param_distributions=pg, cv=5, n_iter=5,
+    main_classifier(), param_distributions=pg, cv=5, n_iter=40,
     return_train_score=True, scoring='accuracy', random_state=1
 )
 
@@ -91,8 +91,8 @@ hyper_parameters['GetPersEntropyFeature'] = [50,100,200]
 hyper_parameters['GetBettiCurveFeature'] = [50,100,200]
 hyper_parameters['GetPersLifespanFeature'] = [50,100,200]
 hyper_parameters['GetTopologicalVectorFeature'] = [5, 10, 20]
-hyper_parameters['GetAtolFeature'] = [2,4,8,16]
-hyper_parameters['GetPersImageFeature'] = [50,100,150,200,250]
+hyper_parameters['GetAtolFeature'] = [2,4,8,16,32,64]
+hyper_parameters['GetPersImageFeature'] = [25,50,100,150,200]
 hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
 hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
 hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
@@ -446,10 +446,10 @@ for p in hyper_parameters[func.__name__]:
                     features_u_d1[str(i)+'_'+str(p)]
                 ]
                 ))   
-    if p==4:
-        search = searchR(noL)
+    if p<=4:
+        search = searchR(forestRBF)
     else:
-        search = searchR(complete)
+        search = searchR(noPoly)
     search.fit(X_train, y_train)
 
     best_scores[str(p)] = (search.best_params_, search.best_score_)
@@ -718,10 +718,19 @@ with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
 # 200  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9428571428571428)
 
 # GetAtolFeature
-# 2  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.8178571428571427)
-# 4  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.6285714285714287)
-# 8  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.5750000000000001)
-# 16  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.4571428571428572)
+# 2  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9178571428571429)
+# 4  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9321428571428572)
+# 8  : ({'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.9607142857142857)
+# 16  : ({'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.9535714285714285)
+# 32  : ({'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.9678571428571427)
+# 64  : ({'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.9821428571428571)
+
+# GetPersImageFeature
+# 25  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9178571428571429)
+# 50  : ({'base_estimator': 'RF', 'n_estimators': 200}, 0.9107142857142858)
+# 100  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9107142857142858)
+# 150  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9071428571428573)
+# 200  : ({'base_estimator': 'RF', 'n_estimators': 100}, 0.9107142857142858)
 
 # GetPersSilhouetteFeature
 # 50_0  : ({'base_estimator': 'RF', 'n_estimators': 500}, 0.9678571428571429)

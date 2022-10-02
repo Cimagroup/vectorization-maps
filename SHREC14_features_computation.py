@@ -123,6 +123,8 @@ feat_path = "Shrec14/features/"
 # with open(feat_path + 'y_test' +'.pkl', 'wb') as f:
 #   pickle.dump(y_test, f)
 
+
+
 #%%
 
 with open(feat_path + 'dgmsT' +'.pkl', 'rb') as f:
@@ -137,11 +139,24 @@ with open(feat_path + 'y_test' +'.pkl', 'rb') as f:
     y_test = pickle.load(f)
 
 #%%
+
+hyper_parameters = {}
+hyper_parameters['GetPersEntropyFeature'] = [50,100,200]
+hyper_parameters['GetBettiCurveFeature'] = [50,100,200]
+hyper_parameters['GetPersLifespanFeature'] = [50,100,200]
+hyper_parameters['GetTopologicalVectorFeature'] = [5, 10, 20]
+hyper_parameters['GetPersImageFeature'] = [10,25,50,100,200]
+hyper_parameters['GetAtolFeature'] = [2,4,8,16]
+hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
+hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
+hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
+
+#%%
 #Methods with no parameter
 
 func_list = [
-             GetPersStats,
-             GetCarlssonCoordinatesFeature
+             # GetPersStats,
+             # GetCarlssonCoordinatesFeature
             ]
 
 for func in func_list:
@@ -159,21 +174,12 @@ for func in func_list:
 #%%
 #Methods with only one parameter
 func_list = [
-              GetPersEntropyFeature,
-              GetBettiCurveFeature,
-              GetTopologicalVectorFeature,
-              GetPersLifespanFeature,
-              GetPersImageFeature,
-               # GetAtolFeature
+              # GetPersEntropyFeature,
+              # GetBettiCurveFeature,
+              # GetTopologicalVectorFeature,
+              # GetPersLifespanFeature,
+              # GetPersImageFeature,
             ]
-
-hyper_parameters = {}
-hyper_parameters['GetPersEntropyFeature'] = [50,100,200]
-hyper_parameters['GetBettiCurveFeature'] = [50,100,200]
-hyper_parameters['GetPersLifespanFeature'] = [50,100,200]
-hyper_parameters['GetTopologicalVectorFeature'] = [5, 10, 20]
-hyper_parameters['GetPersImageFeature'] = [10,25,50,100,200]
-hyper_parameters['GetAtolFeature'] = [2,4,8]
 
 
 for func in func_list:
@@ -191,16 +197,35 @@ for func in func_list:
           pickle.dump(features, f)
           
 #%%
+func_list = [
+              GetAtolFeature
+            ]
+
+from vectorisation.bar_cleaner import bar_cleaner
+
+for func in func_list:
+    features={}
+    print(func.__name__)
+    for p in hyper_parameters[func.__name__]:
+        for t in range(1,10):
+            print(p,t)
+            Z = Z_train[str(t)]+Z_test[str(t)]
+            dgms = dgmsT[str(t)]
+            atol_list = func(dgms,p) 
+            for i in Z:
+                features[str(t)+'_'+str(p)+'_'+str(i)]=atol_list[i,:]
+            
+        with open(feat_path + func.__name__ +'.pkl', 'wb') as f:
+          pickle.dump(features, f)
+          
+
+#%%
 #Methods with two parameter
 func_list = [
-                GetPersSilhouetteFeature,
-               GetComplexPolynomialFeature,
-               GetPersLandscapeFeature
+             # GetPersSilhouetteFeature,
+             # GetComplexPolynomialFeature,
+             # GetPersLandscapeFeature
             ]
-hyper_parameters = {}
-hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
-hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
-hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
 
 for func in func_list:
     features={}

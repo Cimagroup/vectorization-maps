@@ -98,8 +98,10 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
 # 0.8186274509803918
 # classification(str_p = '100', func = GetPersLifespanFeature, base_estimator='RF', n_estimators=300)
 # 0.8450367647058823
-# classification(str_p='250', func=GetPersImageFeature, base_estimator='RF', n_estimators=200)
-
+# classification(func=GetAtolFeature, str_p='64', C=998.1848109388686, base_estimator='SVM', kernel='linear')
+# 0.8370098039215691
+# classification(str_p='150', func=GetPersImageFeature, base_estimator='RF', n_estimators=300)
+# 0.7597794117647058
 # classification(func=GetPersSilhouetteFeature, str_p='100', str_q='1', base_estimator='SVM', kernel='poly', degree=2, C=1000.0405153241447, gamma=0.0009688387165373345)
 # 0.8370098039215691
 # classification(func=GetPersLandscapeFeature, str_p='50', str_q='20', C=998.1848109388686, base_estimator='SVM', kernel='linear')

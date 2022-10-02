@@ -119,8 +119,11 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
 # classification(func=GetPersLifespanFeature, str_p='50', base_estimator='RF', n_estimators=100)
 # 0.9635833333333333
 
-# classification(func=GetAtolFeature, str_p='2', base_estimator='RF', n_estimators=500)
-# 0.7625833333333334
+# classification(func=GetAtolFeature, str_p='64', base_estimator='SVM', kernel='linear', C=998.1848109388686)
+# 0.9749999999999995
+
+# classification(func=GetPersImageFeature, str_p='25', base_estimator='RF', n_estimators=100)
+# 0.929
 
 # classification(func=GetPersSilhouetteFeature, str_p='50', str_q='1', base_estimator='SVM', degree=2, C=1000.0405153241447, gamma=0.0009688387165373345, kernel='poly')
 # 0.9416666666666664

@@ -281,6 +281,35 @@ with open(feat_path + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
 
 #%%Atol
 
+func=GetAtolFeature
+
+print(func.__name__)
+with open(feat_path + func.__name__ +'.pkl', 'rb') as f:
+    features = pickle.load(f)
+best_scores = {}
+for t in range(1,10):
+    best_scores[str(t)]=[('a','a',0)]
+    for p in hyper_parameters[func.__name__]:
+        print(t,p)
+        X_train = []
+        for i in Z_train[str(t)]:       
+            X_train.append(features[str(t)+'_'+str(p)+'_'+str(i)])
+        if t >= 4:
+            search = searchR(noPoly)
+        else:
+            search = searchR(forestRBF)
+        search.fit(X_train, y_train[str(t)])
+        
+        if search.best_score_ > best_scores[str(t)][0][2]:
+            best_scores[str(t)] = [('p='+str(p),search.best_params_, search.best_score_)]
+        elif search.best_score_ == best_scores[str(t)][0][2]:
+            best_scores[str(t)] = best_scores[str(t)]+[('p='+str(p),search.best_params_, search.best_score_)]
+
+    print(best_scores[str(t)])
+print(best_scores)
+with open(feat_path + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+  pickle.dump(best_scores, f)
+  
 #%%
 func = GetPersSilhouetteFeature
 
@@ -451,16 +480,16 @@ with open(feat_path + 'GetTropicalCoordinatesFeature' + '_hyperparameter.pkl', '
 # '9': [('p=100',{'C': 141.38693859523377, 'base_estimator': 'SVM', 'kernel': 'linear'},0.780952380952381)], 
 # '10': [('p=200',{'base_estimator': 'RF', 'n_estimators': 50},0.5523809523809524)]}
 #GetTopologicalVectorFeature
-# '1': [('p=20', {'base_estimator': 'RF', 'n_estimators': 100}, 0.37619047619047624)], 
-# '2': [('p=20', {'base_estimator': 'RF', 'n_estimators': 50}, 0.20476190476190476)], 
-# '3': [('p=10', {'base_estimator': 'RF', 'n_estimators': 50}, 0.26666666666666666), ('p=20', {'base_estimator': 'RF', 'n_estimators': 50}, 0.26666666666666666)], 
-# '4': [('p=5', {'base_estimator': 'RF', 'n_estimators': 50}, 0.38095238095238093)], 
-# '5': [('p=20', {'base_estimator': 'RF', 'n_estimators': 500}, 0.5571428571428572)], 
-# '6': [('p=20', {'base_estimator': 'RF', 'n_estimators': 200}, 0.6476190476190476)], 
-# '7': [('p=20', {'base_estimator': 'RF', 'n_estimators': 50}, 0.7238095238095238)], 
-# '8': [('p=20', {'base_estimator': 'RF', 'n_estimators': 300}, 0.7523809523809525)], 
-# '9': [('p=20', {'base_estimator': 'RF', 'n_estimators': 100}, 0.6666666666666666)], 
-# '10': [('p=20', {'base_estimator': 'RF', 'n_estimators': 200}, 0.47619047619047616)]
+# {'1': [('p=20', {'base_estimator': 'RF', 'n_estimators': 100}, 0.40476190476190477)], 
+#  '2': [('p=20', {'base_estimator': 'RF', 'n_estimators': 200}, 0.27142857142857146)], 
+#  '3': [('p=20', {'base_estimator': 'RF', 'n_estimators': 50}, 0.29523809523809524)], 
+#  '4': [('p=20', {'base_estimator': 'RF', 'n_estimators': 300}, 0.40476190476190477)], 
+#  '5': [('p=20', {'base_estimator': 'RF', 'n_estimators': 500}, 0.5904761904761904)], 
+#  '6': [('p=20', {'base_estimator': 'RF', 'n_estimators': 100}, 0.6428571428571429)], 
+#  '7': [('p=20', {'base_estimator': 'RF', 'n_estimators': 200}, 0.7428571428571429)], 
+#  '8': [('p=20', {'base_estimator': 'RF', 'n_estimators': 100}, 0.7285714285714286)], 
+#  '9': [('p=20', {'base_estimator': 'RF', 'n_estimators': 100}, 0.6666666666666666)], 
+#  '10': [('p=20', {'base_estimator': 'RF', 'n_estimators': 100}, 0.4714285714285714)]}
 #GetPersImageFeature
 # '1': [('p=200',{'base_estimator': 'RF', 'n_estimators': 300},0.7714285714285714)],
 # '2': [('p=100',{'base_estimator': 'RF', 'n_estimators': 100},0.7952380952380953)],
@@ -474,6 +503,16 @@ with open(feat_path + 'GetTropicalCoordinatesFeature' + '_hyperparameter.pkl', '
 # '9': [('p=25',{'base_estimator': 'RF', 'n_estimators': 100},0.6714285714285715),
 #       ('p=200',{'base_estimator': 'RF', 'n_estimators': 300},0.6714285714285715)],
 # '10': [('p=200',{'base_estimator': 'RF', 'n_estimators': 100},0.47619047619047616)]
+#GetAtol
+ # '1': [('p=8', {'base_estimator': 'RF', 'n_estimators': 300}, 0.8)], 
+ # '2': [('p=8', {'base_estimator': 'RF', 'n_estimators': 200}, 0.6857142857142857)], 
+ # '3': [('p=8', {'base_estimator': 'RF', 'n_estimators': 100}, 0.7476190476190477)], 
+ # '4': [('p=4', {'base_estimator': 'RF', 'n_estimators': 100}, 0.8095238095238095)], 
+ # '5': [('p=4', {'base_estimator': 'RF', 'n_estimators': 200}, 0.8666666666666668)], 
+ # '6': [('p=8', {'C': 835.625671897373, 'base_estimator': 'SVM', 'gamma': 0.00018457575175565604, 'kernel': 'rbf'}, 0.8904761904761905)], 
+ # '7': [('p=8', {'base_estimator': 'RF', 'n_estimators': 100}, 0.9238095238095239)], 
+ # '8': [('p=8', {'base_estimator': 'RF', 'n_estimators': 100}, 0.8857142857142856)], 
+ # '9': [('p=8', {'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.8904761904761905)]}
 #GetPersSilhouetteFeature
 # '1': [('p=100  q=0',{'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'},0.6238095238095238)], 
 # '2': [('p=100  q=0',{'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'},0.5476190476190477)],
