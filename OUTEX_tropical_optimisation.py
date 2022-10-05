@@ -32,6 +32,7 @@ class tropical_classifier(BaseEstimator):
         pdiagrams = dict()
         path_diag = "Outex-TC-00024/pdiagrams/"
         path_feat = "Outex-TC-00024/features/"
+        
 
         #Barcodes with just one bar are loaded as a 1d-array.
         #We force them to be a 2d-array
@@ -51,7 +52,7 @@ class tropical_classifier(BaseEstimator):
             T4 = T(safe_load(path_diag+"u_d1_"+str(i)), r=self.r)
             new_X.append(np.hstack((T1,T2,T3,T4)))
         
-        np.array(new_X)        
+        new_X=np.array(new_X)        
         self.X_ = new_X
         self.y_ = y
         
