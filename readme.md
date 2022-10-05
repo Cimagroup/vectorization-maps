@@ -33,13 +33,10 @@ To install the package: ``pip install . ``
 
 | Name | Description  |
 |----------------------------------------------------------------------------------------------------------|----------------------------------|
-|[PARALLEL_extract_all_features.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/extract_all_features_parallel.py) | old script for extracting features from the cifar10 database (in paralell) |
-|[extract_featurized_barcodes.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/extract_featurized_barcodes.py) | script with functions for all vectorization methods |
-|[Test_extract_featurized_barcodes.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/Test_extract_featurized_barcodes.ipynb)| test for functions defined in extract_featurized_barcodes.py|
 |[OUTEX_pdiagrams.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_pdiagrams.py) | script to obtain the persistent diagrams from the OUTEX database |
-|[OUTEX_feature_extraction.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_feature_extraction.py) | script to obtain all the features  from the OUTEX database |
-|[fashionMNIST_pdiagrams.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_pdiagrams.ipynb) | notebook to obtain the persistent diagrams and features from the fashion_mnist database |
+|[OUTEX_feature_computation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_feature_extraction.py) | script to obtain all the features  from the OUTEX database |
 |[SHREC14_features_computation.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_features_computation.ipynb) | notebook to obtain 3D points from Shrec14 dataset, apply VR-filtration, and compute features |
+|[fashionMNIST_pdiagrams.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_pdiagrams.ipynb) | notebook to obtain the persistent diagrams and features from the fashion_mnist database |
 
 ## Classification
 | Name | Description  |
@@ -48,15 +45,10 @@ To install the package: ``pip install . ``
 |[OUTEX68_parameter_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX68_parameter_optimisation.py) | Function to find the best parameters for each method when classifying OUTEX68.|
 |[OUTEX10_classification.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX10_classification.py) | Function to classify OUTEX10. Both, the feature and the machine learning method can be given as an input.|
 |[OUTEX10_parameter_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX10_parameter_optimisation.py) | Function to find the best parameters for each method when classifying OUTEX10.|
+|[SHREC14_classification.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_classification.py) | Function to classify SHREC14. Both, the feature and the machine learning method can be given as an input.|
+|[SHREC14_parameter_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_parameter_optimisation.py) | Function to find the best parameters for each method when classifying SHREC14.|
 |[fashionMNIST_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_classification.ipynb) | notebook to classify the fashion_mnist database using random forest |
 |[direct_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/direct_optimisation.py) | estimator with a general classifier from already calculated features|
 |[OUTEX_tropical_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_tropical_optimisation.py) | estimator with a specific classifier for Tropical Coordinates and the OUTEX database|
-
-## Examples
-| Name | Description  |
-|----------------------------------------------------------------------------------------------------------|----------------------------------|
-| [CIFAR10_example_classificationipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/CIFAR10_example_classification.ipynb)  |   notebook with an example of classification using cifar10                                |
-| [OUTEX68_example_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX68_example_classification.ipynb) | notebook with an example of classification using outex-68|
-| [fashionMNIST_example_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_example_classification.ipynb)|notebook with an example of classification using fashion-mnist|
-
+|[SHREC14_tropical_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_tropical_optimisation.py) | estimator with a specific classifier for Tropical Coordinates and the SHREC14 database|
 
