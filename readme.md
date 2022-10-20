@@ -24,9 +24,9 @@ To install the package: ``pip install . ``
 | Name | Description  |
 |----------------------------------------------------------------------------------------------------------|----------------------------------|
 |[Vectorisation/Get(method)](https://github.com/Cimagroup/vectorisation-maps/tree/master/vectorization) | implementation of the method in python |
-|[Vectorisation/float64to32](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorization/float64to32.py) | normalisation used for the complex polynomials |
-|[persistence_curves.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/persistence_curves.py)| script defyining betti curve, entropy and lifespan curve|
-|[TEST_extract_featurized_barcodes.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/TEST_extract_featurized_barcodes.ipynb)| test to check the features and the cubical complex fucntion works well. It uses the image [TEST_image.pgm](https://github.com/Cimagroup/vectorisation-maps/blob/master/TEST_image.pgm)|
+|[Vectorisation/float64to32](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorization/float64to32.py) | re-scale of float 64 numbers to transform them into float 32, since sklearn cannot handle float 64. It is needed for Complex Polynomials |
+|[Vectorisation/GetNewMethods.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorization/GetNewMethods.py)| Auxiliary functions for GetPersEntropy, GetLifespanCurve and GetTopologicalVector |
+|[Vectorisation/ATS.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorization/ATS.py)| auxiliary functions for GetTentFunction and GetTemplateSystem. The original script can be found [here](https://github.com/lucho8908/adaptive_template_systems).
 
 
 ## Feature extraction from data
@@ -35,7 +35,7 @@ To install the package: ``pip install . ``
 |----------------------------------------------------------------------------------------------------------|----------------------------------|
 |[OUTEX_pdiagrams.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_pdiagrams.py) | script to obtain the persistent diagrams from the OUTEX database |
 |[OUTEX_feature_computation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_feature_extraction.py) | script to obtain all the features  from the OUTEX database |
-|[SHREC14_features_computation.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_features_computation.ipynb) | notebook to obtain 3D points from Shrec14 dataset, apply VR-filtration, and compute features |
+|[SHREC14_features_computation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_features_computation.ipynb) | notebook to obtain 3D points from Shrec14 dataset, apply VR-filtration, and compute features |
 |[fashionMNIST_pdiagrams.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_pdiagrams.ipynb) | notebook to obtain the persistent diagrams and features from the fashion_mnist database |
 
 ## Classification
