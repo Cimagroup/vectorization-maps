@@ -26,7 +26,8 @@ To install the package: ``pip install . ``
 |[Vectorisation/Get(method)](https://github.com/Cimagroup/vectorisation-maps/tree/master/vectorization) | implementation of the method in python |
 |[Vectorisation/float64to32](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorization/float64to32.py) | re-scale of float 64 numbers to transform them into float 32, since sklearn cannot handle float 64. It is needed for Complex Polynomials |
 |[Vectorisation/GetNewMethods.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorization/GetNewMethods.py)| Auxiliary functions for GetPersEntropy, GetLifespanCurve and GetTopologicalVector |
-|[Vectorisation/ATS.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorization/ATS.py)| auxiliary functions for GetTentFunction and GetTemplateSystem. The original script can be found [here](https://github.com/lucho8908/adaptive_template_systems).
+|[Vectorisation/ATS.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorization/ATS.py)| auxiliary functions for GetTentFunction and GetTemplateSystem. The original script can be found [here](https://github.com/lucho8908/adaptive_template_systems) |
+|[Vectorisation/bar_cleaner.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorization/bar_cleaner.py)| it removes the bars with 0 length, which appear in the SHREC14 database |
 
 
 ## Feature extraction from data
