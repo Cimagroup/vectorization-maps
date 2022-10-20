@@ -34,15 +34,31 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
                                                         test_size=0.3, 
                                                         random_state=0)
     
-    if func!=GetPersTropicalCoordinatesFeature:
-        with open(path_feat + func.__name__ + '_l_d0.pkl', 'rb') as f:
-            features_l_d0 = pickle.load(f)
-        with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
-            features_l_d1 = pickle.load(f)
-        with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
-            features_u_d0 = pickle.load(f)
-        with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
-            features_u_d1 = pickle.load(f)
+    if func==GetPersTropicalCoordinatesFeature:
+        method = tropical_classifier(base_estimator, 
+                     n_estimators, C, kernel, gamma, degree, r=float(p))
+        
+            
+        X_train, X_test = Z_train, Z_test
+    else: 
+        if (func == GetTentFunctionFeature) or (func == GetTemplateSystemFeature):
+            with open(path_feat + func.__name__ + '68_l_d0.pkl', 'rb') as f:
+                features_l_d0 = pickle.load(f)
+            with open(path_feat + func.__name__ + '68_l_d1.pkl', 'rb') as f:
+                features_l_d1 = pickle.load(f)
+            with open(path_feat + func.__name__ + '68_u_d0.pkl', 'rb') as f:
+                features_u_d0 = pickle.load(f)
+            with open(path_feat + func.__name__ + '68_u_d1.pkl', 'rb') as f:
+                features_u_d1 = pickle.load(f)
+        else:
+            with open(path_feat + func.__name__ + '_l_d0.pkl', 'rb') as f:
+                features_l_d0 = pickle.load(f)
+            with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+                features_l_d1 = pickle.load(f)
+            with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+                features_u_d0 = pickle.load(f)
+            with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+                features_u_d1 = pickle.load(f)
         
     
         
@@ -72,14 +88,9 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
                         features_u_d1[str(i) + str_p + str_q]
                     ]
                     ))    
-        X_train = float64to32(X_train)
-        X_test = float64to32(X_test)
     
-    else:
-        method = tropical_classifier(base_estimator, 
-                     n_estimators, C, kernel, gamma, degree, r=float(p))
-        
-        X_train, X_test = Z_train, Z_test
+    X_train = float64to32(X_train)
+    X_test = float64to32(X_test)
     
     score_list = []
     for i in range(100):
@@ -100,11 +111,13 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
 # 0.8450367647058823
 # classification(func=GetAtolFeature, str_p='64', C=998.1848109388686, base_estimator='SVM', kernel='linear')
 # 0.8370098039215691
-# classification(str_p='150', func=GetPersImageFeature, base_estimator='RF', n_estimators=300)
-# 0.7597794117647058
+# classification(str_p='250', func=GetPersImageFeature, base_estimator='RF', n_estimators=200)
+
 # classification(func=GetPersSilhouetteFeature, str_p='100', str_q='1', base_estimator='SVM', kernel='poly', degree=2, C=1000.0405153241447, gamma=0.0009688387165373345)
 # 0.8370098039215691
 # classification(func=GetPersLandscapeFeature, str_p='50', str_q='20', C=998.1848109388686, base_estimator='SVM', kernel='linear')
 # 0.8370098039215691
+# classification(func=GetTentFunctionFeature, str_p='35', str_q='25', base_estimator='SVM', kernel='linear', C=998.1848109388686)
+
 # classification(func=GetPersTropicalCoordinatesFeature, str_p='492.5731592803383', base_estimator='RF', n_estimators=200)
 # 0.872732843137255

@@ -83,7 +83,10 @@ hyper_parameters['GetAtolFeature'] = [2,4,8]
 hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
 hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
 hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
-
+hyper_parameters['GetTentFunctionFeature'] = [[3,4,5,6,7,8,9,10,11,12,13,14,15], 
+                                              [.5,.6,.7,.8,.9,1,1.1,1.2]]
+hyper_parameters['GetTemplateSystemFeature'] = [['gmm', 'hdb'], 
+                                                [1,2,3,4, 5,10,15,20,25,30,35,40,45,50]]
 
 #%%
 
@@ -394,6 +397,77 @@ for t in range(1,11):
 print(best_scores)
 with open(feat_path + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
     pickle.dump(best_scores, f)  
+    
+#%%
+func = GetTentFunctionFeature
+
+print(func.__name__)
+with open(feat_path + func.__name__ +'.pkl', 'rb') as f:
+    features = pickle.load(f)
+    
+best_scores = {}
+for t in range(1,10):
+    best_scores[str(t)]=[('a','a',0)]
+    for p in hyper_parameters[func.__name__][0]:
+        for q in hyper_parameters[func.__name__][1]:
+            print('t,p,q = ', t, p, q)
+            X_train = []
+            for i in Z_train[str(t)]:
+                X_train.append(features[str(t)+'_'+str(p)+'_'+str(q)+'_'+str(i)])
+            search = searchR(complete)
+            search.fit(X_train, y_train[str(t)])
+            if search.best_score_ > best_scores[str(t)][0][2]:
+                best_scores[str(t)] = [('p='+str(p)+'  q='+str(q), search.best_params_, search.best_score_)]
+            elif search.best_score_ == best_scores[str(t)][0][2]:
+                best_scores[str(t)] = best_scores[str(t)]+[('p='+str(p)+'  q='+str(q), search.best_params_, search.best_score_)]
+    print(best_scores[str(t)])
+        
+print(best_scores)
+with open(feat_path + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+    pickle.dump(best_scores, f)  
+    
+#%%
+func = GetTemplateSystemFeature
+
+print(func.__name__)
+with open(feat_path + func.__name__ +'.pkl', 'rb') as f:
+    features = pickle.load(f)
+    
+best_scores = {}
+for t in range(10,11):
+    best_scores[str(t)]=[('a','a',0)]
+    for p in hyper_parameters[func.__name__][0]:
+        if (p=='gmm'):
+            for q in hyper_parameters[func.__name__][1]:
+                print('t,p,q = ', t, p, q)
+                X_train = []
+                for i in Z_train[str(t)]:
+                    X_train.append(features[str(t)+'_'+str(p)+'_'+str(q)+'_'+str(i)])
+                search = searchR(forestRBF)
+                search.fit(X_train, y_train[str(t)])
+                if search.best_score_ > best_scores[str(t)][0][2]:
+                    best_scores[str(t)] = [('p='+str(p)+'  q='+str(q), search.best_params_, search.best_score_)]
+                elif search.best_score_ == best_scores[str(t)][0][2]:
+                    best_scores[str(t)] = best_scores[str(t)]+[('p='+str(p)+'  q='+str(q), search.best_params_, search.best_score_)]
+        elif (t!= 10):
+            q=25
+            print('t,p,q = ', t, p, q)
+            X_train = []
+            for i in Z_train[str(t)]:
+                X_train.append(features[str(t)+'_'+str(p)+'_'+str(q)+'_'+str(i)])
+            search = searchR(complete)
+            search.fit(X_train, y_train[str(t)])
+            if search.best_score_ > best_scores[str(t)][0][2]:
+                best_scores[str(t)] = [('p='+str(p)+'  q='+str(q), search.best_params_, search.best_score_)]
+            elif search.best_score_ == best_scores[str(t)][0][2]:
+                best_scores[str(t)] = best_scores[str(t)]+[('p='+str(p)+'  q='+str(q), search.best_params_, search.best_score_)]
+            
+    print(best_scores[str(t)])
+
+        
+print(best_scores)
+with open(feat_path + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+    pickle.dump(best_scores, f)  
          
 #%%
 func = GetPersTropicalCoordinatesFeature
@@ -560,6 +634,34 @@ with open(feat_path + 'GetTropicalCoordinatesFeature' + '_hyperparameter.pkl', '
 #  ('p=100  q=20',{'C': 274.0499742167474, 'base_estimator': 'SVM', 'kernel': 'linear'},0.5904761904761905),
 #  ('p=200  q=10',{'C': 141.38693859523377, 'base_estimator': 'SVM', 'kernel': 'linear'},0.5904761904761905),
 #  ('p=200  q=20',{'C': 141.38693859523377, 'base_estimator': 'SVM', 'kernel': 'linear'},0.5904761904761905)]
+
+#GetTentFunctionFeature
+# '1': [('p=15  q=1.2', {'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.6333333333333333)], 
+# '2': [('p=12  q=0.6', {'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.6619047619047619), ('p=12  q=0.7', {'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.6619047619047619)], 
+# '3': [('p=14  q=0.9', {'C': 879.1425034294132, 'base_estimator': 'SVM', 'gamma': 0.0010352534930954075, 'kernel': 'rbf'}, 0.7476190476190476)], 
+# '4': [('p=6  q=0.5', {'C': 141.38693859523377, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.8), ('p=7  q=0.6', {'C': 141.38693859523377, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.8), ('p=7  q=0.8', {'base_estimator': 'RF', 'n_estimators': 50}, 0.8), ('p=7  q=0.9', {'base_estimator': 'RF', 'n_estimators': 100}, 0.8), ('p=7  q=1', {'base_estimator': 'RF', 'n_estimators': 200}, 0.8), ('p=13  q=0.8', {'C': 936.5390708060319, 'base_estimator': 'SVM', 'gamma': 0.01872823656893796, 'kernel': 'rbf'}, 0.8), ('p=15  q=0.5', {'base_estimator': 'RF', 'n_estimators': 100}, 0.8)], 
+# '5': [('p=14  q=1', {'base_estimator': 'RF', 'n_estimators': 100}, 0.9), ('p=14  q=1.2', {'base_estimator': 'RF', 'n_estimators': 100}, 0.9)], 
+# '6': [('p=12  q=0.7', {'base_estimator': 'RF', 'n_estimators': 500}, 0.9619047619047618)], 
+# '7': [('p=7  q=0.8', {'C': 957.5356566705223, 'base_estimator': 'SVM', 'degree': 2, 'gamma': 0.012031676619431752, 'kernel': 'poly'}, 0.9476190476190476), ('p=9  q=0.8', {'base_estimator': 'RF', 'n_estimators': 50}, 0.9476190476190476), ('p=11  q=0.5', {'base_estimator': 'RF', 'n_estimators': 50}, 0.9476190476190476), ('p=11  q=0.6', {'base_estimator': 'RF', 'n_estimators': 500}, 0.9476190476190476), ('p=11  q=0.7', {'base_estimator': 'RF', 'n_estimators': 100}, 0.9476190476190476), ('p=11  q=0.8', {'base_estimator': 'RF', 'n_estimators': 500}, 0.9476190476190476), ('p=12  q=0.9', {'C': 288.77533858634877, 'base_estimator': 'SVM', 'gamma': 0.001392949093880637, 'kernel': 'rbf'}, 0.9476190476190476), ('p=12  q=1', {'C': 879.1425034294132, 'base_estimator': 'SVM', 'gamma': 0.0010352534930954075, 'kernel': 'rbf'}, 0.9476190476190476), ('p=12  q=1.1', {'C': 212.62811600005904, 'base_estimator': 'SVM', 'gamma': 0.0030862881073963535, 'kernel': 'rbf'}, 0.9476190476190476), ('p=12  q=1.2', {'base_estimator': 'RF', 'n_estimators': 100}, 0.9476190476190476), ('p=15  q=0.8', {'C': 879.1425034294132, 'base_estimator': 'SVM', 'gamma': 0.0010352534930954075, 'kernel': 'rbf'}, 0.9476190476190476)], 
+# '8': [('p=8  q=1.2', {'C': 936.5390708060319, 'base_estimator': 'SVM', 'gamma': 0.01872823656893796, 'kernel': 'rbf'}, 0.9333333333333333), ('p=14  q=1.2', {'C': 288.77533858634877, 'base_estimator': 'SVM', 'gamma': 0.001392949093880637, 'kernel': 'rbf'}, 0.9333333333333333)], 
+# '9': [('p=6  q=1.2', {'base_estimator': 'RF', 'n_estimators': 500}, 0.7190476190476192)]}
+
+#GetTemplateSystemFeature
+# '1': [('p=gmm  q=30', {'base_estimator': 'RF', 'n_estimators': 100}, 0.9380952380952381)], 
+# '2': [('p=gmm  q=25', {'base_estimator': 'RF', 'n_estimators': 100}, 0.8952380952380953)], 
+# '3': [('p=hdb  q=25', {'base_estimator': 'RF', 'n_estimators': 300}, 0.8238095238095238)], 
+# '4': [('p=gmm  q=15', {'base_estimator': 'RF', 'n_estimators': 300}, 0.8333333333333334)], 
+# '5': [('p=gmm  q=10', {'base_estimator': 'RF', 'n_estimators': 500}, 0.8857142857142858)], 
+# '6': [('p=gmm  q=15', {'C': 147.72857490581015, 'base_estimator': 'SVM', 'gamma': 0.008899057397352507, 'kernel': 'rbf'}, 0.9190476190476191), 
+#       ('p=gmm  q=25', {'C': 140.27634725075853, 'base_estimator': 'SVM', 'gamma': 0.0164709455068002, 'kernel': 'rbf'}, 0.9190476190476191), 
+#       ('p=gmm  q=45', {'C': 147.72857490581015, 'base_estimator': 'SVM', 'gamma': 0.008899057397352507, 'kernel': 'rbf'}, 0.9190476190476191)], 
+# '7': [('p=gmm  q=10', {'base_estimator': 'RF', 'n_estimators': 300}, 0.9238095238095237)], 
+# '8': [('p=gmm  q=4', {'C': 294.6141483736795, 'base_estimator': 'SVM', 'gamma': 0.0033936188164774834, 'kernel': 'rbf'}, 0.8476190476190476), 
+#       ('p=gmm  q=5', {'C': 141.38693859523377, 'base_estimator': 'SVM', 'gamma': 0.0022077322411673027, 'kernel': 'rbf'}, 0.8476190476190476), 
+#       ('p=gmm  q=20', {'C': 303.33257263183975, 'base_estimator': 'SVM', 'gamma': 0.001587095951946739, 'kernel': 'rbf'}, 0.8476190476190476)], 
+# '9': [('p=gmm  q=10', {'base_estimator': 'RF', 'n_estimators': 50}, 0.7), 
+#        ('p=gmm  q=20', {'base_estimator': 'RF', 'n_estimators': 300}, 0.7)], 
+# '10': [('p=gmm  q=5', {'base_estimator': 'RF', 'n_estimators': 300}, 0.6000000000000001)]}
 #GetPersTropicalCoordinatesFeature
 # '1': ({'base_estimator': 'RF', 'n_estimators': 200, 'r': 52.19579592311136},
 #  0.5571428571428572),

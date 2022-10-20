@@ -44,15 +44,31 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
     Z_train, Z_test, y_train, y_test = train_test_split(range(len(label_list)), 
                                                         label_list, test_size=0.3, 
                                                         random_state=rs)
-    if func!=GetPersTropicalCoordinatesFeature:
-        with open(path_feat + func.__name__ + '_l_d0.pkl', 'rb') as f:
-            features_l_d0 = pickle.load(f)
-        with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
-            features_l_d1 = pickle.load(f)
-        with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
-            features_u_d0 = pickle.load(f)
-        with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
-            features_u_d1 = pickle.load(f)
+    if func==GetPersTropicalCoordinatesFeature:
+        method = tropical_classifier(base_estimator, 
+                     n_estimators, C, kernel, gamma, degree, r=float(p))
+        
+            
+        X_train, X_test = Z_train, Z_test
+    else: 
+        if (func == GetTentFunctionFeature) or (func == GetTemplateSystemFeature):
+            with open(path_feat + func.__name__ + '10_l_d0.pkl', 'rb') as f:
+                features_l_d0 = pickle.load(f)
+            with open(path_feat + func.__name__ + '10_l_d1.pkl', 'rb') as f:
+                features_l_d1 = pickle.load(f)
+            with open(path_feat + func.__name__ + '10_u_d0.pkl', 'rb') as f:
+                features_u_d0 = pickle.load(f)
+            with open(path_feat + func.__name__ + '10_u_d1.pkl', 'rb') as f:
+                features_u_d1 = pickle.load(f)
+        else:
+            with open(path_feat + func.__name__ + '_l_d0.pkl', 'rb') as f:
+                features_l_d0 = pickle.load(f)
+            with open(path_feat + func.__name__ + '_l_d1.pkl', 'rb') as f:
+                features_l_d1 = pickle.load(f)
+            with open(path_feat + func.__name__ + '_u_d0.pkl', 'rb') as f:
+                features_u_d0 = pickle.load(f)
+            with open(path_feat + func.__name__ + '_u_d1.pkl', 'rb') as f:
+                features_u_d1 = pickle.load(f)
         
     
         
@@ -83,15 +99,8 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
                     ]
                     ))    
     
-        X_train = float64to32(X_train)
-        X_test = float64to32(X_test)
-    
-    else:
-        method = tropical_classifier(base_estimator, 
-                     n_estimators, C, kernel, gamma, degree, r=float(p))
-        
-            
-        X_train, X_test = Z_train, Z_test
+    X_train = float64to32(X_train)
+    X_test = float64to32(X_test)
     
     score_list = []
     for i in range(100):

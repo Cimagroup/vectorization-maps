@@ -150,6 +150,10 @@ hyper_parameters['GetAtolFeature'] = [2,4,8,16]
 hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
 hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
 hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
+hyper_parameters['GetTentFunctionFeature'] = [[3,4,5,6,7,8,9,10,11,12,13,14,15], 
+                                              [.5,.6,.7,.8,.9,1,1.1,1.2]]
+hyper_parameters['GetTemplateSystemFeature'] = [['gmm', 'hdb'], 
+                                                [1,2,3,4, 5,10,15,20,25,30,35,40,45,50]]
 
 #%%
 #Methods with no parameter
@@ -215,8 +219,8 @@ for func in func_list:
             for i in Z:
                 features[str(t)+'_'+str(p)+'_'+str(i)]=atol_list[i,:]
             
-        with open(feat_path + func.__name__ +'.pkl', 'wb') as f:
-          pickle.dump(features, f)
+    with open(feat_path + func.__name__ +'.pkl', 'wb') as f:
+      pickle.dump(features, f)
           
 
 #%%
@@ -239,7 +243,76 @@ for func in func_list:
                 for i in Z:
                     features[str(t)+'_'+str(p)+'_'+str(q)+'_'+str(i)]=func(dgms[i],p,q) 
                 
-            with open(feat_path + func.__name__ +'.pkl', 'wb') as f:
-              pickle.dump(features, f)
+    with open(feat_path + func.__name__ +'.pkl', 'wb') as f:
+      pickle.dump(features, f)
 
 
+#%%
+
+func = GetTentFunctionFeature
+
+features = {}
+for p in hyper_parameters[func.__name__][0]:
+    for q in hyper_parameters[func.__name__][1]:
+        print(p,q)
+        for t in range(1,10):
+            print(t)
+            dgms = dgmsT[str(t)]
+            dgms_train = dgms[Z_train[str(t)]]
+            dgms_test = dgms[Z_test[str(t)]]
+            tent_list = GetTentFunctionFeature(dgms_train, dgms_test, 
+                                               d=p, padding=q)
+            
+            Z = Z_train[str(t)]+Z_test[str(t)]
+            for i in Z:
+                j = Z.index(i)
+                features[str(t)+'_'+str(p)+'_'+str(q)+'_'+str(i)]=tent_list[j,:]
+            
+with open(feat_path + func.__name__ +'.pkl', 'wb') as f:
+    pickle.dump(features, f)
+    
+#%%
+
+func = GetTemplateSystemFeature
+
+features = {}
+for p in hyper_parameters[func.__name__][0]:
+    if p=='gmm':
+        for q in hyper_parameters[func.__name__][1]:
+            print(p,q)
+            for t in range(1,11):
+                print(t)
+                dgms = dgmsT[str(t)]
+                dgms_train = dgms[Z_train[str(t)]]
+                dgms_test = dgms[Z_test[str(t)]]
+                ats_list = GetTemplateSystemFeature(barcodes_train=dgms_train, 
+                                                    barcodes_test=dgms_test, 
+                                                    y_train=y_train[str(t)],
+                                                    model=p,
+                                                    d=q)
+                
+                Z = Z_train[str(t)]+Z_test[str(t)]
+                for i in Z:
+                    j = Z.index(i)
+                    features[str(t)+'_'+str(p)+'_'+str(q)+'_'+str(i)]=ats_list[j,:]
+    else:
+        q=25
+        print(p,q)
+        for t in range(1,11):
+            print(t)
+            dgms = dgmsT[str(t)]
+            dgms_train = dgms[Z_train[str(t)]]
+            dgms_test = dgms[Z_test[str(t)]]
+            ats_list = GetTemplateSystemFeature(barcodes_train=dgms_train, 
+                                                barcodes_test=dgms_test, 
+                                                y_train=y_train[str(t)],
+                                                model=p,
+                                                d=q)
+            
+            Z = Z_train[str(t)]+Z_test[str(t)]
+            for i in Z:
+                j = Z.index(i)
+                features[str(t)+'_'+str(p)+'_'+str(q)+'_'+str(i)]=ats_list[j,:]
+                
+with open(feat_path + func.__name__ +'.pkl', 'wb') as f:
+    pickle.dump(features, f)
