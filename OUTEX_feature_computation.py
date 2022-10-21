@@ -433,7 +433,7 @@ with open(path_feat + func.__name__ +'68_u_d1.pkl', 'wb') as f:
 
 #%%
 
-func = GetTemplateSystemFeature
+func = GetAdaptativeSystemFeature
     
 print(func.__name__)
 print(10)
