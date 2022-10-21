@@ -83,9 +83,9 @@ hyper_parameters['GetAtolFeature'] = [2,4,8]
 hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
 hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
 hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
-hyper_parameters['GetTentFunctionFeature'] = [[3,4,5,6,7,8,9,10,11,12,13,14,15], 
+hyper_parameters['GetTemplateFunctionFeature'] = [[3,4,5,6,7,8,9,10,11,12,13,14,15], 
                                               [.5,.6,.7,.8,.9,1,1.1,1.2]]
-hyper_parameters['GetTemplateSystemFeature'] = [['gmm', 'hdb'], 
+hyper_parameters['GetAdaptativeSystemFeature'] = [['gmm', 'hdb'], 
                                                 [1,2,3,4, 5,10,15,20,25,30,35,40,45,50]]
 
 #%%
@@ -399,7 +399,7 @@ with open(feat_path + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
     pickle.dump(best_scores, f)  
     
 #%%
-func = GetTentFunctionFeature
+func = GetTemplateFunctionFeature
 
 print(func.__name__)
 with open(feat_path + func.__name__ +'.pkl', 'rb') as f:
@@ -427,7 +427,7 @@ with open(feat_path + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
     pickle.dump(best_scores, f)  
     
 #%%
-func = GetTemplateSystemFeature
+func = GetAdaptativeSystemFeature
 
 print(func.__name__)
 with open(feat_path + func.__name__ +'.pkl', 'rb') as f:
@@ -635,7 +635,7 @@ with open(feat_path + 'GetTropicalCoordinatesFeature' + '_hyperparameter.pkl', '
 #  ('p=200  q=10',{'C': 141.38693859523377, 'base_estimator': 'SVM', 'kernel': 'linear'},0.5904761904761905),
 #  ('p=200  q=20',{'C': 141.38693859523377, 'base_estimator': 'SVM', 'kernel': 'linear'},0.5904761904761905)]
 
-#GetTentFunctionFeature
+#GetTemplateFunctionFeature
 # '1': [('p=15  q=1.2', {'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.6333333333333333)], 
 # '2': [('p=12  q=0.6', {'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.6619047619047619), ('p=12  q=0.7', {'C': 998.1848109388686, 'base_estimator': 'SVM', 'kernel': 'linear'}, 0.6619047619047619)], 
 # '3': [('p=14  q=0.9', {'C': 879.1425034294132, 'base_estimator': 'SVM', 'gamma': 0.0010352534930954075, 'kernel': 'rbf'}, 0.7476190476190476)], 
@@ -646,7 +646,7 @@ with open(feat_path + 'GetTropicalCoordinatesFeature' + '_hyperparameter.pkl', '
 # '8': [('p=8  q=1.2', {'C': 936.5390708060319, 'base_estimator': 'SVM', 'gamma': 0.01872823656893796, 'kernel': 'rbf'}, 0.9333333333333333), ('p=14  q=1.2', {'C': 288.77533858634877, 'base_estimator': 'SVM', 'gamma': 0.001392949093880637, 'kernel': 'rbf'}, 0.9333333333333333)], 
 # '9': [('p=6  q=1.2', {'base_estimator': 'RF', 'n_estimators': 500}, 0.7190476190476192)]}
 
-#GetTemplateSystemFeature
+#GetAdaptativeSystemFeature
 # '1': [('p=gmm  q=30', {'base_estimator': 'RF', 'n_estimators': 100}, 0.9380952380952381)], 
 # '2': [('p=gmm  q=25', {'base_estimator': 'RF', 'n_estimators': 100}, 0.8952380952380953)], 
 # '3': [('p=hdb  q=25', {'base_estimator': 'RF', 'n_estimators': 300}, 0.8238095238095238)], 

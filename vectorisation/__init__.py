@@ -11,7 +11,7 @@ from .GetPersLifespanFeature import *
 from .GetPersSilhouetteFeature import *
 from .GetPersStats import *
 from .GetPersTropicalCoordinatesFeature import *
-from .GetTentFunctionFeature import *
-from .GetTemplateSystemFeature import *
+from .GetTemplateFunctionFeature import *
+from .GetAdaptativeSystemFeature import *
 from .GetTopologicalVectorFeature import *
 from .float64to32 import *

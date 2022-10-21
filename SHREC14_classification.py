@@ -326,51 +326,51 @@ def classification(func, str_p='', str_q='', base_estimator='RF', t=6,
 # classification(t=10, str_p='100', str_q='10', base_estimator='SVM', kernel='linear', C=274.0499742167474, func=GetPersLandscapeFeature)
 # 0.5
 
-# print('GetTemplateSystemFeature')
-#classification(t=1, base_estimator='RF', n_estimators=100, str_p='gmm', str_q='30', func=GetTemplateSystemFeature)
+# print('GetAdaptativeSystemFeature')
+#classification(t=1, base_estimator='RF', n_estimators=100, str_p='gmm', str_q='30', func=GetAdaptativeSystemFeature)
 # 0.7951111111111111
-# classification(t=2, base_estimator='RF', n_estimators=100, str_p='gmm', str_q='25', func=GetTemplateSystemFeature)
+# classification(t=2, base_estimator='RF', n_estimators=100, str_p='gmm', str_q='25', func=GetAdaptativeSystemFeature)
 # 0.8160000000000003
-# classification(t=3, base_estimator='RF', n_estimators=300, str_p='gmm', str_q='25', func=GetTemplateSystemFeature)
+# classification(t=3, base_estimator='RF', n_estimators=300, str_p='gmm', str_q='25', func=GetAdaptativeSystemFeature)
 # 0.7836666666666667
-# classification(t=4, base_estimator='RF', n_estimators=300, str_p='gmm', str_q='15', func=GetTemplateSystemFeature)
+# classification(t=4, base_estimator='RF', n_estimators=300, str_p='gmm', str_q='15', func=GetAdaptativeSystemFeature)
 # 0.7275555555555556
-# classification(t=5, base_estimator='RF', n_estimators=500, str_p='gmm', str_q='10', func=GetTemplateSystemFeature)
+# classification(t=5, base_estimator='RF', n_estimators=500, str_p='gmm', str_q='10', func=GetAdaptativeSystemFeature)
 # 0.932
-# classification(t=6, base_estimator='SVM', kernel='rbf', C=147.72857490581015, gamma=0.008899057397352507, str_p='gmm', str_q='15', func=GetTemplateSystemFeature)
+# classification(t=6, base_estimator='SVM', kernel='rbf', C=147.72857490581015, gamma=0.008899057397352507, str_p='gmm', str_q='15', func=GetAdaptativeSystemFeature)
 # 0.8666666666666667
-# classification(t=7, base_estimator='RF', n_estimators=300, str_p='gmm', str_q='10', func=GetTemplateSystemFeature)
+# classification(t=7, base_estimator='RF', n_estimators=300, str_p='gmm', str_q='10', func=GetAdaptativeSystemFeature)
 # 0.8814444444444447
-# classification(t=8, base_estimator='SVM', kernel='rbf', C=294.6141483736795, gamma=0.0033936188164774834, str_p='gmm', str_q='4', func=GetTemplateSystemFeature)
+# classification(t=8, base_estimator='SVM', kernel='rbf', C=294.6141483736795, gamma=0.0033936188164774834, str_p='gmm', str_q='4', func=GetAdaptativeSystemFeature)
 # 0.8777777777777781
-# classification(t=9, base_estimator='RF', n_estimators=50, str_p='gmm', str_q='10', func=GetTemplateSystemFeature)
+# classification(t=9, base_estimator='RF', n_estimators=50, str_p='gmm', str_q='10', func=GetAdaptativeSystemFeature)
 # 0.7044444444444444
-# classification(t=10, base_estimator='RF', n_estimators=300, str_p='gmm', str_q='5', func=GetTemplateSystemFeature)
+# classification(t=10, base_estimator='RF', n_estimators=300, str_p='gmm', str_q='5', func=GetAdaptativeSystemFeature)
 # 0.5723333333333331
 
-# print('GetTentFunctionFeature')
-# classification(t=1, base_estimator='SVM', str_p='15', str_q='1.2', C=998.1848109388686, kernel='linear', func=GetTentFunctionFeature)
+# print('GetTemplateFunctionFeature')
+# classification(t=1, base_estimator='SVM', str_p='15', str_q='1.2', C=998.1848109388686, kernel='linear', func=GetTemplateFunctionFeature)
 # 0.511
-# classification(t=2, base_estimator='SVM', str_p='12', str_q='0.6', C=998.1848109388686, kernel='linear', func=GetTentFunctionFeature)
+# classification(t=2, base_estimator='SVM', str_p='12', str_q='0.6', C=998.1848109388686, kernel='linear', func=GetTemplateFunctionFeature)
 # 0.6
-# classification(t=3, base_estimator='SVM', str_p='14', str_q='0.9', kernel='rbf', C=879.1425034294132, gamma=0.0010352534930954075, func=GetTentFunctionFeature)
+# classification(t=3, base_estimator='SVM', str_p='14', str_q='0.9', kernel='rbf', C=879.1425034294132, gamma=0.0010352534930954075, func=GetTemplateFunctionFeature)
 # 0.722
-# classification(t=4, base_estimator='SVM', str_p='6', str_q='0.5', C=141.38693859523377, kernel='linear', func=GetTentFunctionFeature)
+# classification(t=4, base_estimator='SVM', str_p='6', str_q='0.5', C=141.38693859523377, kernel='linear', func=GetTemplateFunctionFeature)
 # 0.722
-# classification(t=5, str_p='14', str_q='1', base_estimator='RF', n_estimators=100, func=GetTentFunctionFeature)
+# classification(t=5, str_p='14', str_q='1', base_estimator='RF', n_estimators=100, func=GetTemplateFunctionFeature)
 # 0.898
-# classification(t=6, base_estimator='RF', str_p='12', str_q='0.7', n_estimators=500, func=GetTentFunctionFeature)
+# classification(t=6, base_estimator='RF', str_p='12', str_q='0.7', n_estimators=500, func=GetTemplateFunctionFeature)
 # 0.919
-# classification(t=7, base_estimator='SVM', str_p='12', str_q='0.9', C=288.77533858634877, kernel='rbf', gamma=0.001392949093880637, func=GetTentFunctionFeature)
+# classification(t=7, base_estimator='SVM', str_p='12', str_q='0.9', C=288.77533858634877, kernel='rbf', gamma=0.001392949093880637, func=GetTemplateFunctionFeature)
 # 0.911
-# classification(t=8, base_estimator='SVM', str_p='14', str_q='1.2', kernel='rbf', C=288.77533858634877, gamma=0.001392949093880637, func=GetTentFunctionFeature)
+# classification(t=8, base_estimator='SVM', str_p='14', str_q='1.2', kernel='rbf', C=288.77533858634877, gamma=0.001392949093880637, func=GetTemplateFunctionFeature)
 # 0.944
-# classification(t=9, base_estimator='RF', str_p='6', str_q='1.2', n_estimators=500, func=GetTentFunctionFeature)
+# classification(t=9, base_estimator='RF', str_p='6', str_q='1.2', n_estimators=500, func=GetTemplateFunctionFeature)
 # 0.744
 
-# print('GetTemplateSystemFeature')
+# print('GetAdaptativeSystemFeature')
 # classification(t=1, base_estimator='SVM', str_p='gmm', str_q='20',
-#                C=97.17226044546167, kernel='linear', func=GetTemplateSystemFeature)
+#                C=97.17226044546167, kernel='linear', func=GetAdaptativeSystemFeature)
 
 # print('GetPersTropicalCoordinatesFeature')
 # classification(t=1, base_estimator='RF', n_estimators=200, str_p='52.19579592311136', func=GetPersTropicalCoordinatesFeature)

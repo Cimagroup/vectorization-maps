@@ -5,9 +5,9 @@ from sklearn.cluster import KMeans
 
 from vectorisation.bar_cleaner import bar_cleaner
 
-__all__ = ["GetTentFunctionFeature"]
+__all__ = ["GetTemplateFunctionFeature"]
 
-def GetTentFunctionFeature(barcodes_train, barcodes_test, d=5, padding=.05):
+def GetTemplateFunctionFeature(barcodes_train, barcodes_test, d=5, padding=.05):
     
     barcodes_train = list(map(bar_cleaner, barcodes_train))
     barcodes_test = list(map(bar_cleaner, barcodes_test))

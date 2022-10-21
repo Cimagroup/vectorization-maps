@@ -95,8 +95,8 @@ hyper_parameters['GetPersImageFeature'] = [25,50,100,150,200]
 hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
 hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
 hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
-hyper_parameters['GetTentFunctionFeature'] = [[20,35,50,65,80], [5,7,9]]
-hyper_parameters['GetTemplateSystemFeature'] = [['gmm', 'hdb'], 
+hyper_parameters['GetTemplateFunctionFeature'] = [[20,35,50,65,80], [5,7,9]]
+hyper_parameters['GetAdaptativeSystemFeature'] = [['gmm', 'hdb'], 
                                                 [1,2,3,4, 5,10,15,20,25,30,35,40,45,50]]
 
 #%%
@@ -670,7 +670,7 @@ with open(path_feat + func.__name__ + '_10_hyperparameter.pkl', 'wb') as f:
   pickle.dump(best_scores, f)
 
 #%%
-func = GetTentFunctionFeature
+func = GetTemplateFunctionFeature
 
 print(func.__name__)
 
@@ -723,7 +723,7 @@ with open(path_feat + func.__name__ + 'hyperparameter.pkl', 'wb') as f:
 
 #%%
 
-func = GetTemplateSystemFeature
+func = GetAdaptativeSystemFeature
 
 print(func.__name__)
 

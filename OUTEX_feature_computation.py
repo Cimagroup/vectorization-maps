@@ -37,8 +37,8 @@ hyper_parameters['GetPersImageFeature'] = [25,50,100,150,200]
 hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
 hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
 hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
-hyper_parameters['GetTentFunctionFeature'] = [[50,100,200], [1,3,5]]
-hyper_parameters['GetTemplateSystemFeature'] = [['gmm', 'hdb'], 
+hyper_parameters['GetTemplateFunctionFeature'] = [[50,100,200], [1,3,5]]
+hyper_parameters['GetAdaptativeSystemFeature'] = [['gmm', 'hdb'], 
                                                 [1,2,3,4, 5,10,15,20,25,30,35,40,45,50]]
 
 #%%
@@ -215,7 +215,7 @@ Z_train_10, Z_test_10, y_train_10, y_test_10 = train_test_split(range(len(label_
 
 #%%
 
-func = GetTentFunctionFeature
+func = GetTemplateFunctionFeature
     
 print(func.__name__)
 print(68)
@@ -280,7 +280,7 @@ with open(path_feat + func.__name__ +'68_u_d1.pkl', 'wb') as f:
   
 #%%
 
-func = GetTentFunctionFeature
+func = GetTemplateFunctionFeature
     
 print(func.__name__)
 print(10)
@@ -345,7 +345,7 @@ with open(path_feat + func.__name__ +'10_u_d1.pkl', 'wb') as f:
   
 #%%
 
-func = GetTemplateSystemFeature
+func = GetAdaptativeSystemFeature
     
 print(func.__name__)
 print(68)

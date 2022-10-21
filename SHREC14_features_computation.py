@@ -150,9 +150,9 @@ hyper_parameters['GetAtolFeature'] = [2,4,8,16]
 hyper_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
 hyper_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
 hyper_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
-hyper_parameters['GetTentFunctionFeature'] = [[3,4,5,6,7,8,9,10,11,12,13,14,15], 
+hyper_parameters['GetTemplateFunctionFeature'] = [[3,4,5,6,7,8,9,10,11,12,13,14,15], 
                                               [.5,.6,.7,.8,.9,1,1.1,1.2]]
-hyper_parameters['GetTemplateSystemFeature'] = [['gmm', 'hdb'], 
+hyper_parameters['GetAdaptativeSystemFeature'] = [['gmm', 'hdb'], 
                                                 [1,2,3,4, 5,10,15,20,25,30,35,40,45,50]]
 
 #%%
@@ -249,7 +249,7 @@ for func in func_list:
 
 #%%
 
-func = GetTentFunctionFeature
+func = GetTemplateFunctionFeature
 
 features = {}
 for p in hyper_parameters[func.__name__][0]:
@@ -260,7 +260,7 @@ for p in hyper_parameters[func.__name__][0]:
             dgms = dgmsT[str(t)]
             dgms_train = dgms[Z_train[str(t)]]
             dgms_test = dgms[Z_test[str(t)]]
-            tent_list = GetTentFunctionFeature(dgms_train, dgms_test, 
+            tent_list = GetTemplateFunctionFeature(dgms_train, dgms_test, 
                                                d=p, padding=q)
             
             Z = Z_train[str(t)]+Z_test[str(t)]
@@ -273,7 +273,7 @@ with open(feat_path + func.__name__ +'.pkl', 'wb') as f:
     
 #%%
 
-func = GetTemplateSystemFeature
+func = GetAdaptativeSystemFeature
 
 features = {}
 for p in hyper_parameters[func.__name__][0]:
@@ -285,7 +285,7 @@ for p in hyper_parameters[func.__name__][0]:
                 dgms = dgmsT[str(t)]
                 dgms_train = dgms[Z_train[str(t)]]
                 dgms_test = dgms[Z_test[str(t)]]
-                ats_list = GetTemplateSystemFeature(barcodes_train=dgms_train, 
+                ats_list = GetAdaptativeSystemFeature(barcodes_train=dgms_train, 
                                                     barcodes_test=dgms_test, 
                                                     y_train=y_train[str(t)],
                                                     model=p,
@@ -303,7 +303,7 @@ for p in hyper_parameters[func.__name__][0]:
             dgms = dgmsT[str(t)]
             dgms_train = dgms[Z_train[str(t)]]
             dgms_test = dgms[Z_test[str(t)]]
-            ats_list = GetTemplateSystemFeature(barcodes_train=dgms_train, 
+            ats_list = GetAdaptativeSystemFeature(barcodes_train=dgms_train, 
                                                 barcodes_test=dgms_test, 
                                                 y_train=y_train[str(t)],
                                                 model=p,

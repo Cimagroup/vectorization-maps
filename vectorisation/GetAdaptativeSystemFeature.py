@@ -5,9 +5,9 @@ from sklearn.cluster import KMeans
 
 from vectorisation.bar_cleaner import bar_cleaner
 
-__all__ = ["GetTemplateSystemFeature"]
+__all__ = ["GetAdaptativeSystemFeature"]
 
-def GetTemplateSystemFeature(barcodes_train, barcodes_test, y_train, 
+def GetAdaptativeSystemFeature(barcodes_train, barcodes_test, y_train, 
                              model='gmm', d=25):
     
     barcodes_train = list(map(bar_cleaner, barcodes_train))

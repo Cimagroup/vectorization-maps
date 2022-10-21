@@ -51,7 +51,7 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
             
         X_train, X_test = Z_train, Z_test
     else: 
-        if (func == GetTentFunctionFeature) or (func == GetTemplateSystemFeature):
+        if (func == GetTemplateFunctionFeature) or (func == GetAdaptativeSystemFeature):
             with open(path_feat + func.__name__ + '10_l_d0.pkl', 'rb') as f:
                 features_l_d0 = pickle.load(f)
             with open(path_feat + func.__name__ + '10_l_d1.pkl', 'rb') as f:

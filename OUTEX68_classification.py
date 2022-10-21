@@ -41,7 +41,7 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
             
         X_train, X_test = Z_train, Z_test
     else: 
-        if (func == GetTentFunctionFeature) or (func == GetTemplateSystemFeature):
+        if (func == GetTemplateFunctionFeature) or (func == GetAdaptativeSystemFeature):
             with open(path_feat + func.__name__ + '68_l_d0.pkl', 'rb') as f:
                 features_l_d0 = pickle.load(f)
             with open(path_feat + func.__name__ + '68_l_d1.pkl', 'rb') as f:
@@ -117,7 +117,7 @@ def classification(func, str_p='', str_q='', base_estimator='RF',
 # 0.8370098039215691
 # classification(func=GetPersLandscapeFeature, str_p='50', str_q='20', C=998.1848109388686, base_estimator='SVM', kernel='linear')
 # 0.8370098039215691
-# classification(func=GetTentFunctionFeature, str_p='35', str_q='25', base_estimator='SVM', kernel='linear', C=998.1848109388686)
+# classification(func=GetTemplateFunctionFeature, str_p='35', str_q='25', base_estimator='SVM', kernel='linear', C=998.1848109388686)
 
 # classification(func=GetPersTropicalCoordinatesFeature, str_p='492.5731592803383', base_estimator='RF', n_estimators=200)
 # 0.872732843137255
