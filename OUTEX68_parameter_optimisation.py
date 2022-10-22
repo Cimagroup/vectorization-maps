@@ -712,7 +712,7 @@ for p in hyper_parameters[func.__name__][0]:
         print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
     
 print(best_scores)
-with open(path_feat + func.__name__ + 'hyperparameter.pkl', 'wb') as f:
+with open(path_feat + func.__name__ + '_68_hyperparameter.pkl', 'wb') as f:
   pickle.dump(best_scores, f)
     
 #%%
@@ -800,7 +800,7 @@ for p in hyper_parameters[func.__name__][0]:
         print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
     
 print(best_scores)
-with open(path_feat + func.__name__ + 'hyperparameter.pkl', 'wb') as f:
+with open(path_feat + func.__name__ + '_68_hyperparameter.pkl', 'wb') as f:
   pickle.dump(best_scores, f)
   
 #%%
