@@ -1,7 +1,7 @@
 # Table of contents
 1. [Folders](#folders)
 2. [Vectorisation Methods](#vectorisation-methods)
-3. [Feature extraction from data](#feature-extraction-from-data)
+3. [Feature computation from data](#feature-computation-from-data)
 4. [Classification](#classification)
 5. [Examples](#examples)
 
@@ -30,14 +30,15 @@ To install the package: ``pip install . ``
 |[Vectorisation/bar_cleaner.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/vectorisation/bar_cleaner.py)| it removes the bars with 0 length, which appear in the SHREC14 database |
 
 
-## Feature extraction from data
+## Feature computation from data
 
 | Name | Description  |
 |----------------------------------------------------------------------------------------------------------|----------------------------------|
 |[OUTEX_pdiagrams.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_pdiagrams.py) | script to obtain the persistent diagrams from the OUTEX database |
-|[OUTEX_feature_computation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_feature_extraction.py) | script to obtain all the features  from the OUTEX database |
+|[OUTEX_feature_computation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_feature_computation.py) | script to obtain all the features  from the OUTEX database |
 |[SHREC14_features_computation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_features_computation.ipynb) | notebook to obtain 3D points from Shrec14 dataset, apply VR-filtration, and compute features |
-|[fashionMNIST_pdiagrams.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_pdiagrams.ipynb) | notebook to obtain the persistent diagrams and features from the fashion_mnist database |
+|[fashionMNIST_pdiagrams.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_pdiagrams.py) | notebook to obtain the persistent diagrams and features from the fashion_mnist database |
+|[fashionMNIST_feature_computation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_feature_computation.py) | script to obtain all the features from the fashionMNIST database |
 
 ## Classification
 | Name | Description  |
@@ -48,7 +49,8 @@ To install the package: ``pip install . ``
 |[OUTEX10_parameter_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX10_parameter_optimisation.py) | Function to find the best parameters for each method when classifying OUTEX10.|
 |[SHREC14_classification.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_classification.py) | Function to classify SHREC14. Both, the feature and the machine learning method can be given as an input.|
 |[SHREC14_parameter_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_parameter_optimisation.py) | Function to find the best parameters for each method when classifying SHREC14.|
-|[fashionMNIST_classification.ipynb](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_classification.ipynb) | notebook to classify the fashion_mnist database using random forest |
+|[fashionMNIST_classification.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_classification.py) | Function to classify fasionMNIST. Both, the feature and the machine learning method can be given as an input.|
+|[fashionMNIST_parameter_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/fashionMNIST_parameter_optimisation.py) | Function to find the best parameters for each method when classifying fashionMNIST.|
 |[direct_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/direct_optimisation.py) | estimator with a general classifier from already calculated features|
 |[OUTEX_tropical_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/OUTEX_tropical_optimisation.py) | estimator with a specific classifier for Tropical Coordinates and the OUTEX database|
 |[SHREC14_tropical_optimisation.py](https://github.com/Cimagroup/vectorisation-maps/blob/master/SHREC14_tropical_optimisation.py) | estimator with a specific classifier for Tropical Coordinates and the SHREC14 database|
