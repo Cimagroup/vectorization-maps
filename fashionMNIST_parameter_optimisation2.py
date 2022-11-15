@@ -10,7 +10,6 @@ from fashion_mnist import mnist_reader
 from vectorisation import *
 import pandas as pd
 
-
 path_feat = "fashion_mnist/features/"
 path_diag= "fashion_mnist/pdiagrams/"
 
@@ -90,22 +89,26 @@ hyper_parameters['GetPersImageFeature'] = [3,6,12,20]
 hyper_parameters['GetPersSilhouetteFeature'] = [[15,30,50], [0,1,2,5]]
 hyper_parameters['GetComplexPolynomialFeature'] = [[3, 5, 10],['R', 'S', 'T']]
 hyper_parameters['GetPersLandscapeFeature'] = [[15,30,50], [1,2,3,5]]
-hyper_parameters['GetTemplateFunctionFeature'] = [[1,2,3,5], [.5, 1, 2]]
-hyper_parameters['GetAdaptativeSystemFeature'] = [['gmm', 'hdb'], 
+hyper_parameters['GetTemplateFunctionFeature'] = [[2,3,5], [.5, 1, 2]]
+hyper_parameters['GetAdaptativeSystemFeature'] = [['gmm'],#, 'hdb'], 
                                                 [1,2,3,4,5,10,15]]
 
+
+method = onlyForest
+
 #%%
+
 
 func = GetPersStats
 
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
 
-search =  searchG(onlyForest)
+search =  searchG(method)
 
 best_scores = {}
 X_train = []
@@ -113,11 +116,22 @@ for i in Z_train:
     X_train.append(
         np.hstack(
             [
-                features_l[str(i)],
+#                features_l[str(i)],
                 features_u[str(i)]
             ]
             ))
-    
+X_test = []
+for i in Z_test:
+    X_test.append(
+        np.hstack(
+            [
+#                features_l[str(i)],
+                features_u[str(i)]
+            ]
+            ))
+
+
+
 search.fit(X_train, y_train)
 
 best_scores = (search.best_params_, search.best_score_)
@@ -131,13 +145,13 @@ with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
 func = GetCarlssonCoordinatesFeature
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
     
 
-search =  searchG(onlyForest)
+search =  searchG(method)
 
 best_scores = {}
 X_train = []
@@ -145,10 +159,21 @@ for i in Z_train:
     X_train.append(
         np.hstack(
             [
-                features_l[str(i)],
+#                features_l[str(i)],
                 features_u[str(i)]
             ]
             ))
+
+X_test = []
+for i in Z_test:
+    X_test.append(
+        np.hstack(
+            [
+#                features_l[str(i)],
+                features_u[str(i)]
+            ]
+            ))    
+
 
 
 search.fit(X_train, y_train)
@@ -158,19 +183,19 @@ print(best_scores)
     
 
 with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-  pickle.dump(best_scores, f)
+      pickle.dump(best_scores, f)
   
 #%%
 
 func = GetPersEntropyFeature
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
 
-search =  searchR(complete)
+search =  searchG(method)
 
 best_scores = {}
 for p in hyper_parameters[func.__name__]:
@@ -179,10 +204,20 @@ for p in hyper_parameters[func.__name__]:
         X_train.append(
             np.hstack(
                 [
-                    features_l[str(i)+'_'+str(p)],
+                #    features_l[str(i)+'_'+str(p)],
                     features_u[str(i)+'_'+str(p)]
                 ]
                 ))
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+    #                features_l[str(i)],
+                    features_u[str(i)+'_'+str(p)]
+                ]
+                ))
+
 
 
     search.fit(X_train, y_train)
@@ -192,19 +227,19 @@ for p in hyper_parameters[func.__name__]:
     
 print(best_scores)
 with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-  pickle.dump(best_scores, f)
+      pickle.dump(best_scores, f)
 
 #%%
 func = GetBettiCurveFeature
 
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
     
-search = searchR(complete)
+search =  searchG(method)
 
 best_scores = {}
 for p in hyper_parameters[func.__name__]:
@@ -213,13 +248,21 @@ for p in hyper_parameters[func.__name__]:
         X_train.append(
             np.hstack(
                 [
-                    features_l[str(i)+'_'+str(p)],
-                    features_l_d1[str(i)+'_'+str(p)],
-                    features_u_d0[str(i)+'_'+str(p)],
+                #    features_l[str(i)+'_'+str(p)],
                     features_u[str(i)+'_'+str(p)]
                 ]
-                ))           
-
+                ))    
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+    #                features_l[str(i)],
+                    features_u[str(i)+'_'+str(p)]
+                ]
+                ))
+    
+  
 
     search.fit(X_train, y_train)
 
@@ -228,18 +271,18 @@ for p in hyper_parameters[func.__name__]:
     
 print(best_scores)
 with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-  pickle.dump(best_scores, f)
-  
+      pickle.dump(best_scores, f)
+ 
 #%%
 func = GetTopologicalVectorFeature
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
     
-search = searchG(onlyForest)
+search =  searchG(method)
 
 best_scores = {}
 for p in hyper_parameters[func.__name__]:
@@ -248,11 +291,21 @@ for p in hyper_parameters[func.__name__]:
         X_train.append(
             np.hstack(
                 [
-                    features_l[str(i)+'_'+str(p)],
+#                    features_l[str(i)+'_'+str(p)],
                     features_u[str(i)+'_'+str(p)]
                 ]
                 ))
-
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+    #                features_l[str(i)],
+                    features_u[str(i)+'_'+str(p)]
+                ]
+                ))
+    
+    
 
     search.fit(X_train, y_train)
 
@@ -268,13 +321,13 @@ with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
 func = GetPersLifespanFeature
 print(func.__name__)
     
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
 
 
-search =  searchR(complete)
+search =  searchG(method)
 best_scores = {}
 for p in hyper_parameters[func.__name__]:
     X_train = []
@@ -282,28 +335,36 @@ for p in hyper_parameters[func.__name__]:
         X_train.append(
             np.hstack(
                 [
-                    features_l[str(i)+'_'+str(p)],
+#                    features_l[str(i)+'_'+str(p)],
                     features_u[str(i)+'_'+str(p)]
                 ]
                 ))
 
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+    #                features_l[str(i)],
+                    features_u[str(i)+'_'+str(p)]
+                ]
+                ))
 
-    search.fit(X_train, y_train)
 
     best_scores[str(p)] = (search.best_params_, search.best_score_)
     print(str(p), ' :', best_scores[str(p)])
     
 print(best_scores)
 with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-  pickle.dump(best_scores, f)
+      pickle.dump(best_scores, f)
 
 #%%
 func = GetAtolFeature
 
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
 
@@ -314,14 +375,25 @@ for p in hyper_parameters[func.__name__]:
         X_train.append(
             np.hstack(
                 [
-                    features_l[str(i)+'_'+str(p)],
+#                    features_l[str(i)+'_'+str(p)],
                     features_u[str(i)+'_'+str(p)]
                 ]
-                )) 
+                ))
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+    #                features_l[str(i)],
+                    features_u[str(i)+'_'+str(p)]
+                ]
+                ))
+
+    
     if p<=4:
-        search = searchR(forestRBF)
+        search =  searchG(method)
     else:
-        search = searchR(noPoly)
+        search =  searchG(method)
     search.fit(X_train, y_train)
 
     best_scores[str(p)] = (search.best_params_, search.best_score_)
@@ -329,20 +401,20 @@ for p in hyper_parameters[func.__name__]:
     
 print(best_scores)
 with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-  pickle.dump(best_scores, f)
+      pickle.dump(best_scores, f)
   
 #%%
 
 func = GetPersImageFeature
 print(func.__name__)
     
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
 
 
-search = searchR(complete)
+search =  searchG(method)
 best_scores = {}
 for p in hyper_parameters[func.__name__]:
     X_train = []
@@ -350,13 +422,21 @@ for p in hyper_parameters[func.__name__]:
         X_train.append(
             np.hstack(
                 [
-                    features_l[str(i)+'_'+str(p)],
-                    features_l_d1[str(i)+'_'+str(p)],
-                    features_u_d0[str(i)+'_'+str(p)],
+#                    features_l[str(i)+'_'+str(p)],
                     features_u[str(i)+'_'+str(p)]
                 ]
                 )) 
+    X_test = []
+    for i in Z_test:
+        X_test.append(
+            np.hstack(
+                [
+    #                features_l[str(i)],
+                    features_u[str(i)+'_'+str(p)]
+                ]
+                ))
 
+    
     search.fit(X_train, y_train)
 
     best_scores[str(p)] = (search.best_params_, search.best_score_)
@@ -370,12 +450,12 @@ with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
 func = GetPersSilhouetteFeature
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
     
-search = searchR(complete)
+search =  searchG(method)
 
 best_scores = {}
 for p in hyper_parameters[func.__name__][0]:
@@ -385,12 +465,24 @@ for p in hyper_parameters[func.__name__][0]:
             X_train.append(
                 np.hstack(
                     [
-                        features_l[str(i)+'_'+str(p)+'_'+str(q)],
+#                        features_l[str(i)+'_'+str(p)+'_'+str(q)],
                         features_u[str(i)+'_'+str(p)+'_'+str(q)]
                     ]
                     ))
-            
+        X_test = []
+        for i in Z_test:
+            X_test.append(
+                np.hstack(
+                    [
+    #                features_l[str(i)],
+                        features_u[str(i)+'_'+str(p)+'_'+str(q)]
+                    ]
+                ))
+                
         X_train = float64to32(X_train)
+        X_test = float64to32(X_test)
+        
+
         search.fit(X_train, y_train)
         best_scores[str(p)+'_'+str(q)] = (search.best_params_, search.best_score_)
         print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
@@ -403,12 +495,12 @@ with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
 func = GetComplexPolynomialFeature
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
     
-search = searchG(onlyForest)
+search =  searchG(method)
 
 best_scores = {}
 for p in hyper_parameters[func.__name__][0]:
@@ -418,31 +510,42 @@ for p in hyper_parameters[func.__name__][0]:
             X_train.append(
                 np.hstack(
                     [
-                        features_l[str(i)+'_'+str(p)+'_'+str(q)],
+#                        features_l[str(i)+'_'+str(p)+'_'+str(q)],
                         features_u[str(i)+'_'+str(p)+'_'+str(q)]
                     ]
                     ))
 
+        X_test = []
+        for i in Z_test:
+            X_test.append(
+                np.hstack(
+                    [
+    #                features_l[str(i)],
+                        features_u[str(i)+'_'+str(p)+'_'+str(q)]
+                    ]
+                ))
         X_train = float64to32(X_train)
+        X_test = float64to32(X_test)
+        
         search.fit(X_train, y_train)
         best_scores[str(p)+'_'+str(q)] = (search.best_params_, search.best_score_)
         print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
     
 print(best_scores)
 with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-  pickle.dump(best_scores, f)
+      pickle.dump(best_scores, f)
 
 #%%
 func = GetPersLandscapeFeature
 
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
     
-search = searchR(complete)
+search =  searchG(method)
 
 best_scores = {}
 for p in hyper_parameters[func.__name__][0]:
@@ -452,34 +555,46 @@ for p in hyper_parameters[func.__name__][0]:
             X_train.append(
                 np.hstack(
                     [
-                        features_l[str(i)+'_'+str(p)+'_'+str(q)],
+#                        features_l[str(i)+'_'+str(p)+'_'+str(q)],
                         features_u[str(i)+'_'+str(p)+'_'+str(q)]
                     ]
                     ))
-
+        X_test = []
+        for i in Z_test:
+            X_test.append(
+                np.hstack(
+                    [
+    #                features_l[str(i)],
+                        features_u[str(i)+'_'+str(p)+'_'+str(q)]
+                    ]
+                ))
+            
         X_train = float64to32(X_train)
         X_test = float64to32(X_test)
+        np.savetxt("FMNIST_"+func.__name__+"_"+str(p)+"_"+str(q)+"_X_train.txt",X_train)
+        np.savetxt("FMNIST_"+func.__name__+"_"+str(p)+"_"+str(q)+"_X_test.txt",X_test)
+        
         search.fit(X_train, y_train)
         best_scores[str(p)+'_'+str(q)] = (search.best_params_, search.best_score_)
         print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
     
 print(best_scores)
 with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-  pickle.dump(best_scores, f)
-  
+      pickle.dump(best_scores, f)
+   
 #%%
 
 func = GetTemplateFunctionFeature
 
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
     
 
-search = searchR(complete)
+search =  searchG(method)
 
 best_scores = {}
 for p in hyper_parameters[func.__name__][0]:
@@ -489,18 +604,29 @@ for p in hyper_parameters[func.__name__][0]:
             X_train.append(
                 np.hstack(
                     [
-                        features_l[str(i)+'_'+str(p)+'_'+str(q)],
+#                        features_l[str(i)+'_'+str(p)+'_'+str(q)],
                         features_u[str(i)+'_'+str(p)+'_'+str(q)]
                     ]
                     ))
-
+        X_test = []
+        for i in Z_test:
+            X_test.append(
+                np.hstack(
+                    [
+    #                features_l[str(i)],
+                        features_u[str(i)+'_'+str(p)+'_'+str(q)]
+                    ]
+                ))
+            
+        
+        
         search.fit(X_train, y_train)
         best_scores[str(p)+'_'+str(q)] = (search.best_params_, search.best_score_)
         print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
     
 print(best_scores)
-with open(path_feat + func.__name__ + 'hyperparameter.pkl', 'wb') as f:
-  pickle.dump(best_scores, f)
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+      pickle.dump(best_scores, f)
   
 #%%
 
@@ -508,8 +634,8 @@ func = GetAdaptativeSystemFeature
 
 print(func.__name__)
 
-with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
-    features_l = pickle.load(f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'rb') as f:
+#    features_l = pickle.load(f)
 with open(path_feat + func.__name__ + '_u.pkl', 'rb') as f:
     features_u = pickle.load(f)
     
@@ -521,52 +647,73 @@ for p in hyper_parameters[func.__name__][0]:
     if p=='gmm':
         for q in hyper_parameters[func.__name__][1]:
             if q<20:
-                search = searchR(forestRBF)
+                search =  searchG(method)
             else:
-                search = searchR(complete)
+                search =  searchG(method)
             X_train = []
             for i in Z_train:
                 X_train.append(
                     np.hstack(
                         [
-                            features_l[str(i)+'_'+str(p)+'_'+str(q)],
+#                            features_l[str(i)+'_'+str(p)+'_'+str(q)],
                             features_u[str(i)+'_'+str(p)+'_'+str(q)]
                         ]
                         ))  
-    
+            
+            X_test = []
+            for i in Z_test:
+                X_test.append(
+                    np.hstack(
+                        [
+        #                features_l[str(i)],
+                            features_u[str(i)+'_'+str(p)+'_'+str(q)]
+                        ]
+                    ))
+            
+           
+            
             search.fit(X_train, y_train)
             best_scores[str(p)+'_'+str(q)] = (search.best_params_, search.best_score_)
             print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
     else:
         q = 25
-        search = searchR(complete)
+        search =  searchG(method)
         X_train = []
         for i in Z_train:
             X_train.append(
                 np.hstack(
                     [
-                        features_l[str(i)+'_'+str(p)+'_'+str(q)],
-                        features_l_d1[str(i)+'_'+str(p)+'_'+str(q)],
-                        features_u_d0[str(i)+'_'+str(p)+'_'+str(q)],
+#                        features_l[str(i)+'_'+str(p)+'_'+str(q)],
                         features_u[str(i)+'_'+str(p)+'_'+str(q)]
                     ]
                     ))
-
+        X_test = []
+        for i in Z_test:
+            X_test.append(
+                np.hstack(
+                    [
+    #                features_l[str(i)],
+                        features_u[str(i)+'_'+str(p)+'_'+str(q)]
+                    ]
+                ))
+        
+        
         search.fit(X_train, y_train)
         best_scores[str(p)+'_'+str(q)] = (search.best_params_, search.best_score_)
         print(str(p)+'_'+str(q), ' :', best_scores[str(p)+'_'+str(q)])
     
 print(best_scores)
-with open(path_feat + func.__name__ + 'hyperparameter.pkl', 'wb') as f:
-  pickle.dump(best_scores, f)
-  
+with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
+      pickle.dump(best_scores, f)
+
+
 #%%
 func = GetPersTropicalCoordinatesFeature
 from fashionMNIST_tropical_optimisation import tropical_classifier
 
 parameters = [
     {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500], 'r': uniform(1,1000)},
-    {'base_estimator': ['SVM'], 'kernel': ['linear'], 'C': uniform(1,1000), 'r': uniform(1,1000)}
+    #{'base_estimator': ['SVM'], 'kernel': ['linear'], 'C': uniform(1,1000), 'r': uniform(1,1000)}
  ]
 
 X_train, X_test = Z_train, Z_test
@@ -582,4 +729,4 @@ print(best_scores)
     
 
 with open(path_feat + func.__name__ + '_hyperparameter.pkl', 'wb') as f:
-  pickle.dump(best_scores, f)
+      pickle.dump(best_scores, f)

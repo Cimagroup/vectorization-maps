@@ -1,6 +1,8 @@
 import pickle
 import numpy as np
 from skimage import feature
+from skimage import filters
+from skimage import morphology
 from scipy.ndimage import distance_transform_bf
 from fashion_mnist import mnist_reader
 from vectorisation import *
@@ -27,9 +29,13 @@ labels = np.array(y_train.tolist() + y_test.tolist())
 root = lambda ima : int(np.sqrt(ima.shape[0]))
 #unroot = lambda ima : int((ima.shape[0])**2)
 toSquare = lambda ima : ima.reshape([root(ima), root(ima)])
-edger = lambda ima : feature.canny(image=ima, low_threshold=20, high_threshold=170)
+padding = lambda ima : np.pad(ima, ((2,2), (2,2)), 'constant', constant_values=0)
+sq=morphology.rectangle(3, 3, dtype='uint8')
+median = lambda ima : filters.median(ima, sq)
+binarization = lambda ima : 255*(ima>5)
+edger = lambda ima : feature.canny(image=ima, low_threshold=20, high_threshold=100)
 inverter = lambda ima : np.max(np.float32(ima))-ima
-edge_pipeline = lambda ima : inverter(edger(toSquare(ima)))
+edge_pipeline = lambda ima : inverter(edger(binarization(median((toSquare(ima))))))
 
 edge_images = np.array(list(map(edge_pipeline, images)))
 
@@ -47,13 +53,14 @@ for i in range(n_total):
     n = img_i.shape[0]
     n_square = n**2
     
-    dgms = GetCubicalComplexPDs(img=taxi_complexes[i].reshape(n_square,), img_dim=[n,n])
-    dgm = dgms[1]
-    np.savetxt(path_diag+ "taxi_l_"+str(i),dgm)
+    #dgms = GetCubicalComplexPDs(img=taxi_complexes[i].reshape(n_square,), img_dim=[n,n])
+    #dgm = dgms[1]
+    #dgm = dgms[0][:-1]
+    #np.savetxt(path_diag+ "taxi_l_"+str(i),dgm)
     
     dgms = GetCubicalComplexPDs(img=taxi_complexes_opp[i].reshape(n_square,), img_dim=[n,n])
     #we remove the infinity bar
-    dgm = dgms[0][0:len(dgms[0])-1]
+    dgm = dgms[0][:-1]
     np.savetxt(path_diag+ "taxi_u_"+str(i),dgm)
     
 #%%

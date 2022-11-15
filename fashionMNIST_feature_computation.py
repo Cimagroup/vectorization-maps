@@ -26,7 +26,7 @@ def safe_load(x):
     return pd
 
 for i in range(n_total):
-    pdiagrams["pdiag_taxi_l_"+str(i)]= safe_load(path_diag + "taxi_l_"+str(i))
+    #pdiagrams["pdiag_taxi_l_"+str(i)]= safe_load(path_diag + "taxi_l_"+str(i))
     pdiagrams["pdiag_taxi_u_"+str(i)]= safe_load(path_diag + "taxi_u_"+str(i))
     
 #%%
@@ -58,13 +58,13 @@ for func in func_list:
 
     print(func.__name__)
     for i in range(n_total):
-        features_l[str(i)]=func(pdiagrams["pdiag_taxi_l_"+str(i)])
+        #features_l[str(i)]=func(pdiagrams["pdiag_taxi_l_"+str(i)])
         features_u[str(i)]=func(pdiagrams["pdiag_taxi_u_"+str(i)])
         
-    with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
-      pickle.dump(features_l, f)
+#    with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
+#      pickle.dump(features_l, f)
     with open(path_feat + func.__name__ +'_u.pkl', 'wb') as f:
-      pickle.dump(features_u, f)
+          pickle.dump(features_u, f)
         
 #%%
 #Methods with only one parameter
@@ -77,39 +77,45 @@ func_list = [
             ]
 
 for func in func_list:
-    features_l = dict()
+    #features_l = dict()
     features_u = dict()
 
     print(func.__name__)
     for p in hyper_parameters[func.__name__]:
         for i in range(n_total):
-            features_l[str(i)+'_'+str(p)]=func(pdiagrams["pdiag_taxi_l_"+str(i)],p)
+            #features_l[str(i)+'_'+str(p)]=func(pdiagrams["pdiag_taxi_l_"+str(i)],p)
             features_u[str(i)+'_'+str(p)]=func(pdiagrams["pdiag_taxi_u_"+str(i)],p)
             
-    with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
-      pickle.dump(features_l, f)
+#    with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
+#      pickle.dump(features_l, f)
     with open(path_feat + func.__name__ +'_u.pkl', 'wb') as f:
-      pickle.dump(features_u, f)
+          pickle.dump(features_u, f)
       
 #%%
+
 func = GetAtolFeature
     
-features_l = dict()
+#list_u = []
+list_l = []
+for i in range(len(pdiagrams)):
+#        list_u.append(pdiagrams["pdiag_taxi_u_"+str(i)])
+        list_l.append(pdiagrams["pdiag_taxi_l_"+str(i)])
+#features_l = dict()
 features_u = dict()
 for p in hyper_parameters[func.__name__]:    
     print(p)
     
-    atol_l = func(list_l, p)
+#    atol_l = func(list_l, p)
     atol_u = func(list_u, p)
     
     for i in range(n_total):
-        features_l[str(i)+'_'+str(p)]=atol_l[i,:]
+#        features_l[str(i)+'_'+str(p)]=atol_l[i,:]
         features_u[str(i)+'_'+str(p)]=atol_u[i,:]
 
-with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
-  pickle.dump(features_l, f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
+#  pickle.dump(features_l, f)
 with open(path_feat + func.__name__ +'_u.pkl', 'wb') as f:
-  pickle.dump(features_u, f)    
+      pickle.dump(features_u, f)    
 
 #%%
 #Methods with two parameter
@@ -120,7 +126,7 @@ func_list = [
             ]
 
 for func in func_list:
-    features_l = dict()
+#    features_l = dict()
     features_u = dict()
     
     print(func.__name__)
@@ -128,14 +134,14 @@ for func in func_list:
         for q in hyper_parameters[func.__name__][1]:
             print(p,q)
             for i in range(n_total):
-                features_l[str(i)+'_'+str(p)+'_'+str(q)]=func(pdiagrams["pdiag_taxi_l_"+str(i)],p,q)
+#                features_l[str(i)+'_'+str(p)+'_'+str(q)]=func(pdiagrams["pdiag_taxi_l_"+str(i)],p,q)
                 features_u[str(i)+'_'+str(p)+'_'+str(q)]=func(pdiagrams["pdiag_taxi_u_"+str(i)],p,q)
 
                     
-    with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
-      pickle.dump(features_l, f)
+#    with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
+#      pickle.dump(features_l, f)
     with open(path_feat + func.__name__ +'_u.pkl', 'wb') as f:
-      pickle.dump(features_u, f)
+          pickle.dump(features_u, f)
           
 #%%
 
@@ -143,42 +149,42 @@ func = GetTemplateFunctionFeature
     
 print(func.__name__)
 
-train_l = []
+#train_l = []
 train_u = []
 
 for i in range(n_train):
-    train_l.append(pdiagrams["pdiag_taxi_l_"+str(i)])
+#    train_l.append(pdiagrams["pdiag_taxi_l_"+str(i)])
     train_u.append(pdiagrams["pdiag_taxi_u_"+str(i)])
     
-test_l = []
+#test_l = []
 test_u = []
 
 for i in range(n_train, n_total):
-    test_l.append(pdiagrams["pdiag_taxi_l_"+str(i)])
+#    test_l.append(pdiagrams["pdiag_taxi_l_"+str(i)])
     test_u.append(pdiagrams["pdiag_taxi_u_"+str(i)])
 
     
-features_l = dict()
+#features_l = dict()
 features_u = dict()
 
 for p in hyper_parameters[func.__name__][0]:
     for q in hyper_parameters[func.__name__][1]:
         print(p,q)
         
-        tent_l = func(train_l, test_l, 
-                         d=p, padding=q)
+#        tent_l = func(train_l, test_l, 
+#                         d=p, padding=q)
         tent_u = func(train_u, test_u, 
                          d=p, padding=q)
 
         for i in range(n_total):
-            j = Z.index(i)
-            features_l[str(i)+'_'+str(p)+'_'+str(q)]=tent_l[j,:]
-            features_u[str(i)+'_'+str(p)+'_'+str(q)]=tent_u[j,:]
+            #j = Z.index(i)
+#            features_l[str(i)+'_'+str(p)+'_'+str(q)]=tent_l[j,:]
+            features_u[str(i)+'_'+str(p)+'_'+str(q)]=tent_u[i,:]
             
-with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
-  pickle.dump(features_l, f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
+# pickle.dump(features_l, f)
 with open(path_feat + func.__name__ +'_u.pkl', 'wb') as f:
-  pickle.dump(features_u, f)
+      pickle.dump(features_u, f)
 
 #%%
 
@@ -186,22 +192,22 @@ func = GetAdaptativeSystemFeature
     
 print(func.__name__)
 
-train_l = []
+#train_l = []
 train_u = []
 
 for i in range(n_train):
-    train_l.append(pdiagrams["pdiag_taxi_l_"+str(i)])
+#    train_l.append(pdiagrams["pdiag_taxi_l_"+str(i)])
     train_u.append(pdiagrams["pdiag_taxi_u_"+str(i)])
     
-test_l = []
+#test_l = []
 test_u = []
 
 for i in range(n_train, n_total):
-    test_l.append(pdiagrams["pdiag_taxi_l_"+str(i)])
+#    test_l.append(pdiagrams["pdiag_taxi_l_"+str(i)])
     test_u.append(pdiagrams["pdiag_taxi_u_"+str(i)])
 
     
-features_l = dict()
+#features_l = dict()
 features_u = dict()
 
 for p in hyper_parameters[func.__name__][0]:
@@ -209,32 +215,32 @@ for p in hyper_parameters[func.__name__][0]:
         for q in hyper_parameters[func.__name__][1]:
             print(p,q)
             
-            ats_l = func(train_l, test_l, 
-                         y_train = y_train, model=p, d=q)
+#            ats_l = func(train_l, test_l, 
+#                         y_train = y_train, model=p, d=q)
             ats_u = func(train_u, test_u, 
                          y_train = y_train, model=p, d=q)
     
             for i in range(n_total):
-                j = Z.index(i)
-                features_l[str(i)+'_'+str(p)+'_'+str(q)]=ats_l[j,:]
-                features_u[str(i)+'_'+str(p)+'_'+str(q)]=ats_u[j,:]
+                #j = Z.index(i)
+#                features_l[str(i)+'_'+str(p)+'_'+str(q)]=ats_l[j,:]
+                features_u[str(i)+'_'+str(p)+'_'+str(q)]=ats_u[i,:]
     else:
         q=1
-        ats_l = func(train_l, test_l, 
-                     y_train = y_train, model=p, d=q)
+#        ats_l = func(train_l, test_l, 
+#                     y_train = y_train, model=p, d=q)
         ats_u = func(train_u, test_u, 
                      y_train = y_train, model=p, d=q)
 
         for i in range(n_total):
-            j = Z.index(i)
-            features_l[str(i)+'_'+str(p)+'_'+str(q)]=ats_l[j,:]
-            features_u[str(i)+'_'+str(p)+'_'+str(q)]=ats_u[j,:]
+            #j = Z.index(i)
+#            features_l[str(i)+'_'+str(p)+'_'+str(q)]=ats_l[j,:]
+            features_u[str(i)+'_'+str(p)+'_'+str(q)]=ats_u[i,:]
         
             
-with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
-  pickle.dump(features_l, f)
+#with open(path_feat + func.__name__ +'_l.pkl', 'wb') as f:
+#  pickle.dump(features_l, f)
 with open(path_feat + func.__name__ +'_u.pkl', 'wb') as f:
-  pickle.dump(features_u, f)
+      pickle.dump(features_u, f)
 
 
 #%%

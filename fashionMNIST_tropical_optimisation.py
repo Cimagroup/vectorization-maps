@@ -44,9 +44,10 @@ class tropical_classifier(BaseEstimator):
         
         new_X = []
         for i in X:
-            T1 = T(safe_load(path_diag+"l_"+str(i)), r=self.r)
-            T2 = T(safe_load(path_diag+"u_"+str(i)), r=self.r)
-            new_X.append(np.hstack((T1,T2)))
+            #T1 = T(safe_load(path_diag+"l_"+str(i)), r=self.r)
+            T2 = T(safe_load(path_diag+"taxi_u_"+str(i)), r=self.r)
+            #new_X.append(np.hstack((T1,T2)))
+            new_X.append(T2)
         
         new_X=np.array(new_X)        
         self.X_ = new_X
@@ -72,9 +73,9 @@ class tropical_classifier(BaseEstimator):
         
         new_X = []
         for i in X:
-            T1 = T(safe_load(path_diag+"l_"+str(i)), r=self.r)
-            T2 = T(safe_load(path_diag+"u_"+str(i)), r=self.r)
-            new_X.append(np.hstack((T1,T2)))
+            #T1 = T(safe_load(path_diag+"l_"+str(i)), r=self.r)
+            T2 = T(safe_load(path_diag+"taxi_u_"+str(i)), r=self.r)
+            new_X.append(T2)
         
         np.array(new_X)        
         
