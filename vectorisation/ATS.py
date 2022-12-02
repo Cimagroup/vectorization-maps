@@ -54,8 +54,9 @@ def limits_box(list_dgms):
 	mins = np.inf*np.ones(2)
 	maxs = -np.inf*np.ones(2)
 
+
 	for dgm in list_dgms_temp:
-		# dgm[:,1] = dgm[:,1]-dgm[:,0] # Turns the birth-death into birth-lifespan
+		dgm[:,1] = dgm[:,1]-dgm[:,0] # Turns the birth-death into birth-lifespan
 		mins = np.minimum(np.amin(dgm, axis=0), mins)
 		maxs = np.maximum(np.amax(dgm, axis=0), maxs)
 
