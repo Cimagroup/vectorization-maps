@@ -2,3 +2,4 @@ Outex-TC-00024/pdiagrams
 fashion_mnist/pdiagrams
 *\__pycache__/
 
+*.pyc
