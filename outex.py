@@ -21,13 +21,13 @@ seed(s)
 #%%
 
 vec_methods = dict()
-vec_methods['GetPersStats']=(),
+# vec_methods['GetPersStats']=(),
 # vec_methods['GetCarlssonCoordinatesFeature']=(),
 # vec_methods['GetPersEntropyFeature'] = [[50,100,200]]
 # vec_methods['GetBettiCurveFeature'] = [[50,100,200]]
 # vec_methods['GetPersLifespanFeature'] = [[50,100,200]]
 # vec_methods['GetTopologicalVectorFeature'] = [[5, 10, 20]]
-# vec_methods['GetAtolFeature'] = [[16]]#[[2,4,8,16,32,64]]
+vec_methods['GetAtolFeature'] = [[16]]#[[2,4,8,16,32,64]]
 # vec_methods['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
 # vec_methods['GetPersImageFeature'] = [[0.001,0.01,0.2,1],[20,50,70]]
 # vec_methods['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]

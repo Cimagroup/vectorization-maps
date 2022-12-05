@@ -39,12 +39,8 @@ def best_parameter(features, func):
     best_params_key = keys_l[index]
     return best_params_key
 
-def build_dataset_from_features(train_index,y_train,func,feature_dictionary,parameter): 
-    X_train = list()
-    for i in train_index:
-        X_train.append(
-                np.array(feature_dictionary[func.__name__+'_'+str(parameter)][str(i)])
-                )
+def build_dataset_from_features(train_index,y_train,func,feature_dictionary,parameter):     
+    X_train = [feature_dictionary[func.__name__+'_'+str(parameter)][str(i)] for i in train_index]
     return (np.array(X_train),y_train)
 
 def safe_load(x):

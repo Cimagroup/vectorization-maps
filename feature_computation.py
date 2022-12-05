@@ -20,13 +20,15 @@ def feature_computation(vectorisation_methods,pdiagrams,diag_key,train_index,tes
             if func == vect.GetAtolFeature:
                 features_list = func([pdiagrams[diag_key+str(i)] for i in index],*p)
                 for i in index:
-                    features_func[str(i)]= features_list[i,:]
+                    j = index.index(i)
+                    features_func[str(i)]= features_list[j,:]
                 features[func.__name__+'_'+str(p)]= features_func
             if func in [vect.GetTemplateFunctionFeature, vect.GetAdaptativeSystemFeature]:
                 train = [pdiagrams[diag_key+str(i)] for i in train_index]
                 test  = [pdiagrams[diag_key+str(i)] for i in test_index]
                 features_list = func(train,test,*p)
                 for i in index:
-                    features_func[str(i)]= features_list[i,:]
+                    j = index.index(i)
+                    features_func[str(i)]= features_list[j,:]
                 features[func.__name__+'_'+str(p)]= features_func
     return features 

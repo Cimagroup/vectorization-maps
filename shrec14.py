@@ -1,17 +1,17 @@
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
+from parameter_optimization import *
 from scipy.stats import uniform
 from scipy.stats import expon
 import pickle
-import numpy as np
 from feature_computation import *
 import vectorisation as vect
 import pandas as pd
 from direct_optimisation import main_classifier
 from auxiliary_functions import *
 from numpy.random import seed
-
+     
 s=1
 seed(s)
 
@@ -22,7 +22,7 @@ vec_methods['GetPersStats']=(),
 # vec_methods['GetPersEntropyFeature'] = [[50,100,200]]
 # vec_methods['GetBettiCurveFeature'] = [[50,100,200]]
 # vec_methods['GetPersLifespanFeature'] = [[50,100,200]]
-# vec_methods['GetAtolFeature'] = [[2,4,8,16]]
+vec_methods['GetAtolFeature'] = [[16]]# [[2,4,8,16]]
 # vec_methods['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
 # vec_methods['GetPersImageFeature'] = [[0.001,0.01,0.2,1],[10,20,50]]
 # vec_methods['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
@@ -72,7 +72,7 @@ for t in range(1,10):
     with open(path_results+'SHREC14_'+str(t)+'_feature_dictionary.pkl', 'wb') as f:
       pickle.dump(feature_dictionary, f)
       
-    from parameter_optimization import *
+
     
     complete = [
         {'base_estimator': ['RF'], 'n_estimators': [50,100,200,300,500]},
