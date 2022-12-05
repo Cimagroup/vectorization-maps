@@ -4,7 +4,7 @@ from vectorisation.bar_cleaner import bar_cleaner
 
 __all__ = ["GetPersStats"]
 
-def GetPersStats(barcode):
+def GetPersStats(barcode,*p):
     barcode = bar_cleaner(barcode)
     if (np.size(barcode) > 0):
         # Average of Birth and Death of the barcode

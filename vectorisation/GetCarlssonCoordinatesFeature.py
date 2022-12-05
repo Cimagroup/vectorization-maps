@@ -4,7 +4,7 @@ from vectorisation.bar_cleaner import bar_cleaner
 
 __all__ = ["GetCarlssonCoordinatesFeature"]
 
-def GetCarlssonCoordinatesFeature(barcode, FN=5):
+def GetCarlssonCoordinatesFeature(barcode, FN=5, *p):
     feature_vector = np.zeros(FN)
     barcode = bar_cleaner(barcode)
     
