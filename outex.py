@@ -105,7 +105,7 @@ for func in func_list:
         
         feature_dictionary[func.__name__+'_'+str(p)]= deepcopy(features)
         
-    with open(path_results+'OUTEX10_feature_dictionary.pkl', 'wb') as f:
+    with open(path_results+'OUTEX'+str(number_labels)+'_feature_dictionary.pkl', 'wb') as f:
       pickle.dump(feature_dictionary, f)
       
 #%%
@@ -146,7 +146,7 @@ best_scores=parameter_optimization(train_index, y_train, vec_methods, feature_di
 
 print("Parameter optimization:",best_scores)
 
-with open(path_results+'OUTEX10_best_scores.pkl', 'wb') as f:
+with open(path_results+'OUTEX'+str(number_labels)+'_best_scores.pkl', 'wb') as f:
   pickle.dump(best_scores, f)
   
 #%%
@@ -161,7 +161,7 @@ train_scores, test_scores = scores(train_index, y_train, test_index, y_test,
 print("The train accuracy is", train_scores)
 print("The test accuracy is", test_scores)
 
-with open(path_results+'OUTEX10_train_scores.pkl', 'wb') as f:
+with open(path_results+'OUTEX'+str(number_labels)+'_train_scores.pkl', 'wb') as f:
   pickle.dump(train_scores, f)
-with open(path_results+'OUTEX10_test_scores.pkl', 'wb') as f:
+with open(path_results+'OUTEX'+str(number_labels)+'_test_scores.pkl', 'wb') as f:
   pickle.dump(test_scores, f)
