@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 class main_classifier(BaseEstimator):
 
     def __init__(self, base_estimator='RF', n_estimators=100, C=1.0, 
-                 kernel='rbf', gamma=0.1, degree=3):
+                 kernel='rbf', gamma=0.1, degree=3,**p):
     
         self._estimator_type = "classifier"
         self.base_estimator = base_estimator

@@ -72,7 +72,7 @@ def scores(train_index, y_train, test_index, y_test, vectorization_methods,
     return train_scores, test_scores
 
 def classification(train_index, y_train, test_index,y_test, vectorisation_methods, 
-                   feature_vectors, best_scores, normalization):
+                   feature_vectors, best_scores, normalization): 
     # Initial parameters
     base_estimator='RF' 
     n_estimators=100
@@ -80,8 +80,6 @@ def classification(train_index, y_train, test_index,y_test, vectorisation_method
     kernel='rbf'
     gamma=0.1
     degree=3
-    
-    
     func_list = vectorisation_methods.keys()
     train_scores = dict()
     test_scores = dict()
@@ -90,11 +88,17 @@ def classification(train_index, y_train, test_index,y_test, vectorisation_method
         classifier_parameters = best_scores[best_params_key][0]
         # Update the parameters depending on best_scores from the parameter
         # optimization process.
-        for key,val in classifier_parameters.items():
-            exec(key + '=val')
-        
-        method = main_classifier(base_estimator, 
-                     n_estimators, C, kernel, gamma, degree)
+        if classifier_parameters['base_estimator']=='RF':            
+            n_estimators=classifier_parameters['n_estimators']
+        else:
+            base_estimator=classifier_parameters['base_estimator']
+            C=classifier_parameters['C']
+            kernel=classifier_parameters['kernel']
+            gamma=classifier_parameters['gamma']
+        # for key,val in classifier_parameters.items():
+        #     #exec(key + '=val')
+        #     ps.append(val)
+        method = main_classifier(base_estimator,n_estimators, C, kernel, gamma, degree)
 
         X_train = [feature_vectors[best_params_key][str(i)] for i in train_index]
         X_test = [feature_vectors[best_params_key][str(i)] for i in test_index]
