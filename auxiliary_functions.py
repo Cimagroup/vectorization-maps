@@ -94,7 +94,10 @@ def classification(train_index, y_train, test_index,y_test, vectorisation_method
             base_estimator=classifier_parameters['base_estimator']
             C=classifier_parameters['C']
             kernel=classifier_parameters['kernel']
-            gamma=classifier_parameters['gamma']
+            if kernel != 'linear':
+                gamma=classifier_parameters['gamma']
+            if kernel == 'poly':
+                degree=classifier_parameters['degree']
         # for key,val in classifier_parameters.items():
         #     #exec(key + '=val')
         #     ps.append(val)
