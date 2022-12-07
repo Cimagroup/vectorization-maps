@@ -17,7 +17,6 @@ number_labels = 10
 # number_labels = 68
 
 n_iters = 100
-normalization=True
 
 s=1
 seed(s)
@@ -40,7 +39,7 @@ vec_parameters = dict()
 # vec_parameters['GetTopologicalVectorFeature'] = [[5, 10, 20]]
 # vec_parameters['GetAtolFeature'] = [[2,4,8,16,32,64]]
 # vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
-vec_parameters['GetPersImageFeature'] = [[0.01,0.1,1],[20,50,70]]
+vec_parameters['GetPersImageFeature'] = [[0.05,1],[25,75,150]]
 # vec_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
 # vec_parameters['GetComplexPolynomialFeature'] = [[5,10,20],['R', 'S', 'T']]
 # vec_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
@@ -132,6 +131,11 @@ for func in func_list:
         
     with open(path_results+'OUTEX'+str(number_labels)+'_feature_'+func.__name__+'.pkl', 'wb') as f:
       pickle.dump(feature_dictionary, f)
+    
+    if func == GetPersImageFeature:
+        normalization = False
+    else:
+        normalization = True 
       
     best_scores=parameter_optimization(train_index, y_train, vec_methods, feature_dictionary, 
                                       searchR, normalization)
