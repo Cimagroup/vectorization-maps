@@ -32,20 +32,20 @@ path_results = "results/"
 #%%
 
 vec_parameters = dict()
-vec_parameters['GetPersStats']=(),
-vec_parameters['GetCarlssonCoordinatesFeature']=(),
-vec_parameters['GetPersEntropyFeature'] = [[50,100,200]]
-vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
-vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
-vec_parameters['GetTopologicalVectorFeature'] = [[5, 10, 20]]
-vec_parameters['GetAtolFeature'] = [[2,4,8,16,32,64]]
-vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
-vec_parameters['GetPersImageFeature'] = [[0.001,0.01,0.2,1],[20,50,70]]
-vec_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
-vec_parameters['GetComplexPolynomialFeature'] = [[5,10,20],['R', 'S', 'T']]
-vec_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
-vec_parameters['GetTemplateFunctionFeature'] = [[35,50,65], [20,25,30]]
-vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], [10,20,30,40,50]]
+# vec_parameters['GetPersStats']=(),
+# vec_parameters['GetCarlssonCoordinatesFeature']=(),
+# vec_parameters['GetPersEntropyFeature'] = [[50,100,200]]
+# vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
+# vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
+# vec_parameters['GetTopologicalVectorFeature'] = [[5, 10, 20]]
+# vec_parameters['GetAtolFeature'] = [[2,4,8,16,32,64]]
+# vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
+vec_parameters['GetPersImageFeature'] = [[0.01,0.1,1],[20,50,70]]
+# vec_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
+# vec_parameters['GetComplexPolynomialFeature'] = [[5,10,20],['R', 'S', 'T']]
+# vec_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
+# vec_parameters['GetTemplateFunctionFeature'] = [[35,50,65], [20,25,30]]
+# vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], [10,20,30,40,50]]
 
 #%%
 
@@ -138,7 +138,7 @@ for func in func_list:
 
     print("Parameter optimization:",best_scores)
 
-    with open(path_results+'OUTEX'+str(number_labels)+'_best_scores'+func.__name__+'.pkl', 'wb') as f:
+    with open(path_results+'OUTEX'+str(number_labels)+'_best_scores_'+func.__name__+'.pkl', 'wb') as f:
       pickle.dump(best_scores, f)
 
     train_scores, test_scores = scores(train_index, y_train, test_index, y_test, 
@@ -148,7 +148,7 @@ for func in func_list:
     print("The train accuracy is", train_scores)
     print("The test accuracy is", test_scores)
     
-    with open(path_results+'OUTEX'+str(number_labels)+'_train_scores'+func.__name__+'.pkl', 'wb') as f:
+    with open(path_results+'OUTEX'+str(number_labels)+'_train_scores_'+func.__name__+'.pkl', 'wb') as f:
       pickle.dump(train_scores, f)
-    with open(path_results+'OUTEX'+str(number_labels)+'_test_scores'+func.__name__+'.pkl', 'wb') as f:
+    with open(path_results+'OUTEX'+str(number_labels)+'_test_scores_'+func.__name__+'.pkl', 'wb') as f:
       pickle.dump(test_scores, f)
