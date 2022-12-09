@@ -26,21 +26,21 @@ path_results = "results/"
 
 #%%
 vec_parameters = dict()
-vec_parameters['GetPersStats']=(),
-vec_parameters['GetCarlssonCoordinatesFeature']=(),
-vec_parameters['GetPersEntropyFeature'] = [[50,100,200]]
-vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
-vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
-vec_parameters['GetAtolFeature'] = [[16]]# [[2,4,8,16]]
-vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
+# vec_parameters['GetPersStats']=(),
+# vec_parameters['GetCarlssonCoordinatesFeature']=(),
+# vec_parameters['GetPersEntropyFeature'] = [[50,100,200]]
+# vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
+# vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
+# vec_parameters['GetAtolFeature'] = [[16]]# [[2,4,8,16]]
+# vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
 vec_parameters['GetPersImageFeature'] = [[0.05,0.5,1],[10,20,40]]
-vec_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
-vec_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
-vec_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
-vec_parameters['GetTemplateFunctionFeature'] = [[3,4,5,6,7,8,9,10,11,12,13,14,15], 
-                                               [.5,.6,.7,.8,.9,1,1.1,1.2]]
-vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], 
-                                                [5,10,15,20,25,30,35,40,45]]
+# vec_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
+# vec_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
+# vec_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
+# vec_parameters['GetTemplateFunctionFeature'] = [[3,4,5,6,7,8,9,10,11,12,13,14,15], 
+#                                                [.5,.6,.7,.8,.9,1,1.1,1.2]]
+# vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], 
+#                                                 [5,10,15,20,25,30,35,40,45]]
 
 #%%
         
@@ -61,7 +61,7 @@ searchR =  RandomizedSearchCV(
     
 
 #%%
-for t in range(6,10): 
+for t in range(1,10): 
 
     with open(data_path + 'dgmsT' +'.pkl', 'rb') as f:
         dgmsT = pickle.load(f)
