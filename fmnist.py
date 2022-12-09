@@ -32,9 +32,9 @@ vec_parameters = dict()
 # vec_parameters['GetPersSilhouetteFeature'] = [[15,30,50], [0,1,2,5]]
 # vec_parameters['GetComplexPolynomialFeature'] = [[3, 5, 10],['R', 'S', 'T']]
 # vec_parameters['GetPersLandscapeFeature'] = [[15,30,50], [1,2,3,5]]
-# vec_parameters['GetTemplateFunctionFeature'] = [[1,2,3,5], [.5, 1, 2]]
-vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], 
-                                                [1,2,3,4,5,10,15]]
+vec_parameters['GetTemplateFunctionFeature'] = [[2,3,5,10], [.5, 1, 2]]
+# vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], 
+#                                                 [1,2,3,4,5,10,15]]
 
 
 # In[4]:
