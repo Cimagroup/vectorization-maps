@@ -13,8 +13,8 @@ from auxiliary_functions import *
 from numpy.random import choice, seed
 from copy import deepcopy
 
-number_labels = 10
-# number_labels = 68
+# number_labels = 10
+number_labels = 68
 
 n_iters = 100
 
@@ -31,20 +31,20 @@ path_results = "results/"
 #%%
 
 vec_parameters = dict()
-# vec_parameters['GetPersStats']=(),
-# vec_parameters['GetCarlssonCoordinatesFeature']=(),
-# vec_parameters['GetPersEntropyFeature'] = [[50,100,200]]
-# vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
-# vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
-# vec_parameters['GetTopologicalVectorFeature'] = [[5, 10, 20]]
-# vec_parameters['GetAtolFeature'] = [[2,4,8,16,32,64]]
-# vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
+vec_parameters['GetPersStats']=(),
+vec_parameters['GetCarlssonCoordinatesFeature']=(),
+vec_parameters['GetPersEntropyFeature'] = [[50,100,200]]
+vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
+vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
+vec_parameters['GetTopologicalVectorFeature'] = [[5, 10, 20]]
+vec_parameters['GetAtolFeature'] = [[2,4,8,16,32,64]]
+vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
 vec_parameters['GetPersImageFeature'] = [[0.05,1],[25,75,150]]
-# vec_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
-# vec_parameters['GetComplexPolynomialFeature'] = [[5,10,20],['R', 'S', 'T']]
-# vec_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
-# vec_parameters['GetTemplateFunctionFeature'] = [[35,50,65], [20,25,30]]
-# vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], [10,20,30,40,50]]
+vec_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
+vec_parameters['GetComplexPolynomialFeature'] = [[5,10,20],['R', 'S', 'T']]
+vec_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
+vec_parameters['GetTemplateFunctionFeature'] = [[35,50,65], [20,25,30]]
+vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], [10,20,30,40,50]]
 
 #%%
 
@@ -78,8 +78,9 @@ test_labels = np.array(pd.read_csv(path_data + "test.txt", sep=" ",
 if number_labels==10:
     train_index = np.array([i for i in range(len(train_labels)) if train_labels[i] in labels])
     test_index = np.array([i for i in range(len(test_labels)) if test_labels[i] in labels])
-    
-label_list = np.hstack([train_labels[train_index], test_labels[test_index]])
+    label_list = np.hstack([train_labels[train_index], test_labels[test_index]])
+else:
+    label_list = np.hstack([train_labels, test_labels])
 
 train_index, test_index, y_train, y_test = train_test_split(range(len(label_list)), 
                                                     label_list, test_size=0.3, 

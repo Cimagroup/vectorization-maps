@@ -26,14 +26,14 @@ path_results = "results/"
 
 #%%
 vec_parameters = dict()
-# vec_parameters['GetPersStats']=(),
+vec_parameters['GetPersStats']=(),
 # vec_parameters['GetCarlssonCoordinatesFeature']=(),
 # vec_parameters['GetPersEntropyFeature'] = [[50,100,200]]
 # vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
 # vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
 # vec_parameters['GetAtolFeature'] = [[16]]# [[2,4,8,16]]
 # vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
-vec_parameters['GetPersImageFeature'] = [[0.05,0.5,1],[10,20,40]]
+# vec_parameters['GetPersImageFeature'] = [[0.05,0.5,1],[10,20,40]]
 # vec_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
 # vec_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
 # vec_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
@@ -108,7 +108,7 @@ for t in range(1,10):
         
         print("Parameter optimization:",best_scores)
         
-        with open(path_results+'SHREC14_best_scores_'+func.__name__+'.pkl', 'wb') as f:
+        with open(path_results+'SHREC14_'+str(t)+'_best_scores_'+func.__name__+'.pkl', 'wb') as f:
           pickle.dump(best_scores, f)
       
     
