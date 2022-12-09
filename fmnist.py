@@ -91,8 +91,6 @@ for func in func_list:
     with open(path_results+'FMNIST_best_scores_'+func.__name__+'.pkl', 'wb') as f:
       pickle.dump(best_scores, f)
 
-
-
     train_scores, test_scores = scores(train_index, y_train, test_index, y_test, 
                                        vec_methods, feature_dictionary, best_scores,  
                                        n_iters, normalization)

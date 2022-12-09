@@ -132,7 +132,7 @@ for func in func_list:
     with open(path_results+'OUTEX'+str(number_labels)+'_feature_'+func.__name__+'.pkl', 'wb') as f:
       pickle.dump(feature_dictionary, f)
     
-    if func == GetPersImageFeature:
+    if func == vect.GetPersImageFeature:
         normalization = False
     else:
         normalization = True 

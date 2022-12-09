@@ -91,6 +91,11 @@ for t in range(1,10):
         vec_methods = dict()
         vec_methods[func.__name__] = vec_parameters[func.__name__]
         
+        if func == vect.GetPersImageFeature:
+            normalization = False
+        else:
+            normalization = True 
+            
         feature_dictionary = feature_computation(vec_methods, pdiagrams, "",
                                                  train_index, test_index)
     
