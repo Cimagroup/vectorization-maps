@@ -13,8 +13,8 @@ from auxiliary_functions import *
 from numpy.random import choice, seed
 from copy import deepcopy
 
-# number_labels = 10
-number_labels = 68
+number_labels = 10
+# number_labels = 68
 
 n_iters = 100
 

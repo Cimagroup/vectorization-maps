@@ -22,20 +22,20 @@ path_results = "results/"
 
 vec_parameters = dict()
 vec_parameters['GetPersStats']=(),
-# vec_parameters['GetCarlssonCoordinatesFeature']=(),
-# vec_parameters['GetPersEntropyFeature'] = [[15,30,50]]
-# vec_parameters['GetBettiCurveFeature'] = [[15,30,50]]
-# vec_parameters['GetPersLifespanFeature'] = [[15,30,50]]
-# vec_parameters['GetTopologicalVectorFeature'] = [[3, 5, 10]]
-# vec_parameters['GetAtolFeature'] = [[2,4,8,16]]
-# vec_parameters['GetPersImageFeature'] = [[0.05,0.5,1],[3,6,12,20]]
-# vec_parameters['GetPersSilhouetteFeature'] = [[15,30,50], [0,1,2,5]]
-# vec_parameters['GetComplexPolynomialFeature'] = [[3, 5, 10],['R', 'S', 'T']]
-# vec_parameters['GetPersLandscapeFeature'] = [[15,30,50], [1,2,3,5]]
-# vec_parameters['GetTemplateFunctionFeature'] = [[2,3,5,10], [.5, 1, 2]]
-# vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250]]
-# vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], 
-#                                                 [3,4,5,10,15]]
+vec_parameters['GetCarlssonCoordinatesFeature']=(),
+vec_parameters['GetPersEntropyFeature'] = [[15,30,50]]
+vec_parameters['GetBettiCurveFeature'] = [[15,30,50]]
+vec_parameters['GetPersLifespanFeature'] = [[15,30,50]]
+vec_parameters['GetTopologicalVectorFeature'] = [[3, 5, 10]]
+vec_parameters['GetAtolFeature'] = [[2,4,8,16]]
+vec_parameters['GetPersImageFeature'] = [[0.05,0.5,1],[3,6,12,20]]
+vec_parameters['GetPersSilhouetteFeature'] = [[15,30,50], [0,1,2,5]]
+vec_parameters['GetComplexPolynomialFeature'] = [[3, 5, 10],['R', 'S', 'T']]
+vec_parameters['GetPersLandscapeFeature'] = [[15,30,50], [1,2,3,5]]
+vec_parameters['GetTemplateFunctionFeature'] = [[2,3,5,10], [.5, 1, 2]]
+vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250]]
+vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], 
+                                                [3,4,5,10,15]]
 
 
 # In[4]:

@@ -25,22 +25,23 @@ feat_path = "Shrec14/features/"
 path_results = "results/"
 
 #%%
+
 vec_parameters = dict()
 vec_parameters['GetPersStats']=(),
-# vec_parameters['GetCarlssonCoordinatesFeature']=(),
-# vec_parameters['GetPersEntropyFeature'] = [[50,100,200]]
-# vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
-# vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
-# vec_parameters['GetAtolFeature'] = [[16]]# [[2,4,8,16]]
-# vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
-# vec_parameters['GetPersImageFeature'] = [[0.05,0.5,1],[10,20,40]]
-# vec_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
-# vec_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
-# vec_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
-# vec_parameters['GetTemplateFunctionFeature'] = [[3,4,5,6,7,8,9,10,11,12,13,14,15], 
-#                                                [.5,.6,.7,.8,.9,1,1.1,1.2]]
-# vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], 
-#                                                 [5,10,15,20,25,30,35,40,45]]
+vec_parameters['GetCarlssonCoordinatesFeature']=(),
+vec_parameters['GetPersEntropyFeature'] = [[50,100,200]]
+vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
+vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
+vec_parameters['GetAtolFeature'] = [[2,4,8,16]]
+vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
+vec_parameters['GetPersImageFeature'] = [[0.05,0.5,1],[10,20,40]] #SVM do not converge for t=9 and PersImage
+vec_parameters['GetPersSilhouetteFeature'] = [[50,100,200], [0,1,2,5,10,20]]
+vec_parameters['GetComplexPolynomialFeature'] = [[5, 10, 20],['R', 'S', 'T']]
+vec_parameters['GetPersLandscapeFeature'] = [[50,100,200], [2,5,10,20]]
+vec_parameters['GetTemplateFunctionFeature'] = [[3,4,5,6,7,8,9,10,11,12,13,14,15], 
+                                                [.5,.6,.7,.8,.9,1,1.1,1.2]]
+vec_parameters['GetAdaptativeSystemFeature'] = [['gmm'], 
+                                                [5,10,15,20,25,30,35,40,45]]
 
 #%%
         
@@ -58,7 +59,14 @@ searchR =  RandomizedSearchCV(
     return_train_score=True, scoring='accuracy', random_state=1
 )
         
-    
+onlyForest = [
+    {'base_estimator': ['RF'], 'n_estimators': [50,100]},
+ ]
+
+searchG = GridSearchCV(
+    main_classifier(), param_grid=onlyForest, cv=5,
+    return_train_score=True, scoring='accuracy'
+)
 
 #%%
 for t in range(1,10): 
@@ -91,10 +99,6 @@ for t in range(1,10):
         vec_methods = dict()
         vec_methods[func.__name__] = vec_parameters[func.__name__]
         
-        if func == vect.GetPersImageFeature:
-            normalization = False
-        else:
-            normalization = True 
             
         feature_dictionary = feature_computation(vec_methods, pdiagrams, "",
                                                  train_index, test_index)
@@ -102,8 +106,13 @@ for t in range(1,10):
         with open(path_results+'SHREC14_'+str(t)+'_feature_'+func.__name__+'.pkl', 'wb') as f:
           pickle.dump(feature_dictionary, f)
         
-        best_scores=parameter_optimization(train_index, y_train, vec_methods, feature_dictionary, 
-                                           searchR, normalization)
+        if func==vect.GetPersImageFeature and t==9:
+            best_scores=parameter_optimization(train_index, y_train, vec_methods, feature_dictionary, 
+                                               searchG, normalization)
+        else:
+            best_scores=parameter_optimization(train_index, y_train, vec_methods, feature_dictionary, 
+                                               searchR, normalization)
+        
     
         
         print("Parameter optimization:",best_scores)
