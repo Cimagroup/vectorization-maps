@@ -25,17 +25,17 @@ def GetPersStats(barcode,*p):
         
         
         avg_barcodes = (barcode[:,1] + barcode[:,0])/2
-        # Average of Birth and Death of the barcode
+        # Average of midpoints of the barcode
         bc_av_av = np.mean(avg_barcodes)
-        # STDev of Birth and Death of the barcode
+        # STDev of midpoints of the barcode
         bc_std_av = np.std(avg_barcodes)
-        # Median of Birth and Death of the barcode
+        # Median of midpoints of the barcode
         bc_med_av = np.median(avg_barcodes)
-        # Intercuartil range of births and death
+        # Intercuartil range of midpoints
         bc_iqr_av = np.subtract(*np.percentile(avg_barcodes, [75, 25])) 
-        # Range of births and deaths
+        # Range of midpoints
         bc_r_av = np.max(avg_barcodes) - np.min(avg_barcodes)
-        # Percentiles of births and deaths
+        # Percentiles of midpoints
         bc_p10_av = np.percentile(barcode, 10)
         bc_p25_av=np.percentile(barcode,25)
         bc_p75_av=np.percentile(barcode, 75)
