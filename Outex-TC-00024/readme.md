@@ -1,2 +1,1 @@
-The persistent diagrams and features of this database have been removed from this folder.
-To download them, go to the OneDrive folder Datasets and Outputs/
+The dataset Outex Texture Database is provided by the original authors in [dataset homepage](http://www.outex.oulu.fi/). If you contact us by email we can also provide it.
