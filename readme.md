@@ -5,7 +5,9 @@ This repository contains the code of the paper ...
 ## Library
 
 A library containing all the vectorization methods can be found in the [vectorization](https://github.com/Cimagroup/vectorization-maps/tree/master/vectorization) folder. 
-To install it, download the repository and in a terminal inside the repository folder use `pip install .`.
+To install it, download the repository and, in a terminal inside the repository folder, use:
+
+`pip install .`
 
 ## Experiments
 
