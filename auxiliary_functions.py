@@ -1,14 +1,19 @@
 import itertools
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-import vectorisation as vect
-import numpy as np
-from direct_optimisation import main_classifier
+import vectorization as vect
+
+
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVC
-from sklearn.metrics import classification_report
-from types import SimpleNamespace
-from numpy.random import seed
+from sklearn.base import BaseEstimator
+from sklearn.ensemble import RandomForestClassifier
+# from sklearn.metrics import classification_report
+# from sklearn.svm import SVC
+# from sklearn.model_selection import RandomizedSearchCV
+# from sklearn.model_selection import GridSearchCV
+# from sklearn.model_selection import train_test_split
+
+
 #Barcodes with just one bar are loaded as a 1d-array.
 #We force them to be a 2d-array
 
@@ -43,11 +48,6 @@ def build_dataset_from_features(train_index,y_train,func,feature_dictionary,para
     X_train = [feature_dictionary[func.__name__+'_'+str(parameter)][str(i)] for i in train_index]
     return (np.array(X_train),y_train)
 
-def safe_load(x):
-    pd = np.loadtxt(x)
-    if (len(pd.shape)==1) and (pd.shape[0]>0): 
-        pd = pd.reshape(1,2)
-    return pd
 
 def scores(train_index, y_train, test_index, y_test, vectorization_methods, 
            feature_dictionary, best_scores, n_iters, normalization):
@@ -117,3 +117,86 @@ def classification(train_index, y_train, test_index,y_test, vectorisation_method
         #train_scores[func] = method.score(X_train, y_train)
         #test_scores[func] = method.score(X_test, y_test)   
     return train_scores, test_scores
+#%% For feature computation
+
+def feature_computation(vectorisation_methods,pdiagrams,diag_key,train_index,test_index):  
+ 
+    func_list = [getattr(vect, keys) for keys in vectorisation_methods.keys()]
+    features = dict()
+    index = train_index + test_index
+    for func in func_list:
+        func_parameters = load_parameters(func,vectorisation_methods)
+        for p in func_parameters:
+            features_func = dict()
+            if func not in  [vect.GetAtolFeature,vect.GetTemplateFunctionFeature, vect.GetAdaptativeSystemFeature]:
+                for i in index:
+                    barcode = pdiagrams[diag_key+str(i)]
+                    features_func[str(i)]=func(barcode,*p)
+                features[func.__name__+'_'+str(p)] = features_func
+            if func == vect.GetAtolFeature:
+                features_list = func([pdiagrams[diag_key+str(i)] for i in index],*p)
+                for i in index:
+                    j = index.index(i)
+                    features_func[str(i)]= features_list[j,:]
+                features[func.__name__+'_'+str(p)]= features_func
+            if func in [vect.GetTemplateFunctionFeature, vect.GetAdaptativeSystemFeature]:
+                train = [pdiagrams[diag_key+str(i)] for i in train_index]
+                test  = [pdiagrams[diag_key+str(i)] for i in test_index]
+                features_list = func(train,test,*p)
+                for i in index:
+                    j = index.index(i)
+                    features_func[str(i)]= features_list[j,:]
+                features[func.__name__+'_'+str(p)]= features_func
+    return features 
+
+#%% For parameter optimization
+class main_classifier(BaseEstimator):
+
+    def __init__(self, base_estimator='RF', n_estimators=100, C=1.0, 
+                 kernel='rbf', gamma=0.1, degree=3,**p):
+    
+        self._estimator_type = "classifier"
+        self.base_estimator = base_estimator
+        self.n_estimators = n_estimators
+        self.C = C
+        self.kernel = kernel
+        self.gamma = gamma
+        self.degree = degree
+        
+    
+    def fit(self, X, y):
+        if self.base_estimator=='RF':
+            self.estimator_=RandomForestClassifier(self.n_estimators)
+        elif self.base_estimator=='SVM':
+            self.estimator_=SVC(C=self.C, kernel = self.kernel, 
+                                     gamma=self.gamma, degree=self.degree)   
+        else :
+            print('The estimator must be "RF" or "SVM"')
+        
+        self.X_ = X
+        self.y_ = y
+        
+        return self.estimator_.fit(self.X_, self.y_)
+    
+    def predict(self, X):
+        return self.estimator_.predict(X)
+
+    def classes_(self):
+        if self.estimator_:
+            return self.base_estimator_.classes_
+        
+def parameter_optimization(train_index, y_train, vectorisation_methods, feature_dictionary,search_method, normalization):
+    func_list = [getattr(vect, keys) for keys in vectorisation_methods.keys()]
+    best_scores = dict()
+    for func in func_list:
+        func_parameters =load_parameters(func,vectorisation_methods)
+        for p in func_parameters:
+            X_train, y_train = build_dataset_from_features(train_index,y_train,func,feature_dictionary,p)
+            X_train = np.array(X_train)
+            if normalization:             
+                mm_scaler = MinMaxScaler()
+                X_train = mm_scaler.fit_transform(X_train)
+            search_method.fit(X_train, y_train)
+            best_scores[func.__name__+'_'+str(p)] = (search_method.best_params_, search_method.best_score_)
+    return best_scores
+    

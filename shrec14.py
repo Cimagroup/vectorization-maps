@@ -1,14 +1,10 @@
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import train_test_split
-from parameter_optimization import *
 from scipy.stats import uniform
 from scipy.stats import expon
 import pickle
-from feature_computation import *
-import vectorisation as vect
+import vectorization as vect
 import pandas as pd
-from direct_optimisation import main_classifier
 from auxiliary_functions import *
 from numpy.random import seed
      
@@ -28,8 +24,8 @@ path_results = "results/"
 
 vec_parameters = dict()
 vec_parameters['GetPersStats']=(),
-vec_parameters['GetCarlssonCoordinatesFeature']=(),
-vec_parameters['GetPersEntropyFeature'] = [[50,100,200]]
+vec_parameters['GetAlgebraicFunctions']=(),
+vec_parameters['GetEntropySummary'] = [[50,100,200]]
 vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
 vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
 vec_parameters['GetAtolFeature'] = [[2,4,8,16]]
