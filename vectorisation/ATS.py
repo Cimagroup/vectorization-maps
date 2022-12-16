@@ -1,5 +1,5 @@
 '''
-This code was obtained from
+This code is a collection of functions obtained from
     https://github.com/barnesd8/machine_learning_for_persistence/blob/master/mlforpers/persistence_methods/ATS.py
 Under the following license:
    Copyright 2019 Luis G. Polanco Contreras
