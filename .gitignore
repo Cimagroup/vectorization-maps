@@ -2,3 +2,7 @@ Outex-TC-00024/pdiagrams
 fashion_mnist/pdiagrams
 *\__pycache__/
 *.pyc
+vectorization.egg-info/top_level.txt
+vectorization.egg-info/SOURCES.txt
+vectorization.egg-info/PKG-INFO
+vectorization.egg-info/dependency_links.txt
