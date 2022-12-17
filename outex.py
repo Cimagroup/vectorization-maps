@@ -32,7 +32,6 @@ vec_parameters['GetAlgebraicFunctions']=(),
 vec_parameters['GetEntropySummary'] = [[50,100,200]]
 vec_parameters['GetBettiCurveFeature'] = [[50,100,200]]
 vec_parameters['GetPersLifespanFeature'] = [[50,100,200]]
-vec_parameters['GetTopologicalVectorFeature'] = [[5, 10, 20]]
 vec_parameters['GetAtolFeature'] = [[2,4,8,16,32,64]]
 vec_parameters['GetPersTropicalCoordinatesFeature'] = [[10,50,250,500,800]]
 vec_parameters['GetPersImageFeature'] = [[0.05,1],[25,75,150]]
