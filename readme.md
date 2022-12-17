@@ -1,6 +1,8 @@
 # A Survey of Vectorization Methods in Topological Data Analysis
 
-This repository contains the code of the paper ...
+This code accompanies the paper 
+
+> A Survey of Vectorization Methods in Topological Data Analysis, Dashti Ali, Aras Asaad, Maria Jose Jimenez, Vidit Nanda, Eduardo Paluzo-Hidalgo, and Manuel Soriano-Trigueros
 
 ## Library
 
