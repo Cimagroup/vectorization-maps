@@ -6,3 +6,8 @@ vectorization.egg-info/top_level.txt
 vectorization.egg-info/SOURCES.txt
 vectorization.egg-info/PKG-INFO
 vectorization.egg-info/dependency_links.txt
+build/lib/vectorization/__init__.py
+build/lib/vectorization/ATS.py
+build/lib/vectorization/bar_cleaner.py
+build/lib/vectorization/GetNewMethods.py
+build/lib/vectorization/vectorizationmethods.py
