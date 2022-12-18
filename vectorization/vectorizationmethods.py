@@ -71,7 +71,7 @@ def GetBettiCurveFeature(barcode, res=100):
         
     return feature_vector
 
-def GetComplexPolynomialFeature(barcode, thres = 10, pol_type='R'):
+def GetComplexPolynomialFeature(barcode, thres = 10, pol_type='R',app=False):
     #We pick the first tresh largest cofficient from the polynomial.
     #There are different pol_type, 'R' is the most common but unstable,
     #'S' and 'T' sends points close to the diagonal to points close to zero.
@@ -82,6 +82,9 @@ def GetComplexPolynomialFeature(barcode, thres = 10, pol_type='R'):
         feature_vector = complexPolynomial.fit_transform([barcode]).flatten()
         feature_vector = np.concatenate([np.array([np.real(i), np.imag(i)]) 
                                          for i in feature_vector])
+        if app==True:
+            "For visualization purposes in the associated webbapp"
+            feature_vector = np.stack((feature_vector.real,feature_vector.imag),-1)
     else:
     	feature_vector = np.zeros(2*thres)
         
@@ -156,7 +159,7 @@ def GetPersSilhouetteFeature(barcode, res=100, w=1):
 
     return feature_vector
 
-def GetPersStats(barcode,*p):
+def GetPersStats(barcode,app=False,*p):
     barcode = bar_cleaner(barcode)
     if (np.size(barcode) > 0):
         # Average of Birth and Death of the barcode
@@ -227,6 +230,12 @@ def GetPersStats(barcode,*p):
                               bc_lengthMedian, bc_lengthIQR, bc_lengthR, bc_lengthp10,  
                               bc_lengthp25,  bc_lengthp75,  bc_lengthp90, bc_count, 
                               bc_ent[0][0]])
+        if app == True:
+            bar_stats = np.array([bc_av0, bc_std0, bc_med0, bc_iqr0, bc_r0, bc_p10_0, bc_p25_0, bc_p75_0, bc_p90_0,
+                              bc_av1, bc_std1, bc_med1, bc_iqr1, bc_r1, bc_p10_1, bc_p25_1, bc_p75_1, bc_p90_1,
+                              bc_av_av, bc_std_av, bc_med_av, bc_iqr_av, bc_r_av, bc_p10_av, bc_p25_av, bc_p75_av, bc_p90_av,
+                              bc_lengthAverage, bc_lengthSTD, bc_lengthMedian, bc_lengthIQR, bc_lengthR, bc_lengthp10, bc_lengthp25, bc_lengthp75, bc_lengthp90,
+                              bc_count, bc_ent[0][0]])
     else:
         bar_stats = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
