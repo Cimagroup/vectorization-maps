@@ -2,7 +2,7 @@
 
 This code accompanies the paper 
 
-> A Survey of Vectorization Methods in Topological Data Analysis, Dashti Ali, Aras Asaad, Maria Jose Jimenez, Vidit Nanda, Eduardo Paluzo-Hidalgo, and Manuel Soriano-Trigueros
+> A Survey of Vectorization Methods in Topological Data Analysis, Dashti Ali, Aras Asaad, Maria Jose Jimenez, Vidit Nanda, Eduardo Paluzo-Hidalgo, and Manuel Soriano-Trigueros [(ArXiV)](https://arxiv.org/abs/2212.09703)
 
 ## Library
 
