@@ -11,7 +11,6 @@ kiwisolver==1.4.4
 llvmlite==0.39.1
 matplotlib==3.6.2
 mpmath==1.2.1
-numba==0.56.4
 numpy==1.23.5
 packaging==22.0
 pandas==1.5.2

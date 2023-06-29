@@ -27,7 +27,7 @@ from copy import deepcopy
 from matplotlib.patches import Ellipse
 from ripser import ripser
 from persim import plot_diagrams
-from numba import jit, njit, prange
+# from numba import jit, njit, prange
 from sklearn import mixture
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.linear_model import RidgeClassifier
