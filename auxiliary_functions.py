@@ -1,5 +1,6 @@
 import itertools
 import numpy as np
+from scipy.spatial import distance_matrix
 import vectorization as vect
 
 
@@ -12,6 +13,7 @@ from sklearn.ensemble import RandomForestClassifier
 # from sklearn.model_selection import RandomizedSearchCV
 # from sklearn.model_selection import GridSearchCV
 # from sklearn.model_selection import train_test_split
+
 
 
 #Barcodes with just one bar are loaded as a 1d-array.
@@ -199,4 +201,12 @@ def parameter_optimization(train_index, y_train, vectorisation_methods, feature_
             search_method.fit(X_train, y_train)
             best_scores[func.__name__+'_'+str(p)] = (search_method.best_params_, search_method.best_score_)
     return best_scores
+
+
+def power_quantiles(barcode):
+    M=distance_matrix(barcode,barcode)
+    qs = np.quantile(np.sort([M[i,j] for i in range(len(M)) for j in range(len(M)) if i<j]),[0.25,0.5,0.75])
+    powers = [-2,-1,1]
+    qs_power = [q**p for q in qs for p in powers]+[1]
+    return qs_power
     
