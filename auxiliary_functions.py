@@ -203,10 +203,16 @@ def parameter_optimization(train_index, y_train, vectorisation_methods, feature_
     return best_scores
 
 
-def power_quantiles(barcode):
-    M=distance_matrix(barcode,barcode)
-    qs = np.quantile(np.sort([M[i,j] for i in range(len(M)) for j in range(len(M)) if i<j]),[0.25,0.5,0.75])
+def power_quantiles(barcodes):
+    
+    distances = []
+    for barcode in barcodes:    
+        M=distance_matrix(barcode,barcode)
+        distances += [M[i,j] for i in range(len(M)) for j in range(len(M)) if i<j]
+            
+    qs = np.quantile(np.sort(distances),[0.25,0.5,0.75])
     powers = [-2,-1,1]
     qs_power = [q**p for q in qs for p in powers]+[1]
     return qs_power
+
     

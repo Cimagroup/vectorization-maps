@@ -15,25 +15,10 @@ Under the following license:
 '''
 
 import numpy as np
-# import multidim
-import itertools
-import os
-#import hdbscan
-import sys
-import pandas as pd
-
-from scipy import interpolate
 from copy import deepcopy
 from matplotlib.patches import Ellipse
 from ripser import ripser
-from persim import plot_diagrams
-# from numba import jit, njit, prange
 from sklearn import mixture
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.linear_model import RidgeClassifier
-
-
-import matplotlib.pyplot as plt
 
 
 
