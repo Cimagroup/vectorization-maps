@@ -4,6 +4,8 @@ This code accompanies the paper
 
 > A Survey of Vectorization Methods in Topological Data Analysis, Dashti Ali, Aras Asaad, Maria Jose Jimenez, Vidit Nanda, Eduardo Paluzo-Hidalgo, and Manuel Soriano-Trigueros [(ArXiV)](https://arxiv.org/abs/2212.09703)
 
+Link to the web-app repository: [BRAVA](https://github.com/dashtiali/vectorisation-app)
+
 ## Library
 
 A library containing all the vectorization methods can be found in the [vectorization](https://github.com/Cimagroup/vectorization-maps/tree/master/vectorization) folder. 
