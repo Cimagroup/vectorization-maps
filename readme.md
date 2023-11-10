@@ -8,6 +8,8 @@ Link to the web-app repository: [BRAVA](https://github.com/dashtiali/vectorisati
 
 ## Library
 
+This is compatible with versions of python >= 3.8 & < 3.11.
+
 A library containing all the vectorization methods can be found in the [vectorization](https://github.com/Cimagroup/vectorization-maps/tree/master/vectorization) folder. 
 To install it, download the repository and, in a terminal inside the repository folder, use:
 
@@ -23,4 +25,11 @@ Experiments with three datasets were developed that you can find in the followin
 | [Outex](https://github.com/Cimagroup/vectorization-maps/blob/master/outex.py)          |
 | [Fashion MNIST](https://github.com/Cimagroup/vectorization-maps/blob/master/fmnist.py) |
 | [Shrec14](https://github.com/Cimagroup/vectorization-maps/blob/master/shrec14.py)      |
+
+The barcodes used in the experiments were calculated using the following scripts:
+
+| Dataset                                                                                          |
+|--------------------------------------------------------------------------------------------------|
+| [Outex](https://github.com/Cimagroup/vectorization-maps/blob/master/outex-pdiagrams.py)          |
+| [Fashion MNIST](https://github.com/Cimagroup/vectorization-maps/blob/master/fmnist-pdiagrams.py) |
 
