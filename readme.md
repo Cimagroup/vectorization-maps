@@ -8,7 +8,7 @@ Link to the web-app repository: [BRAVA](https://github.com/dashtiali/vectorisati
 
 ## Library
 
-This is compatible with versions of python >= 3.8 & < 3.11.
+This experiment is compatible with the following versions of python >= 3.8 & < 3.11.
 
 A library containing all the vectorization methods can be found in the [vectorization](https://github.com/Cimagroup/vectorization-maps/tree/master/vectorization) folder. 
 To install it, download the repository and, in a terminal inside the repository folder, use:
